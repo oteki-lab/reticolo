@@ -136,7 +136,7 @@ theta=[0,0];                          %angle of incidence in degrees
 %%%%%% Geometric parameters
 periodicity_x=0.215;                % period in x
 periodicity_y=periodicity_x;        % period in y
-Nb_couches=13;                      %Number of layers (between 1 and 12)
+Nb_couches=18;                      %Number of layers (between 1 and 12)
 
 %diameter of each layer
 
@@ -155,8 +155,13 @@ dx10=dx1;
 dx11=dx1;
 dx12=dx1;
 dx13=dx1;
+dx14=dx1;
+dx15=dx1;
+dx16=dx1;
+dx17=dx1;
+dx18=dx1;
 
-Diameter_x=[dx1,dx2,dx3,dx4,dx5,dx6,dx7,dx8,dx9,dx10,dx11,dx12,dx13];
+Diameter_x=[dx1,dx2,dx3,dx4,dx5,dx6,dx7,dx8,dx9,dx10,dx11,dx12,dx13,dx14,dx15,dx16,dx17,dx18];
 
 
 % Setting diameter @ more 12
@@ -175,15 +180,20 @@ h1=0.08;                            % Thickness of layer 1 (0 si if no layer)
 h2=0.04; % AlInP Thickness of layer 2 (0 si if no layer)
 h3=0.16;                           % AlInP Thickness of layer 3 (0 si if no layer)
 h4=0.14;                           % GaAs Thickness of layer 4 (0 si if no layer)
-h5=1.1;                             % Thickness of layer 5 (0 si if no layer)
+h5=0.6;                             % Thickness of layer 5 (0 si if no layer)
 h6=0.1;                             % Thickness of layer 6 (0 si if no layer)                               % Thickness of layer 6 (0 si if no layer)
 h7=0.1;                               % Thickness of layer 7 (0 si if no layer)
 h8=0.1;                               % Thickness of layer 8 (0 si if no layer)
 h9=0.1;                               % Thickness of layer 9 (0 si if no layer)
 h10=0.1;                              % Thickness of layer 10 (0 si if no layer)
 h11=0.1;                              % Thickness of layer 11 (0 si if no layer)
-h12=0.04;                              % Thickness of layer 12 (0 si if no layer)
-h13=0.05;                              % Thickness of layer 12 (0 si if no layer)
+h12=0.1;                              % Thickness of layer 12 (0 si if no layer)
+h13=0.1;                              % Thickness of layer 12 (0 si if no layer)
+h14=0.1;                              % Thickness of layer 12 (0 si if no layer)
+h15=0.1;                              % Thickness of layer 12 (0 si if no layer)
+h16=0.1;                              % Thickness of layer 12 (0 si if no layer)
+h17=0.04;                              % Thickness of layer 12 (0 si if no layer)
+h18=0.05;                              % Thickness of layer 12 (0 si if no layer)
 
 %%%%%% Refraction indices (from top to bottom), can be a function of the wavelength
 
@@ -197,23 +207,33 @@ n3m=0;
 n4=retindice_chen(wavelength,4.708); %QD
 n4m=0; 
 n5=retindice_chen(wavelength,4.707); % GaAs
-n5m=0;                               % index inside the structures of layer 3 (0 if not structured)
+n5m=0;
 n6=retindice_chen(wavelength,4.707); % GaAs
 n6m=0;
 n7=retindice_chen(wavelength,4.707); % GaAs
 n7m=0; 
 n8=retindice_chen(wavelength,4.707); % GaAs
-n8m=0;                               % index inside the structures of layer 7 (0 if not structured)
+n8m=0;
 n9=retindice_chen(wavelength,4.707); % GaAs
-n9m=0;                               % index inside the structures of layer 9 (0 if not structured)
+n9m=0;
 n10=retindice_chen(wavelength,4.707); % GaAs
-n10m=0;                              % index inside the structures of layer 10 (0 if not structured)
+n10m=0;
 n11=retindice_chen(wavelength,4.707); % GaAs
-n11m=0;                              % index inside the structures of layer 10 (0 if not structured)
-n12=retindice_chen(wavelength,4.802); % AlInP
-n12m=0;                              % index inside the structures of layer 11 (0 if not structured)
-n13=retindice_chen(wavelength,1.72);   % Ag
-n13m=0;                              % index inside the structures of layer 12 (0 if not structured)
+n11m=0;
+n12=retindice_chen(wavelength,4.707); % GaAs
+n12m=0;
+n13=retindice_chen(wavelength,4.707); % GaAs
+n13m=0;
+n14=retindice_chen(wavelength,4.707); % GaAs
+n14m=0;
+n15=retindice_chen(wavelength,4.707); % GaAs
+n15m=0;
+n16=retindice_chen(wavelength,4.707); % GaAs
+n16m=0;
+n17=retindice_chen(wavelength,4.802); % AlInP
+n17m=0;                              % index inside the structures of layer 17 (0 if not structured)
+n18=retindice_chen(wavelength,1.72);   % Ag
+n18m=0;                              % index inside the structures of layer 18 (0 if not structured)
 nsub=ones(size(wavelength)); % Air
 %%%%%% Numerical parameters
 pol=0;                               % polarization of the incident wave, TM pol=2  TE pol=0
@@ -282,7 +302,7 @@ Einc=[];Hinc=[];E_semicon=[];H_semicon=[];x_semicon=[];y_semicon=[];z_semicon=[]
 Ex=[];Ey=[];Ez=[];Hx=[];Hy=[];Hz=[];
 xx=[];yy=[];zz=[];indice=[];
 Ntre=1;
-Height=[h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12,h13];
+Height=[h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12,h13,h14,h15,h16,h17,h18];
 H=Height(1:(Nb_couches));
 if cal_abs==1||cal_champ==1||trace_champ==1;op_retcouche=1;else op_retcouche=0;end;
 if H(Nb_couches)<1e-5;disp('WARNING : There is a problem in the definition of the layers number !!');return;end;
@@ -334,6 +354,11 @@ parfor zou=1:length(wavelength)
     if length(n11)==1;nn11=n11;else nn11=n11(zou);end;
     if length(n12)==1;nn12=n12;else nn12=n12(zou);end;
     if length(n12)==1;nn13=n13;else nn13=n13(zou);end;
+    if length(n12)==1;nn14=n14;else nn14=n14(zou);end;
+    if length(n12)==1;nn15=n15;else nn15=n15(zou);end;
+    if length(n12)==1;nn16=n16;else nn16=n16(zou);end;
+    if length(n12)==1;nn17=n17;else nn17=n17(zou);end;
+    if length(n12)==1;nn18=n18;else nn18=n18(zou);end;
     if length(n1m)==1;nn1m=n1m;else nn1m=n1m(zou);end;
     if length(n2m)==1;nn2m=n2m;else nn2m=n2m(zou);end;
     if length(n3m)==1;nn3m=n3m;else nn3m=n3m(zou);end;
@@ -347,9 +372,14 @@ parfor zou=1:length(wavelength)
     if length(n11m)==1;nn11m=n11m;else nn11m=n11m(zou);end;
     if length(n12m)==1;nn12m=n12m;else nn12m=n12m(zou);end;
     if length(n12m)==1;nn13m=n13m;else nn13m=n13m(zou);end;
-    Number=[nn1,nn2,nn3,nn4,nn5,nn6,nn7,nn8,nn9,nn10,nn11,nn12,nn13];
+    if length(n12m)==1;nn14m=n14m;else nn14m=n14m(zou);end;
+    if length(n12m)==1;nn15m=n15m;else nn15m=n15m(zou);end;
+    if length(n12m)==1;nn16m=n16m;else nn16m=n16m(zou);end;
+    if length(n12m)==1;nn17m=n17m;else nn17m=n17m(zou);end;
+    if length(n12m)==1;nn18m=n18m;else nn18m=n18m(zou);end;
+    Number=[nn1,nn2,nn3,nn4,nn5,nn6,nn7,nn8,nn9,nn10,nn11,nn12,nn13,nn14,nn15,nn16,nn17,nn18];
     N=Number(1:Nb_couches);
-    Numberm=[nn1m,nn2m,nn3m,nn4m,nn5m,nn6m,nn7m,nn8m,nn9m,nn10m,nn11m,nn12m,nn13m];
+    Numberm=[nn1m,nn2m,nn3m,nn4m,nn5m,nn6m,nn7m,nn8m,nn9m,nn10m,nn11m,nn12m,nn13m,nn14m,nn15m,nn16m,nn17m,nn18m];
     Nm=Numberm(1:Nb_couches);
     diameter_x=Diameter_x(1:(Nb_couches));
     diameter_y=diameter_x;
@@ -604,7 +634,7 @@ text=['period_',int2str(periodicity_x*1000),'_diam_',int2str(dx1*1000),'wav',int
 
 %%%% Example to plot the absorption
 figure
-plot(wavelength,Abs(1,:),wavelength,Abs(2,:),wavelength,Abs(3,:),wavelength,Abs(4,:),wavelength,Abs(5,:)+Abs(6,:)+Abs(7,:)+Abs(8,:)+Abs(9,:)+Abs(10,:)+Abs(11,:),wavelength,Abs(12,:),wavelength,Abs(13,:),wavelength,A_tot(1,:),'Linewidth',3)
+plot(wavelength,Abs(1,:),wavelength,Abs(2,:),wavelength,Abs(3,:),wavelength,Abs(4,:),wavelength,Abs(5,:)+Abs(6,:)+Abs(7,:)+Abs(8,:)+Abs(9,:)+Abs(10,:)+Abs(11,:)+Abs(12,:)+Abs(13,:)+Abs(14,:)+Abs(15,:)+Abs(16,:),wavelength,Abs(17,:),wavelength,Abs(18,:),wavelength,A_tot(1,:),'Linewidth',3)
 %plot(wavelength,Abs(3,:)+Abs(4,:)+Abs(5,:),'Linewidth',3)
 %hold on 
 % plot(wavelength,Abs(2,:),'Linewidth',3)
@@ -617,7 +647,7 @@ xlim([min(wavelength) max(wavelength)])
 ylim([0 1])
 set(gca,'Fontsize',12)
 %legend({'InGaP','GaAs','Silver mirror','Total'})
-legend({'SiNx(1)','InGaP(2)','GaAs(3)','QD(4)','GaAs(5-11)','InGaP(12)','Silver mirror(13)','Total'})
+legend({'SiNx(1)','InGaP(2)','GaAs(3)','QD(4)','GaAs(5-16)','InGaP(17)','Silver mirror(18)','Total'})
 set(gca,'XMinorTick','on','YMinorTick','on')
 set(gcf,'color','w');
 box on
