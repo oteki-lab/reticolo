@@ -138,7 +138,7 @@ theta=[0,0];                          %angle of incidence in degrees
 %%%%%% Geometric parameters
 periodicity_x=2.4;                  % period in x
 periodicity_y=periodicity_x;        % period in y
-Nb_couches=12; %Number of layers (between 1 and 12)
+Nb_couches=18; %Number of layers (between 1 and 12)
 
 %diameter of each layer
 
@@ -151,13 +151,19 @@ dx4=2.4;
 dx5=2.4;
 dx6=2.4;
 dx7=2.4;
-dx8=2.4;
-dx9=2.4*3/4;
-dx10=2.4*2/4;
-dx11=2.4/4;
-dx12=dx1;
+dx8=2.4*10/10;
+dx9=2.4*9/10;
+dx10=2.4*8/10;
+dx11=2.4*7/10;
+dx12=2.4*6/10;
+dx13=2.4*5/10;
+dx14=2.4*4/10;
+dx15=2.4*3/10;
+dx16=2.4*2/10;
+dx17=2.4*1/10;
+dx18=dx1;
 
-Diameter_x=[dx1,dx2,dx3,dx4,dx5,dx6,dx7,dx8,dx9,dx10,dx11,dx12];
+Diameter_x=[dx1,dx2,dx3,dx4,dx5,dx6,dx7,dx8,dx9,dx10,dx11,dx12,dx13,dx14,dx15,dx16,dx17,dx18];
 
 
 % Setting diameter @ more 12
@@ -180,10 +186,16 @@ h5=0.16;                             % Thickness of layer 5 (0 si if no layer)
 h6=0.14;                             % Thickness of layer 6 (0 si if no layer)                               % Thickness of layer 6 (0 si if no layer)
 h7=1.7;                               % Thickness of layer 7 (0 si if no layer)
 h8=0.04;                               % Thickness of layer 8 (0 si if no layer)
-h9=0.9/3;                               % Thickness of layer 9 (0 si if no layer)
-h10=0.9/3;                              % Thickness of layer 10 (0 si if no layer)
-h11=0.9/3;                              % Thickness of layer 11 (0 si if no layer)
-h12=0.01;                              % Thickness of layer 12 (0 si if no layer)
+h9=0.9/9;                               % Thickness of layer 9 (0 si if no layer)
+h10=0.9/9;                              % Thickness of layer 10 (0 si if no layer)
+h11=0.9/9;                              % Thickness of layer 11 (0 si if no layer)
+h12=0.9/9;                              % Thickness of layer 12 (0 si if no layer)
+h13=0.9/9;                              % Thickness of layer 12 (0 si if no layer)
+h14=0.9/9;                              % Thickness of layer 12 (0 si if no layer)
+h15=0.9/9;                              % Thickness of layer 12 (0 si if no layer)
+h16=0.9/9;                              % Thickness of layer 12 (0 si if no layer)
+h17=0.9/9;                              % Thickness of layer 12 (0 si if no layer)
+h18=0.01;                              % Thickness of layer 12 (0 si if no layer)
 
 %%%%%% Refraction indices (from top to bottom), can be a function of the wavelength
 
@@ -210,8 +222,20 @@ n10=1.58*ones(size(wavelength));                               % index between t
 n10m=retindice_chen(wavelength,4.802);                              % index inside the structures of layer 10 (0 if not structured)
 n11=1.58*ones(size(wavelength));                               % index between the structures of layer 11
 n11m=retindice_chen(wavelength,4.802);                              % index inside the structures of layer 11 (0 if not structured)
-n12=retindice_chen(wavelength,1.72);                               % index between the structures of layer 12
-n12m=0;                              % index inside the structures of layer 12 (0 if not structured)
+n12=1.58*ones(size(wavelength));                               % index between the structures of layer 11
+n12m=retindice_chen(wavelength,4.802);                              % index inside the structures of layer 11 (0 if not structured)
+n13=1.58*ones(size(wavelength));                               % index between the structures of layer 11
+n13m=retindice_chen(wavelength,4.802);                              % index inside the structures of layer 11 (0 if not structured)
+n14=1.58*ones(size(wavelength));                               % index between the structures of layer 11
+n14m=retindice_chen(wavelength,4.802);                              % index inside the structures of layer 11 (0 if not structured)
+n15=1.58*ones(size(wavelength));                               % index between the structures of layer 11
+n15m=retindice_chen(wavelength,4.802);                              % index inside the structures of layer 11 (0 if not structured)
+n16=1.58*ones(size(wavelength));                               % index between the structures of layer 11
+n16m=retindice_chen(wavelength,4.802);                              % index inside the structures of layer 11 (0 if not structured)
+n17=1.58*ones(size(wavelength));                               % index between the structures of layer 11
+n17m=retindice_chen(wavelength,4.802);                              % index inside the structures of layer 11 (0 if not structured)
+n18=retindice_chen(wavelength,1.72);                               % index between the structures of layer 12
+n18m=0;                              % index inside the structures of layer 12 (0 if not structured)
 nsub=retindice_chen(wavelength,1.72); % Ag argent index of the substrate
 %%%%%% Numerical parameters
 pol=0;                               % polarization of the incident wave, TM pol=2  TE pol=0
@@ -280,7 +304,7 @@ Einc=[];Hinc=[];E_semicon=[];H_semicon=[];x_semicon=[];y_semicon=[];z_semicon=[]
 Ex=[];Ey=[];Ez=[];Hx=[];Hy=[];Hz=[];
 xx=[];yy=[];zz=[];indice=[];
 Ntre=1;
-Height=[h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12];
+Height=[h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12,h13,h14,h15,h16,h17,h18];
 H=Height(1:(Nb_couches));
 if cal_abs==1||cal_champ==1||trace_champ==1;op_retcouche=1;else op_retcouche=0;end;
 if H(Nb_couches)<1e-5;disp('WARNING : There is a problem in the definition of the layers number !!');return;end;
@@ -331,6 +355,12 @@ if trace_champ==1&&isempty(y0)==0&&isempty(z0)==0;disp('WARNING : There is a pro
     if length(n10)==1;nn10=n10;else nn10=n10(zou);end;
     if length(n11)==1;nn11=n11;else nn11=n11(zou);end;
     if length(n12)==1;nn12=n12;else nn12=n12(zou);end;
+    if length(n12)==1;nn13=n13;else nn13=n13(zou);end;
+    if length(n12)==1;nn14=n14;else nn14=n14(zou);end;
+    if length(n12)==1;nn15=n15;else nn15=n15(zou);end;
+    if length(n12)==1;nn16=n16;else nn16=n16(zou);end;
+    if length(n12)==1;nn17=n17;else nn17=n17(zou);end;
+    if length(n12)==1;nn18=n18;else nn18=n18(zou);end;
     if length(n1m)==1;nn1m=n1m;else nn1m=n1m(zou);end;
     if length(n2m)==1;nn2m=n2m;else nn2m=n2m(zou);end;
     if length(n3m)==1;nn3m=n3m;else nn3m=n3m(zou);end;
@@ -343,9 +373,15 @@ if trace_champ==1&&isempty(y0)==0&&isempty(z0)==0;disp('WARNING : There is a pro
     if length(n10m)==1;nn10m=n10m;else nn10m=n10m(zou);end;
     if length(n11m)==1;nn11m=n11m;else nn11m=n11m(zou);end;
     if length(n12m)==1;nn12m=n12m;else nn12m=n12m(zou);end;
-    Number=[nn1,nn2,nn3,nn4,nn5,nn6,nn7,nn8,nn9,nn10,nn11,nn12];
+    if length(n12m)==1;nn13m=n13m;else nn13m=n13m(zou);end;
+    if length(n12m)==1;nn14m=n14m;else nn14m=n14m(zou);end;
+    if length(n12m)==1;nn15m=n15m;else nn15m=n15m(zou);end;
+    if length(n12m)==1;nn16m=n16m;else nn16m=n16m(zou);end;
+    if length(n12m)==1;nn17m=n17m;else nn17m=n17m(zou);end;
+    if length(n12m)==1;nn18m=n18m;else nn18m=n18m(zou);end;
+    Number=[nn1,nn2,nn3,nn4,nn5,nn6,nn7,nn8,nn9,nn10,nn11,nn12,nn13,nn14,nn15,nn16,nn17,nn18];
     N=Number(1:Nb_couches);
-    Numberm=[nn1m,nn2m,nn3m,nn4m,nn5m,nn6m,nn7m,nn8m,nn9m,nn10m,nn11m,nn12m];
+    Numberm=[nn1m,nn2m,nn3m,nn4m,nn5m,nn6m,nn7m,nn8m,nn9m,nn10m,nn11m,nn12m,nn13m,nn14m,nn15m,nn16m,nn17m,nn18m];
     Nm=Numberm(1:Nb_couches);
     diameter_x=Diameter_x(1:(Nb_couches));
     diameter_y=diameter_x;
