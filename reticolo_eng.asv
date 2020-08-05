@@ -611,7 +611,7 @@ xlim([min(wavelength) max(wavelength)])
 ylim([0 1])
 set(gca,'Fontsize',12)
 %legend({'InGaP','GaAs','Silver mirror','Total'})
-legend({'SiNx(1)','InGaP(2)','GaAs(3)','QD(4)','GaAs(5)','InGaP(6)','Silver mirror(7)','Total'})
+legend({'SiNx','InGaP(1)','GaAs(1)','QD','GaAs(2)','InGaP(2)','Silver mirror','Total'})
 set(gca,'XMinorTick','on','YMinorTick','on')
 set(gcf,'color','w');
 box on
