@@ -19,7 +19,7 @@
 %%%% - The volumic EM field in a given layer
 %%%% - A cross section of the EM field along a given plane
 %%%%
-%%%% Unit of length; everything is in ??m
+%%%% Unit of length; everything is in É m
 %%%%
 
 % -----------------------------------------
@@ -249,7 +249,7 @@ z0=[];                               % Cross section along z=z0 if trace_champ=1
 % note: z=0 corresponds to the bottom of the considered stack, at a depth h_sub inside the substrate
 h_air=0.05;                          % Thickness in incident medium to represent the cross-section (trace_champ=1)
 h_sub=0.05;                          % Thickness in the substrate to represent the cross-section  (trace_champ=1)
-h_2pts=20;                           % distance between 2 points in z pour the layers whose thickness is higher than 1??m (trace_champ=1)
+h_2pts=20;                           % distance between 2 points in z pour the layers whose thickness is higher than 1É m (trace_champ=1)
 op_objet=0;                          % If 1, plot the geometry to verify the calculated structure is correct
  diameter_x=Diameter_x(1:(Nb_couches));
  diameter_y=diameter_x;
@@ -293,7 +293,7 @@ if trace_champ==1&&isempty(y0)==0&&isempty(z0)==0;disp('WARNING : There is a pro
 
 % parfor zou=1:length(wavelength)
     zou=1;
-    disp(['Calculation n?' int2str(zou) ' of ' int2str(length(wavelength))])
+    disp(['Calculation n∞' int2str(zou) ' of ' int2str(length(wavelength))])
     
     inc=[];
     sym=[];
@@ -753,7 +753,7 @@ ylabel('z')
 % % plot(wavelength,Abs(4,:),'Linewidth',3)
 % 
 % plot(wavelength,A_tot,'Linewidth',3,'Linestyle','-.')
-% xlabel('\lambda (??m)')
+% xlabel('\lambda (É m)')
 % ylabel('Absorption')
 % xlim([min(wavelength) max(wavelength)])
 % ylim([0 1])
