@@ -138,9 +138,12 @@ theta=[0,0];                          %angle of incidence in degrees
 %%%%%% Geometric parameters
 periodicity_x=2.4;                  % period in x
 periodicity_y=periodicity_x;        % period in y
-Nb_couches=18; %Number of layers
+Nb_couches=18; %Number of layers (between 1 and 12)
 
 %diameter of each layer
+
+% dx1=periodicity_x/4;
+% dx2=3*periodicity_x/4;
 dx1=0.215/4;
 dx2=0.215/4*2;
 dx3=0.215/4*3;
@@ -174,69 +177,71 @@ Diameter_x=[dx1,dx2,dx3,dx4,dx5,dx6,dx7,dx8,dx9,dx10,dx11,dx12,dx13,dx14,dx15,dx
 % end
 
 % Thicknesses, from top to bottom
-h1=0.4/3;                           % Thickness of layer 1 (0 si if no layer)   AlInP
-h2=0.4/3;                           % Thickness of layer 2 (0 si if no layer)   AlInP
-h3=0.4/3;                           % Thickness of layer 3 (0 si if no layer)   AlInP
-h4=0.04;                            % Thickness of layer 4 (0 si if no layer)   AlInP
-h5=0.16;                            % Thickness of layer 5 (0 si if no layer)   GaAs
-h6=0.14;                            % Thickness of layer 6 (0 si if no layer)   QD
-h7=1.7;                             % Thickness of layer 7 (0 si if no layer)   GaAs
-h8=0.04;                            % Thickness of layer 8 (0 si if no layer)   AlInP
-h9=0.9/9;                           % Thickness of layer 9 (0 si if no layer)   AlInP
-h10=0.9/9;                          % Thickness of layer 10 (0 si if no layer)  AlInP
-h11=0.9/9;                          % Thickness of layer 11 (0 si if no layer)  AlInP
-h12=0.9/9;                          % Thickness of layer 12 (0 si if no layer)  AlInP
-h13=0.9/9;                          % Thickness of layer 12 (0 si if no layer)  AlInP
-h14=0.9/9;                          % Thickness of layer 12 (0 si if no layer)  AlInP
-h15=0.9/9;                          % Thickness of layer 12 (0 si if no layer)  AlInP
-h16=0.9/9;                          % Thickness of layer 12 (0 si if no layer)  AlInP
-h17=0.9/9;                          % Thickness of layer 12 (0 si if no layer)  AlInP
-h18=0.01;                           % Thickness of layer 12 (0 si if no layer)  Ag
+
+h1=0.4/3;                            % Thickness of layer 1 (0 si if no layer)
+h2=0.4/3; % AlInP Thickness of layer 2 (0 si if no layer)
+h3=0.4/3;                           % AlInP Thickness of layer 3 (0 si if no layer)
+h4=0.04;                           % GaAs Thickness of layer 4 (0 si if no layer)
+h5=0.16;                             % Thickness of layer 5 (0 si if no layer)
+h6=0.14;                             % Thickness of layer 6 (0 si if no layer)                               % Thickness of layer 6 (0 si if no layer)
+h7=1.7;                               % Thickness of layer 7 (0 si if no layer)
+h8=0.04;                               % Thickness of layer 8 (0 si if no layer)
+h9=0.9/9;                               % Thickness of layer 9 (0 si if no layer)
+h10=0.9/9;                              % Thickness of layer 10 (0 si if no layer)
+h11=0.9/9;                              % Thickness of layer 11 (0 si if no layer)
+h12=0.9/9;                              % Thickness of layer 12 (0 si if no layer)
+h13=0.9/9;                              % Thickness of layer 12 (0 si if no layer)
+h14=0.9/9;                              % Thickness of layer 12 (0 si if no layer)
+h15=0.9/9;                              % Thickness of layer 12 (0 si if no layer)
+h16=0.9/9;                              % Thickness of layer 12 (0 si if no layer)
+h17=0.9/9;                              % Thickness of layer 12 (0 si if no layer)
+h18=0.01;                              % Thickness of layer 12 (0 si if no layer)
 
 %%%%%% Refraction indices (from top to bottom), can be a function of the wavelength
-nh=1;
-n1=ones(size(wavelength));                  % AlInP
-n1m=retindice_chen(wavelength,4.802);       % 
-n2=ones(size(wavelength));                  % AlInP
-n2m=retindice_chen(wavelength,4.802);       % 
-n3=ones(size(wavelength));                  % AlInP
-n3m=retindice_chen(wavelength,4.802);       % 
-n4=ones(size(wavelength));                  % AlInP
-n4m=retindice_chen(wavelength,4.802);       % 
-n5=retindice_chen(wavelength,4.707);        % emitter GaAs
-n5m=0;                                      %
-n6=retindice_chen(wavelength,4.708);        % QD Al80Ga20As 
-n6m=0;                                      % 
-n7=retindice_chen(wavelength,4.707);        % base GaAs
-n7m=0;                                      % 
-n8=1.58*ones(size(wavelength));             % AlInP
-n8m=retindice_chen(wavelength,4.802);       % 
-n9=1.58*ones(size(wavelength));             % AlInP
-n9m=retindice_chen(wavelength,4.802);       % 
-n10=1.58*ones(size(wavelength));            % AlInP
-n10m=retindice_chen(wavelength,4.802);      % 
-n11=1.58*ones(size(wavelength));            % AlInP
-n11m=retindice_chen(wavelength,4.802);      % 
-n12=1.58*ones(size(wavelength));            % AlInP
-n12m=retindice_chen(wavelength,4.802);      % 
-n13=1.58*ones(size(wavelength));            % AlInP
-n13m=retindice_chen(wavelength,4.802);      % 
-n14=1.58*ones(size(wavelength));            % AlInP
-n14m=retindice_chen(wavelength,4.802);      % 
-n15=1.58*ones(size(wavelength));            % AlInP
-n15m=retindice_chen(wavelength,4.802);      % 
-n16=1.58*ones(size(wavelength));            % AlInP
-n16m=retindice_chen(wavelength,4.802);      % 
-n17=1.58*ones(size(wavelength));            % AlInP
-n17m=retindice_chen(wavelength,4.802);      % 
-n18=retindice_chen(wavelength,1.72);        % Ag
-n18m=0;                                     % 
-nsub=retindice_chen(wavelength,1.72);       % Ag argent index of the substrate
 
+nh=1;
+n1=ones(size(wavelength)); %air
+n1m=retindice_chen(wavelength,4.802);%AlInP
+n2=ones(size(wavelength)); % AlInP index inside the structures of layer 2 (0 if not structured)
+n2m=retindice_chen(wavelength,4.802);% AlInP
+n3=ones(size(wavelength)); % AlInP index inside the structures of layer 2 (0 if not structured)
+n3m=retindice_chen(wavelength,4.802);% AlInP
+n4=ones(size(wavelength)); %emitter gaas index between the structures of layer 3
+n4m=retindice_chen(wavelength,4.802); %Al                              % index inside the structures of layer 2 (0 if not structured)
+n5=retindice_chen(wavelength,4.708); % QD Al80Ga20As index between the structures of layer 3
+n5m=0;                               % index inside the structures of layer 3 (0 if not structured)
+n6=retindice_chen(wavelength,4.707); % gaas index between the structures of layer 4
+n6m=0;    % argent index inside the structures of layer 4 (0 if not structured)
+n7=retindice_chen(wavelength,4.708);   % AlInP argentindex between the structures of layer 5
+n7m=0; 
+n8=1.58*ones(size(wavelength));   % Ag index between the structures of layer 7
+n8m=retindice_chen(wavelength,4.802);                               % index inside the structures of layer 7 (0 if not structured)
+n9=1.58*ones(size(wavelength));                                % index between the structures of layer 9
+n9m=retindice_chen(wavelength,4.802);                               % index inside the structures of layer 9 (0 if not structured)
+n10=1.58*ones(size(wavelength));                               % index between the structures of layer 10
+n10m=retindice_chen(wavelength,4.802);                              % index inside the structures of layer 10 (0 if not structured)
+n11=1.58*ones(size(wavelength));                               % index between the structures of layer 11
+n11m=retindice_chen(wavelength,4.802);                              % index inside the structures of layer 11 (0 if not structured)
+n12=1.58*ones(size(wavelength));                               % index between the structures of layer 11
+n12m=retindice_chen(wavelength,4.802);                              % index inside the structures of layer 11 (0 if not structured)
+n13=1.58*ones(size(wavelength));                               % index between the structures of layer 11
+n13m=retindice_chen(wavelength,4.802);                              % index inside the structures of layer 11 (0 if not structured)
+n14=1.58*ones(size(wavelength));                               % index between the structures of layer 11
+n14m=retindice_chen(wavelength,4.802);                              % index inside the structures of layer 11 (0 if not structured)
+n15=1.58*ones(size(wavelength));                               % index between the structures of layer 11
+n15m=retindice_chen(wavelength,4.802);                              % index inside the structures of layer 11 (0 if not structured)
+n16=1.58*ones(size(wavelength));                               % index between the structures of layer 11
+n16m=retindice_chen(wavelength,4.802);                              % index inside the structures of layer 11 (0 if not structured)
+n17=1.58*ones(size(wavelength));                               % index between the structures of layer 11
+n17m=retindice_chen(wavelength,4.802);                              % index inside the structures of layer 11 (0 if not structured)
+n18=retindice_chen(wavelength,1.72);                               % index between the structures of layer 12
+n18m=0;                              % index inside the structures of layer 12 (0 if not structured)
+nsub=retindice_chen(wavelength,1.72); % Ag argent index of the substrate
 %%%%%% Numerical parameters
-pol=0;                              % polarization of the incident wave, TM pol=2  TE pol=0
-                                    % For normal incidence, TM <=> H//y and TE <=> E//y
-sym=[pol-1,pol-1,0,0];              % The symmetry of the structure, more symmetry means shorter calculation time
+pol=0;                               % polarization of the incident wave, TM pol=2  TE pol=0
+% For normal incidence, TM <=> H//y and TE <=> E//y
+
+sym=[pol-1,pol-1,0,0]; % The symmetry of the structure, more symmetry means shorter calculation time
 % IMPORTANT: To be changed if non-normal incident or if non-rectangular
 % structures
 % if theta(1)==0 && theta(2)==0;sym=[pol-1,pol-1,0,0];end;
@@ -244,11 +249,13 @@ sym=[pol-1,pol-1,0,0];              % The symmetry of the structure, more symmet
 % if theta(1)==0 && theta(2)~=0;sym=[1-pol,0,0,0];end;
 % if theta(1)~=0 && theta(2)~=0;sym=[];end;
 
-%% 
 Mx=0;                                % Number of Fourier terms in x
+%% 
+%% 
 My=Mx;                               % Number of Fourier terms in y
 op_granet=0;                         % If 1, RCWA is modified to improve convergence (Transforms the real coordinates at discontinuities)
-% IMPORTANT: this parameter is tricky to use, and does not work out of normal incidence. Better keep it at zero
+% IMPORTANT: this parameter is tricky to use, and does not work out of
+% normal incidence. Better keep it at zero
 
 cal_abs=0;                           % If 1, calculate absorption in each layer
 Nb_pts_z=10;                         % Number of points in z to calculate absorption, when absorption is calculated in each layer
@@ -268,8 +275,8 @@ h_air=0.05;                          % Thickness in incident medium to represent
 h_sub=0.05;                          % Thickness in the substrate to represent the cross-section  (trace_champ=1)
 h_2pts=20;                           % distance between 2 points in z pour the layers whose thickness is higher than 1??m (trace_champ=1)
 op_objet=0;                          % If 1, plot the geometry to verify the calculated structure is correct
-diameter_x=Diameter_x(1:(Nb_couches));
-diameter_y=diameter_x;
+ diameter_x=Diameter_x(1:(Nb_couches));
+ diameter_y=diameter_x;
 for az=1:Nb_couches
     if op_granet==1;Bx=500;Ax=0.02/Bx;By=Bx;Ay=Ax;xdisc=[-diameter_x/2,diameter_x/2];ydisc=[-diameter_y/2,diameter_y/2];
     end
@@ -299,26 +306,28 @@ xx=[];yy=[];zz=[];indice=[];
 Ntre=1;
 Height=[h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12,h13,h14,h15,h16,h17,h18];
 H=Height(1:(Nb_couches));
-if cal_abs==1||cal_champ==1||trace_champ==1;op_retcouche=1; else; op_retcouche=0; end
-if H(Nb_couches)<1e-5;disp('WARNING : There is a problem in the definition of the layers number !!'); return; end
-if trace_champ==1&&isempty(x0)==1&&isempty(y0)==1&&isempty(z0)==1;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
-if trace_champ==1&&isempty(x0)==0&&isempty(y0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
-if trace_champ==1&&isempty(x0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
-if trace_champ==1&&isempty(y0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
+if cal_abs==1||cal_champ==1||trace_champ==1;op_retcouche=1;else op_retcouche=0;end;
+if H(Nb_couches)<1e-5;disp('WARNING : There is a problem in the definition of the layers number !!');return;end;
+if trace_champ==1&&isempty(x0)==1&&isempty(y0)==1&&isempty(z0)==1;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!');return;end;
+if trace_champ==1&&isempty(x0)==0&&isempty(y0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!');return;end;
+if trace_champ==1&&isempty(x0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!');return;end;
+if trace_champ==1&&isempty(y0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!');return;end;
 
 %parpool
 %parfor zou=1:length(wavelength)
+
 for zou=1:length(wavelength)
-    disp(['Calculation n°' int2str(zou) ' of ' int2str(length(wavelength))])
+    %zou=1;
+    disp(['Calculation nï¿½' int2str(zou) ' of ' int2str(length(wavelength))])
     
     inc=[];
     sym=[];
     e0=[];
     o0=[];
-    % R0_TE_TE_vect=zeros(1);
-    % R0_TE_TM_vect=R0_TE_TE_vect;
-    % R0_TM_TM_vect=R0_TE_TE_vect;
-    % R0_TM_TE_vect=R0_TE_TE_vect;
+    R0_TE_TE_vect=zeros(1);
+    R0_TE_TM_vect=R0_TE_TE_vect;
+    R0_TM_TM_vect=R0_TE_TE_vect;
+    R0_TM_TE_vect=R0_TE_TE_vect;
     ref_TE_TE_vect=zeros(1);ref_TE_TM_vect=ref_TE_TE_vect;ref_TM_TM_vect=ref_TE_TE_vect;ref_TM_TE_vect=ref_TE_TE_vect;
     A_tot_vect=zeros(1);
     A_sub_vect=zeros(1);
@@ -335,42 +344,42 @@ for zou=1:length(wavelength)
     period=[periodicity_x,periodicity_y];
     
     ns=nsub(zou);
-    if length(n1)==1;nn1=n1; else; nn1=n1(zou); end;
-    if length(n2)==1;nn2=n2; else; nn2=n2(zou); end;
-    if length(n3)==1;nn3=n3; else; nn3=n3(zou); end;
-    if length(n4)==1;nn4=n4; else; nn4=n4(zou); end;
-    if length(n5)==1;nn5=n5; else; nn5=n5(zou); end;
-    if length(n6)==1;nn6=n6; else; nn6=n6(zou); end;
-    if length(n7)==1;nn7=n7; else; nn7=n7(zou); end;
-    if length(n8)==1;nn8=n8; else; nn8=n8(zou); end;
-    if length(n9)==1;nn9=n9; else; nn9=n9(zou); end;
-    if length(n10)==1;nn10=n10; else; nn10=n10(zou); end;
-    if length(n11)==1;nn11=n11; else; nn11=n11(zou); end;
-    if length(n12)==1;nn12=n12; else; nn12=n12(zou); end;
-    if length(n13)==1;nn13=n13; else; nn13=n13(zou); end;
-    if length(n14)==1;nn14=n14; else; nn14=n14(zou);end;
-    if length(n15)==1;nn15=n15; else; nn15=n15(zou);end;
-    if length(n16)==1;nn16=n16; else; nn16=n16(zou);end;
-    if length(n17)==1;nn17=n17; else; nn17=n17(zou);end;
-    if length(n18)==1;nn18=n18; else; nn18=n18(zou);end;
-    if length(n1m)==1;nn1m=n1m; else; nn1m=n1m(zou);end;
-    if length(n2m)==1;nn2m=n2m; else; nn2m=n2m(zou);end;
-    if length(n3m)==1;nn3m=n3m; else; nn3m=n3m(zou);end;
-    if length(n4m)==1;nn4m=n4m; else; nn4m=n4m(zou);end;
-    if length(n5m)==1;nn5m=n5m; else; nn5m=n5m(zou);end;
-    if length(n6m)==1;nn6m=n6m; else; nn6m=n6m(zou);end;
-    if length(n7m)==1;nn7m=n7m; else; nn7m=n7m(zou);end;
-    if length(n8m)==1;nn8m=n8m; else; nn8m=n8m(zou);end;
-    if length(n9m)==1;nn9m=n9m; else; nn9m=n9m(zou);end;
-    if length(n10m)==1;nn10m=n10m; else; nn10m=n10m(zou);end;
-    if length(n11m)==1;nn11m=n11m; else; nn11m=n11m(zou);end;
-    if length(n12m)==1;nn12m=n12m; else; nn12m=n12m(zou);end;
-    if length(n13m)==1;nn13m=n13m; else; nn13m=n13m(zou);end;
-    if length(n14m)==1;nn14m=n14m; else; nn14m=n14m(zou);end;
-    if length(n15m)==1;nn15m=n15m; else; nn15m=n15m(zou);end;
-    if length(n16m)==1;nn16m=n16m; else; nn16m=n16m(zou);end;
-    if length(n17m)==1;nn17m=n17m; else; nn17m=n17m(zou);end;
-    if length(n18m)==1;nn18m=n18m; else; nn18m=n18m(zou);end;
+    if length(n1)==1;nn1=n1;else nn1=n1(zou);end;
+    if length(n2)==1;nn2=n2;else nn2=n2(zou);end;
+    if length(n3)==1;nn3=n3;else nn3=n3(zou);end;
+    if length(n4)==1;nn4=n4;else nn4=n4(zou);end;
+    if length(n5)==1;nn5=n5;else nn5=n5(zou);end;
+    if length(n6)==1;nn6=n6;else nn6=n6(zou);end;
+    if length(n7)==1;nn7=n7;else nn7=n7(zou);end;
+    if length(n8)==1;nn8=n8;else nn8=n8(zou);end;
+    if length(n9)==1;nn9=n9;else nn9=n9(zou);end;
+    if length(n10)==1;nn10=n10;else nn10=n10(zou);end;
+    if length(n11)==1;nn11=n11;else nn11=n11(zou);end;
+    if length(n12)==1;nn12=n12;else nn12=n12(zou);end;
+    if length(n13)==1;nn13=n13;else nn13=n13(zou);end;
+    if length(n14)==1;nn14=n14;else nn14=n14(zou);end;
+    if length(n15)==1;nn15=n15;else nn15=n15(zou);end;
+    if length(n16)==1;nn16=n16;else nn16=n16(zou);end;
+    if length(n17)==1;nn17=n17;else nn17=n17(zou);end;
+    if length(n18)==1;nn18=n18;else nn18=n18(zou);end;
+    if length(n1m)==1;nn1m=n1m;else nn1m=n1m(zou);end;
+    if length(n2m)==1;nn2m=n2m;else nn2m=n2m(zou);end;
+    if length(n3m)==1;nn3m=n3m;else nn3m=n3m(zou);end;
+    if length(n4m)==1;nn4m=n4m;else nn4m=n4m(zou);end;
+    if length(n5m)==1;nn5m=n5m;else nn5m=n5m(zou);end;
+    if length(n6m)==1;nn6m=n6m;else nn6m=n6m(zou);end;
+    if length(n7m)==1;nn7m=n7m;else nn7m=n7m(zou);end;
+    if length(n8m)==1;nn8m=n8m;else nn8m=n8m(zou);end;
+    if length(n9m)==1;nn9m=n9m;else nn9m=n9m(zou);end;
+    if length(n10m)==1;nn10m=n10m;else nn10m=n10m(zou);end;
+    if length(n11m)==1;nn11m=n11m;else nn11m=n11m(zou);end;
+    if length(n12m)==1;nn12m=n12m;else nn12m=n12m(zou);end;
+    if length(n13m)==1;nn13m=n13m;else nn13m=n13m(zou);end;
+    if length(n14m)==1;nn14m=n14m;else nn14m=n14m(zou);end;
+    if length(n15m)==1;nn15m=n15m;else nn15m=n15m(zou);end;
+    if length(n16m)==1;nn16m=n16m;else nn16m=n16m(zou);end;
+    if length(n17m)==1;nn17m=n17m;else nn17m=n17m(zou);end;
+    if length(n18m)==1;nn18m=n18m;else nn18m=n18m(zou);end;
     Number=[nn1,nn2,nn3,nn4,nn5,nn6,nn7,nn8,nn9,nn10,nn11,nn12,nn13,nn14,nn15,nn16,nn17,nn18];
     N=Number(1:Nb_couches);
     Numberm=[nn1m,nn2m,nn3m,nn4m,nn5m,nn6m,nn7m,nn8m,nn9m,nn10m,nn11m,nn12m,nn13m,nn14m,nn15m,nn16m,nn17m,nn18m];
@@ -398,7 +407,7 @@ for zou=1:length(wavelength)
             u{az}=retu(period,{N(az),k0});
             
         else
-            % u{az}=retu(period,{N(az),[0,0,diameter_x,diameter_y,Nm(az),Ntre],[-diameter_x/2+w_rectangle/2,diameter_y/2+h_rectangle/2,w_rectangle,h_rectangle,Nm(az),Ntre],[diameter_x/2+h_rectangle/2,-diameter_y/2+w_rectangle/2,h_rectangle,w_rectangle,Nm(az),Ntre ],k0});
+            %             u{az}=retu(period,{N(az),[0,0,diameter_x,diameter_y,Nm(az),Ntre],[-diameter_x/2+w_rectangle/2,diameter_y/2+h_rectangle/2,w_rectangle,h_rectangle,Nm(az),Ntre],[diameter_x/2+h_rectangle/2,-diameter_y/2+w_rectangle/2,h_rectangle,w_rectangle,Nm(az),Ntre ],k0});
             if az==1||az==2||az==3
                 structure1=[-1200*10/11,-1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
                 structure2=[-1200*10/11,-1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
@@ -617,6 +626,7 @@ for zou=1:length(wavelength)
     end
     
     if cal_abs==1||cal_champ==1||trace_champ==1
+        
         sb_norm=retb(init,ah,-0.1,0,[],[]);
         tab_norm=[0,1,1];
         if size(ef.inc.teta,2)==1
@@ -634,9 +644,11 @@ for zou=1:length(wavelength)
             Einc=squeeze(einc(:,:,:,1:3));
             Hinc=squeeze(einc(:,:,:,4:6));
         end
+        
     end
     
     if cal_abs==1
+        
         nunu=find(Nm~=0);num=[];
         for zer=1:length(nunu);if nunu(zer)==1;num=[num,nunu(zer),nunu(zer)+1];else;num=[num,nunu(zer)-1,nunu(zer),nunu(zer)+1];end;end;
         num=retelimine(num);
@@ -681,9 +693,11 @@ for zou=1:length(wavelength)
         test(:,zou)=test_vect;
         A_tot(:,zou)=A_tot_vect;
         A_sub(:,zou)=A_sub_vect;
+        
     end
     
     if cal_champ==1
+        
         tab_semicon=[];
         struct={ab};
         for az=1:Nb_couches
@@ -711,10 +725,12 @@ for zou=1:length(wavelength)
         struct0={struct0{:},ab};
         tab0=[tab0;[h_sub,Nb_couches+2,Nb_pts_z+10]];
         tab0(tab0(:,1)>1,3)=floor(tab0(tab0(:,1)>1,1)*1000/h_2pts);
+       
         
         [xx,wx]=retgauss(-periodicity_x/2,periodicity_x/2,15,12,[-diameter_x/2,diameter_x/2]);
         [yy,wy]=retgauss(-periodicity_y/2,periodicity_y/2,15,12,[-diameter_y/2,diameter_y/2]);
       
+        
         if isempty(x0)==1&&isempty(z0)==1
             [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,y0},tab0,[],[1:6]+7.25i,1,1,1:6);
         elseif isempty(y0)==1&&isempty(z0)==1
@@ -738,12 +754,23 @@ for zou=1:length(wavelength)
     end
 
 end
+
 %delete(gcp('nocreate'))
+
 %% Saving and plotting output data
 
+%%%% Example to save the data into a file
+% AbsRCWA=1-R0_TE_TE;
+% text=['AbsRCWA_','wav',int2str(wavelength(1)*1000),'_',int2str(wavelength(end)*1000),'kappa',num2str(kappa),'_diam',int2str(diameter_x*1000),'_per',int2str(periodicity_x*1000),'_h1_',int2str(h1*1000),'_h2_',int2str(h2*1000),'_Fourier',int2str(Mx),'_nbpoints',int2str(length(wavelength)),'_wrect',num2str(w_rectangle),'_hrect',num2str(h_rectangle),'_granet_nosym.mat'];
+% save(text,'AbsRCWA','wavelength','ref_TE_TE','ref_TE_TM','ref_TM_TM','ref_TM_TE','R0_TE_TE','R0_TE_TM','R0_TM_TM','R0_TM_TE','Abs_plots','Abs','A_sub','A_tot','test','Nb_couches','N_semicon','nh','n1','n2','n3','n4','n5','n6','n7','n8','n9','n10','n11','n12','nsub','n1m','n2m','n3m','n4m','n5m','n6m','n7m','n8m','n9m','n10m','n11m','n12m','periodicity_x','periodicity_y','diameter_x','diameter_y','h1','h2','h3','h4','h5','h6','h7','h8','h9','h10','h11','h12','Mx','My','pol',...
+%     'op_granet','Nb_pts_z','Nb_pts_z_semicon','x0','y0','z0','h_air','h_sub','Einc','Hinc','E_semicon','H_semicon','x_semicon','y_semicon','z_semicon','W_semicon','Ex','Ey','Ez','Hx','Hy','Hz','xx','yy','zz','indice','cal_abs','cal_champ','trace_champ')
 %%%% Example to plot a cross section with trace_champ=1, x0=[], y0=0, z0=[]
 %%%% Hy as a function of x and z
 %%%% The separation between the layers is in white (indice contains the position of all indices)
+% figure
+% pcolor(xx,zz,abs(Hy).^2);shading flat;colorbar;colormap(hot);hold on;
+% contour(xx,zz,indice,'w','linewidth',1.5)
+disp(xx)
 if trace_champ == 1
     figure
     pcolor(xx,zz,abs(Ey).^2);
@@ -756,21 +783,27 @@ if trace_champ == 1
 end
 
 if cal_abs == 1
-    %%%% Example to save the data into a file
+    Abs_abs=Abs(3,:)+Abs(4,:)+Abs(5,:);
     text=['period_',int2str(periodicity_x*1000),'_diam_',int2str(dx1*1000),'wav',int2str(wavelength(1)*1000),'_',int2str(wavelength(end)*1000),'_nbpoints',int2str(length(wavelength)),'_Fourier',int2str(Mx),'.mat'];
-    save(text);
+        %     text='AbsRCWA_20nm_GaAs_check_Andrea.mat';
+        save(text);
 
     %%%% Example to plot the absorption
     figure
-    %plot(wavelength,A_tot(1,:),'Linewidth',3)
-    %legend({'Total'})
-    plot(wavelength,Abs(1,:)+Abs(2,:)+Abs(3,:)+Abs(4,:), wavelength,Abs(5,:), wavelength,Abs(6,:), wavelength,Abs(7,:), wavelength,Abs(8,:)+Abs(9,:)+Abs(10,:)+Abs(11,:)+Abs(12,:)+Abs(13,:)+Abs(14,:)+Abs(15,:)+Abs(16,:)+Abs(17,:), wavelength,Abs(18,:), wavelength,Abs(5,:)+Abs(6,:)+Abs(7,:), 'Linewidth',3)
-    legend({'AlInP(1-4)','GaAs(5)','QD(6)','GaAs(7)','AlInP(8-17)','Silver mirror(18)','active region(4-6)'})
-    xlabel('\lambda (ƒÊm)')
+    %plot(wavelength,Abs(1,:),wavelength,Abs(2,:),wavelength,Abs(3,:),wavelength,Abs(4,:),wavelength,Abs(5,:)+Abs(6,:)+Abs(7,:)+Abs(8,:)+Abs(9,:)+Abs(10,:)+Abs(11,:)+Abs(12,:)+Abs(13,:)+Abs(14,:)+Abs(15,:)+Abs(16,:),wavelength,Abs(17,:),wavelength,Abs(18,:),wavelength,A_tot(1,:),'Linewidth',3)
+    plot(wavelength,A_tot(1,:),'Linewidth',3)
+    %hold on 
+    % plot(wavelength,Abs(2,:),'Linewidth',3)
+    % plot(wavelength,Abs(4,:),'Linewidth',3)
+
+    % plot(wavelength,A_tot,'Linewidth',3,'Linestyle','-.')
+    xlabel('\lambda (ï¿½ï¿½m)')
     ylabel('Absorption')
     xlim([min(wavelength) max(wavelength)])
     ylim([0 1])
     set(gca,'Fontsize',12)
+    %legend({'SiNx(1)','InGaP(2)','GaAs(3)','QD(4)','GaAs(5-16)','InGaP(17)','Silver mirror(18)','Total'})
+    legend({'Total'})
     set(gca,'XMinorTick','on','YMinorTick','on')
     set(gcf,'color','w');
     box on
