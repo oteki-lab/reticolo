@@ -19,7 +19,7 @@ function [e,yy,ww,o,s,sssh]=retchamp(init,a,sh,sb,inc,x,y,h,cale,calyy,calww,cal
 %
 % calcul des champs ex=e(:,:,:,1),ey=e(:,:,:,2),ez=e(:,:,:,3),hx=e(:,:,:,4),hy=e(:,:,:,5),hz=e(:,:,:,6)
 %  en yy,x,y  {x,y} regroupes en  cell array  dans les donnees pour compatibilitee avec le cas 1D
-%  si  a  a  eté calculé sans parametre (ou c=0) le calcul est fait de maniére approchée pour les champs discontinus
+%  si  a  a  et? calcul? sans parametre (ou c=0) le calcul est fait de maniére approchée pour les champs discontinus
 %  alors ez et hz ne sont pas calcules (ez=hz=0)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SI PLUSIEURS COUCHES:
@@ -36,7 +36,7 @@ function [e,yy,ww,o,s,sssh]=retchamp(init,a,sh,sb,inc,x,y,h,cale,calyy,calww,cal
 %                                                  créés par retio( ,1) ou retio( ,'fich')
 %
 % des matrices S sont tabulées dans un cell array: sssh 
-%  on peut les réutiliser dans un autre passage avec d'autres x pourvu que tab ne soit pas changé
+%  on peut les réutiliser dans un autre passage avec d'autres x pourvu que tab ne soit pas chang?
 %  (ceci peut être utile pour faire divers coupes sagittales)
 %
 %
@@ -81,25 +81,25 @@ function [e,yy,ww,o,s,sssh]=retchamp(init,a,sh,sb,inc,x,y,h,cale,calyy,calww,cal
 %   Il est alors impératif que en dessus et en dessous il y ait des textures rcwa
 %   si on veut calculer les champ en des hauteurs précises ,on peut prendre par exemple:
 %   tab=[ .....;[hh,10];[h1,5,0];[0,5,1];[h2,5,0];[0,5,1];[h3,5,0];[hb,2,15];..
-%   où a{1} a{2} sont les descripteurs des textures dessus et dessous (rcwa),
+%   o? a{1} a{2} sont les descripteurs des textures dessus et dessous (rcwa),
 %   et a{5}  un descripteur de tronçons obtenus par les éléments finis   
 %   (la hauteur totale de la partie 'éléments finis' h1+h2+h3 doit être exacte)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 %   AU RETOUR:
 %
 %   ee:champs
-%   yy:cotes des points ou le champ est calculé ,L' ORIGINE EST LE BAS de la structure ( donc yy>0 )
+%   yy:cotes des points ou le champ est calcul? ,L' ORIGINE EST LE BAS de la structure ( donc yy>0 )
 %   ww: poids associés ( si on veut intégrer)
 %   o:eps de l'objet aux mêmes points que ee (pour tracer l'objet)
 %   s:matrice s totale
-%   le calcul de ces quantités est contrôlé par des paramètres:
+%   le calcul de ces quantités est contrôl? par des paramètres:
 %     cale   calcul de e
 %     si une valeur de cale est i, elle est ignorée et le champ est clone
 %     si imag(cale)~=0 apodisation avec le paramètre imag(cale)
 %         en 2D les 2 valeurs des paramètres d'apodisation (en x et en y)
 %         sont la première et la dernière valeur non nulle de imag(cale)
 %         en 1D la valeur du paramètre d'apodisation est la première valeur non nulle de imag(cale)
-%             ( la fonction d' apodisation 'masque' peut être visualisée et calculée par appel à 
+%             ( la fonction d' apodisation 'masque' peut être visualisée et calculée par appel ? 
 %             masque=retchamp(init,apod) qui utilise le bon nombre de termes de Fourier
 %             ou, masque=retchamp(apod)) qui utilise 100 termes de Fourier en 1D ,
 %             ou, masque=retchamp([apod,m]) qui utilise m termes de Fourier en 1D )
@@ -113,7 +113,7 @@ function [e,yy,ww,o,s,sssh]=retchamp(init,a,sh,sb,inc,x,y,h,cale,calyy,calww,cal
 %     exemples: cale=[1,2] calcul des composantes 1 et 2 sans apodisation
 %               cale=[1+3i,2i] calcul de la composante 1 avec apodisation 3 en x 2 en y si on est en 2 D  3 en 1 D
 %               cale=[1:6]+i calcul des composantes 1,2,3,4,5,6 avec apodisation 1 en x et 1 en y
-%               cale=[-1,2,3] calcul des amplitudes au carré  ,des composantes 1,2,3 sans apodisation
+%               cale=[-1,2,3] calcul des amplitudes au carr?  ,des composantes 1,2,3 sans apodisation
 %               cale=[1:6,i] calcul des composantes 1,2,3,4,5,6  sans apodisation et clonage
 %
 %     calyy  1 calcul si  0 ou [] pas calcul de yy                              défaut:  1
@@ -136,7 +136,7 @@ function [e,yy,ww,o,s,sssh]=retchamp(init,a,sh,sb,inc,x,y,h,cale,calyy,calww,cal
 % [e,yy,ww,o,s]=retchamp(init,a,sh,sb,inc,x,y,h,cale,calyy,calww,calo,cals)
 %
 %  y:vecteur des hauteurs dans la couche considérée(y=0:bas de la couche  y=h:haut de la couche)
-% le descripteur de texture a décrivant la couche a été calculée auparavant avec  retcouche  (paramètre c=1 conseille)
+% le descripteur de texture a décrivant la couche a ét? calculée auparavant avec  retcouche  (paramètre c=1 conseille)
 % sh :matrice s du haut de la couche au haut du système
 % sb :matrice s du bas du système au bas de la couche                                      
 % inc:vecteur incident du système total (ligne ou colonne)
@@ -176,7 +176,7 @@ function [e,yy,ww,o,s,sssh]=retchamp(init,a,sh,sb,inc,x,y,h,cale,calyy,calww,cal
 %
 %  ATTENTION: dans ce cas pas de cale ( donc pas d'apodisation ni de clonage )
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-%   forme dègènerèe :ajout d'une couche dans tab avec 1 point à la hauteur h depuis le bas 
+%   forme dègènerèe :ajout d'une couche dans tab avec 1 point ? la hauteur h depuis le bas 
 %  [tab,k]=retchamp(tab,h);
 %  le numéro (dans le nouveau tab ) de la couche est k
 %  si h<0 (ou h> sum(tab(:,1))) tab est prolonge par le dernier (ou premier) milieu 
@@ -191,13 +191,13 @@ function [e,yy,ww,o,s,sssh]=retchamp(init,a,sh,sb,inc,x,y,h,cale,calyy,calww,cal
 % zs coordonnees des sources l'origine etant le bas de tab ( z=0 de retchamp)
 % sh sb sans les eventuelles sources exterieures au tab
 % ah,ab descripteur de texture des milieux invariants en haut et en bas 
-% source matrice S de la source à répéter
+% source matrice S de la source ? répéter
 % ns numero mis dans tab pour designer la source
 % SORTIES
 % Tab,Sh,Sb :les nouveaux
 % Lh,Lb hauteurs supplementaires en haut et en bas ( eventuelles sources exterieures au tab)
 % Tab=retchamp(tab,zs,sh,sb,ah,ab,source,ns);est plus rapide si on a deja
-% calculé Sh Sb Lh Lb (par exemple pour la boite de retop)
+% calcul? Sh Sb Lh Lb (par exemple pour la boite de retop)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 %            RESUME
@@ -540,7 +540,7 @@ end;             %<--
 end;            % .. forme simplifiee ou generale ?
 
 if a{end}.type==5; % texture inclinee
-u=exp(i*y(nn)*a{3}*[init{2},init{2}].');uu=exp(-i*y(nn)*a{3}*init{2}.');% translation due à l'inclinaison 
+u=exp(i*y(nn)*a{3}*[init{2},init{2}].');uu=exp(-i*y(nn)*a{3}*init{2}.');% translation due ? l'inclinaison 
 e(nn,:,3)=-i*retff((uu.*(a3*(v.*u))).',betaa);   % Ht
 e(nn,:,4)=-i*retff((uu.*(a1*(v.*u))).',betaa);% Bn
 mu=rettestobjet(init,a,-1,0,x-y(nn)*a{3},2:4).';
@@ -564,7 +564,7 @@ end;                % texture inclinee  ?
 end;  % <++++++++++++++ nn
 end; % < xxxxxxxxxxxxxxxxxxxx  1D 2D ?
 end; %  < $$$$$$$$$$$$$$$$$
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%ù
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%?
 function e=ret2champ(init,a,sh,sb,inc,x,y,z,h,betaa);
 % function e=ret2champ(init,a,sh,sb,inc,x,y,z,h,betaa);
 % calcul des champs ex=e(:,:,:,1),ey=e(:,:,2),ez=e(:,:,:,3),hx=e(:,:,:,4),hy=e(:,:,:,5),hz=e(:,:,:,6)
@@ -620,7 +620,7 @@ end;
 end;
 v=retsc(ssh,ssb,inc,m);
 
-if a{end}.type==5; % texture inclinee on ramene à l'origine pour ensuite decaler
+if a{end}.type==5; % texture inclinee on ramene ? l'origine pour ensuite decaler
 v=exp(((i*z(nn)*a{3})*a{9})).'.*v;
 end;
 
@@ -700,7 +700,7 @@ mu(1,fx,fy,1,3)=uu(ii,jj,9);mu(1,fx,fy,3,1)=uu(ii,jj,9); %     8 9 3
 end;
 end;end;% < ii jj
 	
-mm=length(v)/2;v(mm+1:2*mm)=i*v(mm+1:2*mm);% clonage attention que mm n'est par egal à m si on utilise la symetrie !	
+mm=length(v)/2;v(mm+1:2*mm)=i*v(mm+1:2*mm);% clonage attention que mm n'est par egal ? m si on utilise la symetrie !	
 %[Ze,Zh,f_champe,f_champh]=deal(fey,fhy,ez,hz);
 
 
@@ -825,7 +825,7 @@ end;               % <********************** texture inclinee  ?
 
 end; % < #############################  fin calcul propre
 
-if ~propre; %calcul approché des champs discontinus
+if ~propre; %calcul approch? des champs discontinus
 e(nn,:,:,2)=ret2ff(kx,ky,v(n+1:2*n),betaa);  %EY
 e(nn,:,:,5)=ret2ff(kx,ky,v(3*n+1:4*n),betaa);%HY
 e(nn,:,:,1)=ret2ff(kx,ky,v(1:n),betaa);      %EX
@@ -874,7 +874,7 @@ if dim==1;e=zeros(mz,mx,4);else;e=zeros(mz,mx,my,6);end
 return;end;
 
 % calcul des amplitudes des modes montants et descendants
-         % importance de la troncature pour la stabilité numerique
+         % importance de la troncature pour la stabilit? numerique
 if iscell(sh);
 sbb=retss(retb(init,a,1.e-6,0),rettronc(sb,0,[],-1));shh=retss(rettronc(sh,0,[],1),retb(init,a,-1.e-6,0));
 ddd=exp(-dd*h);
@@ -987,7 +987,7 @@ mx=betaa{3};my=betaa{4};
 ff=repmat(betaa{1}(kx,:),1,my)*(retdiag(f)*(reshape(repmat(betaa{2}(ky,:),mx,1),length(ky),mx*my)).'); 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function betaa=calbetaa(init,x,apod);% calcul de betaa qui sert à calculer les champs par synthèse de Fourier-Floquet  
+function betaa=calbetaa(init,x,apod);% calcul de betaa qui sert ? calculer les champs par synthèse de Fourier-Floquet  
 if init{end}.genre==1;% Bessel cylindres Popov
 N=init{end}.nhanckel;L=init{2};k=init{3};wk=init{4};Pml=init{10};
 K=retdiag(k);W=retdiag(wk);
@@ -1424,7 +1424,7 @@ e(:,:,:,4:6)=-i*e(:,:,:,4:6);% declonage
 % les sources sont obligatoirement regulierement espacées sont au moins 2
 % sh sb sans les eventuelles sources exterieures au tab
 % ah,ab descripteur de texture des milieux invariants en haut et en bas 
-% source matrice S de la source à répéter
+% source matrice S de la source ? répéter
 % ns numero mis dans tab pour designer la source
 % SORTIES
 % Tab,Sh,Sb :les nouveaus

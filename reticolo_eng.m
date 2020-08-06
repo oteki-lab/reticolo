@@ -129,7 +129,7 @@ clear;retio;
 
 
 %%%%%% Wavelengths and angle of incidence
-npoints=101;  % 1 for only structure
+npoints=1;  % 1 for only structure
 lambdamin=0.4;
 lambdamax=1.2;
 wavelength=linspace(lambdamin,lambdamax,npoints);
@@ -248,7 +248,7 @@ My=Mx;                               % Number of Fourier terms in y
 op_granet=0;                         % If 1, RCWA is modified to improve convergence (Transforms the real coordinates at discontinuities)
 % IMPORTANT: this parameter is tricky to use, and does not work out of normal incidence. Better keep it at zero
 
-cal_abs=1;                           % If 1, calculate absorption in each layer
+cal_abs=0;                           % If 1, calculate absorption in each layer
 Nb_pts_z=10;                         % Number of points in z to calculate absorption, when absorption is calculated in each layer
 
 cal_champ=0;                         % If 1, calculate the field in layer N_semicon
@@ -256,7 +256,7 @@ cal_champ=0;                         % If 1, calculate the field in layer N_semi
 N_semicon=3;                         % Layer where field is calculated (if cal_champ=1)
 Nb_pts_z_semicon=50;                 % Number of points in the z direction to calculate the field in N_semicon (if cal_champ=1)
 
-trace_champ=0;                       % si 1,calculates a cross-section of the field
+trace_champ=1;                       % si 1,calculates a cross-section of the field
 % IMPORTANT: only one wavelength
 x0=0;                                % Cross section along x=x0 if trace_champ=1 ([] if the cross-section is along another direction)
 y0=[];                               % Cross section along y=y0 if trace_champ=1 ([] if the cross-section is along another direction)
@@ -303,9 +303,9 @@ if trace_champ==1&&isempty(x0)==0&&isempty(y0)==0;disp('WARNING : There is a pro
 if trace_champ==1&&isempty(x0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 if trace_champ==1&&isempty(y0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 
-parpool
-parfor zou=1:length(wavelength)
-%for zou=1:length(wavelength)
+%parpool
+%parfor zou=1:length(wavelength)
+for zou=1:length(wavelength)
     disp(['Calculation n-' int2str(zou) ' of ' int2str(length(wavelength))])
     
     inc=[];
@@ -713,7 +713,7 @@ parfor zou=1:length(wavelength)
     end
 
 end
-delete(gcp('nocreate'))
+%delete(gcp('nocreate'))
 %% Saving and plotting output data
 
 %%%% Example to plot a cross section with trace_champ=1, x0=[], y0=0, z0=[]
@@ -741,7 +741,7 @@ if cal_abs == 1
     %legend({'Total'})
     plot(wavelength,Abs(1,:)+Abs(2,:)+Abs(3,:)+Abs(4,:), wavelength,Abs(5,:), wavelength,Abs(6,:), wavelength,Abs(7,:), wavelength,Abs(8,:)+Abs(9,:)+Abs(10,:)+Abs(11,:)+Abs(12,:)+Abs(13,:)+Abs(14,:)+Abs(15,:)+Abs(16,:)+Abs(17,:), wavelength,Abs(18,:), wavelength,Abs(5,:)+Abs(6,:)+Abs(7,:), 'Linewidth',3)
     legend({'AlInP(1-4)','GaAs(5)','QD(6)','GaAs(7)','AlInP(8-17)','Silver mirror(18)','active region(4-6)'})
-    xlabel('\lambda (Œºm)')
+    xlabel('\lambda (É m)')
     ylabel('Absorption')
     xlim([min(wavelength) max(wavelength)])
     ylim([0 1])
