@@ -368,147 +368,16 @@ for zou=1:length(wavelength)
         else
             % u{az}=retu(period,{N(az),[0,0,diameter_x,diameter_y,Nm(az),Ntre],[-diameter_x/2+w_rectangle/2,diameter_y/2+h_rectangle/2,w_rectangle,h_rectangle,Nm(az),Ntre],[diameter_x/2+h_rectangle/2,-diameter_y/2+w_rectangle/2,h_rectangle,w_rectangle,Nm(az),Ntre ],k0});
             if az==1||az==2||az==3
-                structure1=[-1200*10/11,-1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure2=[-1200*10/11,-1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure3=[-1200*10/11,-1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure4=[-1200*10/11,-1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure5=[-1200*10/11,-1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure6=[-1200*10/11,0,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure7=[-1200*10/11,1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure8=[-1200*10/11,1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure9=[-1200*10/11,1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure10=[-1200*10/11,1200*8,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure11=[-1200*10/11,1200*10,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-
-                structure12=[-1200*8/11,-1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure13=[-1200*8/11,-1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure14=[-1200*8/11,-1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure15=[-1200*8/11,-1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure16=[-1200*8/10,-1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure17=[-1200*8/11,0,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure18=[-1200*8/11,1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure19=[-1200*8/11,1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure20=[-1200*8/11,1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure21=[-1200*8/11,1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure22=[-1200*8/11,1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-
-                structure23=[-1200*6/11,-1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure24=[-1200*6/11,-1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure25=[-1200*6/11,-1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure26=[-1200*6/11,-1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure27=[-1200*6/11,-1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure28=[-1200*6/11,0,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure29=[-1200*6/11,1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure30=[-1200*6/11,1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure31=[-1200*6/11,1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure32=[-1200*6/11,1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure33=[-1200*6/11,1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-
-                structure34=[-1200*4/11,-1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure35=[-1200*4/11,-1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure36=[-1200*4/11,-1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure37=[-1200*4/11,-1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure38=[-1200*4/11,-1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure39=[-1200*4/11,0,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure40=[-1200*4/11,1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure41=[-1200*4/11,1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure42=[-1200*4/11,1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure43=[-1200*4/11,1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure44=[-1200*4/11,1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-
-                structure45=[-1200*2/11,-1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure46=[-1200*2/11,-1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure47=[-1200*2/11,-1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure48=[-1200*2/11,-1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure49=[-1200*2/11,-1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure50=[-1200*2/11,0,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure51=[-1200*2/11,1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure52=[-1200*2/11,1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure53=[-1200*2/11,1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure54=[-1200*2/11,1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure55=[-1200*2/11,1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-
-                structure56=[0,-1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure57=[0,-1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure58=[0,-1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure59=[0,-1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure60=[0,-1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure61=[0,0,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure62=[0,1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure63=[0,1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure64=[0,1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure65=[0,1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure66=[0,1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-
-                structure67=[1200*2/11,-1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure68=[1200*2/11,-1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure69=[1200*2/11,-1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure70=[1200*2/11,-1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure71=[1200*2/11,-1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure72=[1200*2/11,0,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure73=[1200*2/11,1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure74=[1200*2/11,1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure75=[1200*2/11,1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure76=[1200*2/11,1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure77=[1200*2/11,1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-
-                structure78=[1200*4/11,-1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure79=[1200*4/11,-1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure80=[1200*4/11,-1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure81=[1200*4/11,-1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure82=[1200*4/11,-1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure83=[1200*4/11,0,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure84=[1200*4/11,1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure85=[1200*4/11,1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure86=[1200*4/11,1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure87=[1200*4/11,1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure88=[1200*4/11,1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-
-                structure89=[1200*6/11,-1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure90=[1200*6/11,-1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure91=[1200*6/11,-1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure92=[1200*6/11,-1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure93=[1200*6/11,-1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure94=[1200*6/11,0,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure95=[1200*6/11,1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure96=[1200*6/11,1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure97=[1200*6/11,1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure98=[1200*6/11,1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure99=[1200*6/11,1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-
-                structure100=[1200*8/11,-1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure101=[1200*8/11,-1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure102=[1200*8/11,-1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure103=[1200*8/11,-1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure104=[1200*8/11,-1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure105=[1200*8/11,0,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure106=[1200*8/11,1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure107=[1200*8/11,1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure108=[1200*8/11,1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure109=[1200*8/11,1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure110=[1200*8/11,1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-
-                structure111=[1200*10/11,-1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure112=[1200*10/11,-1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure113=[1200*10/11,-1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure114=[1200*10/11,-1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure115=[1200*10/11,-1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure116=[1200*10/11,0,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure117=[1200*10/11,1200*2/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure118=[1200*10/11,1200*4/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure119=[1200*10/11,1200*6/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure120=[1200*10/11,1200*8/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                structure121=[1200*10/11,1200*10/11,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-
-                
-                texture={N(az),structure1,structure2,structure3,structure4,structure5,structure6,structure7,structure8,structure9,structure10,structure11,structure12,structure13,structure14,structure15,structure16,structure17,structure18,structure19,structure20,structure21,structure22,structure23,structure24,structure25,structure26,structure27,structure28,structure29,structure30,structure31,structure32,structure33,structure34,structure35,structure36,structure37,structure38,structure39,structure40,structure41,structure42,structure43,structure44,structure45,structure46,structure47,structure48,structure49,structure50,structure51,structure52,structure53,structure54,structure55,structure56,structure57,structure58,structure59,structure60,structure61,structure62,structure63,structure64,structure65,structure66,structure67,structure68,structure69,structure70,structure71,structure72,structure73,structure74,structure75,structure76,structure77,structure78,structure79,structure80,structure81,structure82,structure83,structure84,structure85,structure86,structure87,structure88,structure89,structure90,structure91,structure92,structure93,structure94,structure95,structure96,structure97,structure98,structure99,structure100,structure101,structure102,structure103,structure104,structure105,structure106,structure107,structure108,structure109,structure110,structure111,structure112,structure113,structure114,structure115,structure116,structure117,structure118,structure119,structure120,structure121,k0};
-                
-                
+                structure_array = {};
+                for px=-5:5
+                    for py=-5:5
+                        structure_array = [structure_array, [1200*2*px/11,1200*2*py/11,diameter_x(az),diameter_y(az),Nm(az),Ntre]];
+                    end
+                end
+                texture={N(az),structure_array{:},k0};
             else
                 structure=[0,0,diameter_x(az),diameter_y(az),Nm(az),Ntre];
                 texture={N(az),structure,k0};
-                
-                
             end
             
             u{az}=retu(period,texture);
