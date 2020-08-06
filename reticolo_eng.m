@@ -129,7 +129,7 @@ clear;retio;
 
 
 %%%%%% Wavelengths and angle of incidence
-npoints=1;  % 1 for only structure
+npoints=101;  % 1 for only structure
 lambdamin=0.4;
 lambdamax=1.2;
 wavelength=linspace(lambdamin,lambdamax,npoints);
@@ -163,26 +163,26 @@ Diameter_x=[
     diam
 ];
 
-% Thicknesses, from top to bottom
+% Thicknesses, from top to bottom   (0 si if no layer)
 Height=[
-    0.4/3,                           % Thickness of layer 1 (0 si if no layer)   AlInP
-    0.4/3,                           % Thickness of layer 2 (0 si if no layer)   AlInP
-	0.4/3,                           % Thickness of layer 3 (0 si if no layer)   AlInP
-	0.04,                            % Thickness of layer 4 (0 si if no layer)   AlInP
-	0.16,                            % Thickness of layer 5 (0 si if no layer)   GaAs
-	0.14,                            % Thickness of layer 6 (0 si if no layer)   QD
-	1.7,                             % Thickness of layer 7 (0 si if no layer)   GaAs
-	0.04,                            % Thickness of layer 8 (0 si if no layer)   AlInP
-	0.9/9,                           % Thickness of layer 9 (0 si if no layer)   AlInP
-	0.9/9,                          % Thickness of layer 10 (0 si if no layer)  AlInP
-	0.9/9,                          % Thickness of layer 11 (0 si if no layer)  AlInP
-	0.9/9,                          % Thickness of layer 12 (0 si if no layer)  AlInP
-	0.9/9,                          % Thickness of layer 12 (0 si if no layer)  AlInP
-	0.9/9,                          % Thickness of layer 12 (0 si if no layer)  AlInP
-	0.9/9,                          % Thickness of layer 12 (0 si if no layer)  AlInP
-	0.9/9,                          % Thickness of layer 12 (0 si if no layer)  AlInP
-	0.9/9,                          % Thickness of layer 12 (0 si if no layer)  AlInP
-	0.01                            % Thickness of layer 12 (0 si if no layer)  Ag
+    0.4/3,                          % AlInP
+    0.4/3,                          % AlInP
+	0.4/3,                          % AlInP
+	0.04,                           % AlInP
+	0.16,                           % GaAs
+	0.14,                           % QD
+	1.7,                            % GaAs
+	0.04,                           % AlInP
+	0.9/9,                          % AlInP
+	0.9/9,                          % AlInP
+	0.9/9,                          % AlInP
+	0.9/9,                          % AlInP
+	0.9/9,                          % AlInP
+	0.9/9,                          % AlInP
+	0.9/9,                          % AlInP
+	0.9/9,                          % AlInP
+	0.9/9,                          % AlInP
+	0.01                            % Ag
 ];
 
 %%%%%% Refraction indices (from top to bottom), can be a function of the wavelength
@@ -206,9 +206,8 @@ n = [
     1.58*ones(size(wavelength)),             % AlInP
     1.58*ones(size(wavelength)),             % AlInP
     1.58*ones(size(wavelength)),             % AlInP
-    1.58*ones(size(wavelength))              % AlInP
+    retindice_chen(wavelength,1.72);         % Ag
 ];
-
 nm = [
     retindice_chen(wavelength,4.802),       % 
     retindice_chen(wavelength,4.802),       % 
@@ -227,44 +226,9 @@ nm = [
     retindice_chen(wavelength,4.802),       % 
     retindice_chen(wavelength,4.802),       % 
     retindice_chen(wavelength,4.802),       % 
-    0.00*ones(size(wavelength)),            %
+    0.00*ones(size(wavelength))             %
 ];
-n1=ones(size(wavelength));                  % AlInP
-n1m=retindice_chen(wavelength,4.802);       % 
-n2=ones(size(wavelength));                  % AlInP
-n2m=retindice_chen(wavelength,4.802);       % 
-n3=ones(size(wavelength));                  % AlInP
-n3m=retindice_chen(wavelength,4.802);       % 
-n4=ones(size(wavelength));                  % AlInP
-n4m=retindice_chen(wavelength,4.802);       % 
-n5=retindice_chen(wavelength,4.707);        % emitter GaAs
-n5m=0;                                      %
-n6=retindice_chen(wavelength,4.708);        % QD Al80Ga20As 
-n6m=0;                                      % 
-n7=retindice_chen(wavelength,4.707);        % base GaAs
-n7m=0;                                      % 
-n8=1.58*ones(size(wavelength));             % AlInP
-n8m=retindice_chen(wavelength,4.802);       % 
-n9=1.58*ones(size(wavelength));             % AlInP
-n9m=retindice_chen(wavelength,4.802);       % 
-n10=1.58*ones(size(wavelength));            % AlInP
-n10m=retindice_chen(wavelength,4.802);      % 
-n11=1.58*ones(size(wavelength));            % AlInP
-n11m=retindice_chen(wavelength,4.802);      % 
-n12=1.58*ones(size(wavelength));            % AlInP
-n12m=retindice_chen(wavelength,4.802);      % 
-n13=1.58*ones(size(wavelength));            % AlInP
-n13m=retindice_chen(wavelength,4.802);      % 
-n14=1.58*ones(size(wavelength));            % AlInP
-n14m=retindice_chen(wavelength,4.802);      % 
-n15=1.58*ones(size(wavelength));            % AlInP
-n15m=retindice_chen(wavelength,4.802);      % 
-n16=1.58*ones(size(wavelength));            % AlInP
-n16m=retindice_chen(wavelength,4.802);      % 
-n17=1.58*ones(size(wavelength));            % AlInP
-n17m=retindice_chen(wavelength,4.802);      % 
-n18=retindice_chen(wavelength,1.72);        % Ag
-n18m=0;                                     % 
+
 nsub=retindice_chen(wavelength,1.72);       % Ag argent index of the substrate
 
 %%%%%% Numerical parameters
@@ -284,7 +248,7 @@ My=Mx;                               % Number of Fourier terms in y
 op_granet=0;                         % If 1, RCWA is modified to improve convergence (Transforms the real coordinates at discontinuities)
 % IMPORTANT: this parameter is tricky to use, and does not work out of normal incidence. Better keep it at zero
 
-cal_abs=0;                           % If 1, calculate absorption in each layer
+cal_abs=1;                           % If 1, calculate absorption in each layer
 Nb_pts_z=10;                         % Number of points in z to calculate absorption, when absorption is calculated in each layer
 
 cal_champ=0;                         % If 1, calculate the field in layer N_semicon
@@ -292,7 +256,7 @@ cal_champ=0;                         % If 1, calculate the field in layer N_semi
 N_semicon=3;                         % Layer where field is calculated (if cal_champ=1)
 Nb_pts_z_semicon=50;                 % Number of points in the z direction to calculate the field in N_semicon (if cal_champ=1)
 
-trace_champ=1;                       % si 1,calculates a cross-section of the field
+trace_champ=0;                       % si 1,calculates a cross-section of the field
 % IMPORTANT: only one wavelength
 x0=0;                                % Cross section along x=x0 if trace_champ=1 ([] if the cross-section is along another direction)
 y0=[];                               % Cross section along y=y0 if trace_champ=1 ([] if the cross-section is along another direction)
@@ -302,11 +266,11 @@ h_air=0.05;                          % Thickness in incident medium to represent
 h_sub=0.05;                          % Thickness in the substrate to represent the cross-section  (trace_champ=1)
 h_2pts=20;                           % distance between 2 points in z pour the layers whose thickness is higher than 1??m (trace_champ=1)
 op_objet=0;                          % If 1, plot the geometry to verify the calculated structure is correct
-diameter_x=Diameter_x(1:(Nb_couches));
-diameter_y=diameter_x;
-for az=1:Nb_couches
-    if op_granet==1;Bx=500;Ax=0.02/Bx;By=Bx;Ay=Ax;xdisc=[-diameter_x/2,diameter_x/2];ydisc=[-diameter_y/2,diameter_y/2];
-    end
+
+if op_granet==1
+    Bx=500;Ax=0.02/Bx;By=Bx;Ay=Ax;
+    diameter_x=Diameter_x(1:(Nb_couches));diameter_y=diameter_x;
+    xdisc=[-diameter_x/2,diameter_x/2];ydisc=[-diameter_y/2,diameter_y/2];
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -339,10 +303,10 @@ if trace_champ==1&&isempty(x0)==0&&isempty(y0)==0;disp('WARNING : There is a pro
 if trace_champ==1&&isempty(x0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 if trace_champ==1&&isempty(y0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 
-%parpool
-%parfor zou=1:length(wavelength)
-for zou=1:length(wavelength)
-    disp(['Calculation n∞' int2str(zou) ' of ' int2str(length(wavelength))])
+parpool
+parfor zou=1:length(wavelength)
+%for zou=1:length(wavelength)
+    disp(['Calculation n-' int2str(zou) ' of ' int2str(length(wavelength))])
     
     inc=[];
     sym=[];
@@ -368,54 +332,17 @@ for zou=1:length(wavelength)
     period=[periodicity_x,periodicity_y];
 
     ns=nsub(zou);
-    %Number = zeros(length(n));
-    %for index = 1:length(n)
-    %    if length(n(index))==1; Number(index)=n(index); else; Number(index)=n(index, zou); end
-    %end
+    Number = [];
+    for index = 1:length(n(:,1))
+        if length(n(index,:))==1; Number=[Number,n(index)]; else; Number=[Number,n(index, zou)]; end
+    end
     
-    %Numberm = zeros(length(nm));
-    %for index = 1:length(nm)
-    %    if length(nm(index))==1; Numberm(index)=nm(index); else; Numberm(index)=nm(index, zou); end
-    %end
-    if length(n1)==1;nn1=n1; else; nn1=n1(zou); end
-    if length(n2)==1;nn2=n2; else; nn2=n2(zou); end
-    if length(n3)==1;nn3=n3; else; nn3=n3(zou); end
-    if length(n4)==1;nn4=n4; else; nn4=n4(zou); end
-    if length(n5)==1;nn5=n5; else; nn5=n5(zou); end
-    if length(n6)==1;nn6=n6; else; nn6=n6(zou); end
-    if length(n7)==1;nn7=n7; else; nn7=n7(zou); end
-    if length(n8)==1;nn8=n8; else; nn8=n8(zou); end
-    if length(n9)==1;nn9=n9; else; nn9=n9(zou); end
-    if length(n10)==1;nn10=n10; else; nn10=n10(zou); end
-    if length(n11)==1;nn11=n11; else; nn11=n11(zou); end
-    if length(n12)==1;nn12=n12; else; nn12=n12(zou); end
-    if length(n13)==1;nn13=n13; else; nn13=n13(zou); end
-    if length(n14)==1;nn14=n14; else; nn14=n14(zou); end
-    if length(n15)==1;nn15=n15; else; nn15=n15(zou); end
-    if length(n16)==1;nn16=n16; else; nn16=n16(zou); end
-    if length(n17)==1;nn17=n17; else; nn17=n17(zou); end
-    if length(n18)==1;nn18=n18; else; nn18=n18(zou); end
-    if length(n1m)==1;nn1m=n1m; else; nn1m=n1m(zou); end
-    if length(n2m)==1;nn2m=n2m; else; nn2m=n2m(zou); end
-    if length(n3m)==1;nn3m=n3m; else; nn3m=n3m(zou); end
-    if length(n4m)==1;nn4m=n4m; else; nn4m=n4m(zou); end
-    if length(n5m)==1;nn5m=n5m; else; nn5m=n5m(zou); end
-    if length(n6m)==1;nn6m=n6m; else; nn6m=n6m(zou); end
-    if length(n7m)==1;nn7m=n7m; else; nn7m=n7m(zou); end
-    if length(n8m)==1;nn8m=n8m; else; nn8m=n8m(zou); end
-    if length(n9m)==1;nn9m=n9m; else; nn9m=n9m(zou); end
-    if length(n10m)==1;nn10m=n10m; else; nn10m=n10m(zou); end
-    if length(n11m)==1;nn11m=n11m; else; nn11m=n11m(zou); end
-    if length(n12m)==1;nn12m=n12m; else; nn12m=n12m(zou); end
-    if length(n13m)==1;nn13m=n13m; else; nn13m=n13m(zou); end
-    if length(n14m)==1;nn14m=n14m; else; nn14m=n14m(zou); end
-    if length(n15m)==1;nn15m=n15m; else; nn15m=n15m(zou); end
-    if length(n16m)==1;nn16m=n16m; else; nn16m=n16m(zou); end
-    if length(n17m)==1;nn17m=n17m; else; nn17m=n17m(zou); end
-    if length(n18m)==1;nn18m=n18m; else; nn18m=n18m(zou); end
-    Number=[nn1,nn2,nn3,nn4,nn5,nn6,nn7,nn8,nn9,nn10,nn11,nn12,nn13,nn14,nn15,nn16,nn17,nn18];
+    Numberm = [];
+    for index = 1:length(nm(:,1))
+        if length(nm(index,:))==1; Numberm=[Numberm,nm(index)]; else; Numberm=[Numberm,nm(index, zou)]; end
+    end
+    
     N=Number(1:Nb_couches);
-    Numberm=[nn1m,nn2m,nn3m,nn4m,nn5m,nn6m,nn7m,nn8m,nn9m,nn10m,nn11m,nn12m,nn13m,nn14m,nn15m,nn16m,nn17m,nn18m];
     Nm=Numberm(1:Nb_couches);
     diameter_x=Diameter_x(1:(Nb_couches));
     diameter_y=diameter_x;
@@ -786,7 +713,7 @@ for zou=1:length(wavelength)
     end
 
 end
-%delete(gcp('nocreate'))
+delete(gcp('nocreate'))
 %% Saving and plotting output data
 
 %%%% Example to plot a cross section with trace_champ=1, x0=[], y0=0, z0=[]
@@ -814,7 +741,7 @@ if cal_abs == 1
     %legend({'Total'})
     plot(wavelength,Abs(1,:)+Abs(2,:)+Abs(3,:)+Abs(4,:), wavelength,Abs(5,:), wavelength,Abs(6,:), wavelength,Abs(7,:), wavelength,Abs(8,:)+Abs(9,:)+Abs(10,:)+Abs(11,:)+Abs(12,:)+Abs(13,:)+Abs(14,:)+Abs(15,:)+Abs(16,:)+Abs(17,:), wavelength,Abs(18,:), wavelength,Abs(5,:)+Abs(6,:)+Abs(7,:), 'Linewidth',3)
     legend({'AlInP(1-4)','GaAs(5)','QD(6)','GaAs(7)','AlInP(8-17)','Silver mirror(18)','active region(4-6)'})
-    xlabel('\lambda (É m)')
+    xlabel('\lambda (Œºm)')
     ylabel('Absorption')
     xlim([min(wavelength) max(wavelength)])
     ylim([0 1])
