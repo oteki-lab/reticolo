@@ -139,81 +139,96 @@ theta=[0,0];                          %angle of incidence in degrees
 periodicity_x=2.4;                  % period in x
 periodicity_y=periodicity_x;        % period in y
 Nb_couches=18; %Number of layers
+diam=0.215/4;
 
 %diameter of each layer
-dx1=0.215/4;
-dx2=0.215/4*2;
-dx3=0.215/4*3;
-dx4=2.4;
-dx5=2.4;
-dx6=2.4;
-dx7=2.4;
-dx8=2.4*10/10;
-dx9=2.4*9/10;
-dx10=2.4*8/10;
-dx11=2.4*7/10;
-dx12=2.4*6/10;
-dx13=2.4*5/10;
-dx14=2.4*4/10;
-dx15=2.4*3/10;
-dx16=2.4*2/10;
-dx17=2.4*1/10;
-dx18=dx1;
-
 Diameter_x=[
-    0.215/4,
-    0.215/4*2
-    0.215/4*3;
-    2.4;
-    2.4;
-    2.4;
-    2.4;
-    2.4*10/10;
-    2.4*9/10;
-    2.4*8/10;
-    2.4*7/10;
-    2.4*6/10;
-    2.4*5/10;
-dx14=2.4*4/10;
-dx15=2.4*3/10;
-dx16=2.4*2/10;
-dx17=2.4*1/10;
-dx18=dx1;
-dx2,dx3,dx4,dx5,dx6,dx7,dx8,dx9,dx10,dx11,dx12,dx13,dx14,dx15,dx16,dx17,dx18];
-
-
-% Setting diameter @ more 12
-% for az=13;Nb_couches;
-%     diameter(az)=diameter;
-% end
-% Setting diameter for pyramid structure
-% dr=
-% for az=a;b;
-%     diameter(az)=diameter-az*dr;
-% end
+    diam*1,
+    diam*2,
+    diam*3,
+    periodicity_x,
+    periodicity_x,
+    periodicity_x,
+    periodicity_x,
+    periodicity_x*10/10,
+    periodicity_x*9/10,
+    periodicity_x*8/10,
+    periodicity_x*7/10,
+    periodicity_x*6/10,
+    periodicity_x*5/10,
+    periodicity_x*4/10,
+    periodicity_x*3/10,
+    periodicity_x*2/10,
+    periodicity_x*1/10,
+    diam
+];
 
 % Thicknesses, from top to bottom
-h1=0.4/3;                           % Thickness of layer 1 (0 si if no layer)   AlInP
-h2=0.4/3;                           % Thickness of layer 2 (0 si if no layer)   AlInP
-h3=0.4/3;                           % Thickness of layer 3 (0 si if no layer)   AlInP
-h4=0.04;                            % Thickness of layer 4 (0 si if no layer)   AlInP
-h5=0.16;                            % Thickness of layer 5 (0 si if no layer)   GaAs
-h6=0.14;                            % Thickness of layer 6 (0 si if no layer)   QD
-h7=1.7;                             % Thickness of layer 7 (0 si if no layer)   GaAs
-h8=0.04;                            % Thickness of layer 8 (0 si if no layer)   AlInP
-h9=0.9/9;                           % Thickness of layer 9 (0 si if no layer)   AlInP
-h10=0.9/9;                          % Thickness of layer 10 (0 si if no layer)  AlInP
-h11=0.9/9;                          % Thickness of layer 11 (0 si if no layer)  AlInP
-h12=0.9/9;                          % Thickness of layer 12 (0 si if no layer)  AlInP
-h13=0.9/9;                          % Thickness of layer 12 (0 si if no layer)  AlInP
-h14=0.9/9;                          % Thickness of layer 12 (0 si if no layer)  AlInP
-h15=0.9/9;                          % Thickness of layer 12 (0 si if no layer)  AlInP
-h16=0.9/9;                          % Thickness of layer 12 (0 si if no layer)  AlInP
-h17=0.9/9;                          % Thickness of layer 12 (0 si if no layer)  AlInP
-h18=0.01;                           % Thickness of layer 12 (0 si if no layer)  Ag
+Height=[
+    0.4/3,                           % Thickness of layer 1 (0 si if no layer)   AlInP
+    0.4/3,                           % Thickness of layer 2 (0 si if no layer)   AlInP
+	0.4/3,                           % Thickness of layer 3 (0 si if no layer)   AlInP
+	0.04,                            % Thickness of layer 4 (0 si if no layer)   AlInP
+	0.16,                            % Thickness of layer 5 (0 si if no layer)   GaAs
+	0.14,                            % Thickness of layer 6 (0 si if no layer)   QD
+	1.7,                             % Thickness of layer 7 (0 si if no layer)   GaAs
+	0.04,                            % Thickness of layer 8 (0 si if no layer)   AlInP
+	0.9/9,                           % Thickness of layer 9 (0 si if no layer)   AlInP
+	0.9/9,                          % Thickness of layer 10 (0 si if no layer)  AlInP
+	0.9/9,                          % Thickness of layer 11 (0 si if no layer)  AlInP
+	0.9/9,                          % Thickness of layer 12 (0 si if no layer)  AlInP
+	0.9/9,                          % Thickness of layer 12 (0 si if no layer)  AlInP
+	0.9/9,                          % Thickness of layer 12 (0 si if no layer)  AlInP
+	0.9/9,                          % Thickness of layer 12 (0 si if no layer)  AlInP
+	0.9/9,                          % Thickness of layer 12 (0 si if no layer)  AlInP
+	0.9/9,                          % Thickness of layer 12 (0 si if no layer)  AlInP
+	0.01                            % Thickness of layer 12 (0 si if no layer)  Ag
+];
 
 %%%%%% Refraction indices (from top to bottom), can be a function of the wavelength
 nh=1;
+
+n = [
+    ones(size(wavelength)),                  % AlInP
+	ones(size(wavelength)),                  % AlInP
+    ones(size(wavelength)),                  % AlInP
+    ones(size(wavelength)),                  % AlInP
+    retindice_chen(wavelength,4.707),        % emitter GaAs
+    retindice_chen(wavelength,4.708),        % QD Al80Ga20As 
+    retindice_chen(wavelength,4.707),        % base GaAs
+    1.58*ones(size(wavelength)),             % AlInP
+    1.58*ones(size(wavelength)),             % AlInP
+    1.58*ones(size(wavelength)),             % AlInP
+    1.58*ones(size(wavelength)),             % AlInP
+    1.58*ones(size(wavelength)),             % AlInP
+    1.58*ones(size(wavelength)),             % AlInP
+    1.58*ones(size(wavelength)),             % AlInP
+    1.58*ones(size(wavelength)),             % AlInP
+    1.58*ones(size(wavelength)),             % AlInP
+    1.58*ones(size(wavelength)),             % AlInP
+    1.58*ones(size(wavelength))              % AlInP
+];
+
+nm = [
+    retindice_chen(wavelength,4.802),       % 
+    retindice_chen(wavelength,4.802),       % 
+    retindice_chen(wavelength,4.802),       % 
+    retindice_chen(wavelength,4.802),       % 
+    0.00*ones(size(wavelength)),            %
+    0.00*ones(size(wavelength)),            %
+    0.00*ones(size(wavelength)),            %
+    retindice_chen(wavelength,4.802),       % 
+    retindice_chen(wavelength,4.802),       % 
+    retindice_chen(wavelength,4.802),       % 
+    retindice_chen(wavelength,4.802),       % 
+    retindice_chen(wavelength,4.802),       % 
+    retindice_chen(wavelength,4.802),       % 
+    retindice_chen(wavelength,4.802),       % 
+    retindice_chen(wavelength,4.802),       % 
+    retindice_chen(wavelength,4.802),       % 
+    retindice_chen(wavelength,4.802),       % 
+    0.00*ones(size(wavelength)),            %
+];
 n1=ones(size(wavelength));                  % AlInP
 n1m=retindice_chen(wavelength,4.802);       % 
 n2=ones(size(wavelength));                  % AlInP
@@ -316,7 +331,6 @@ Einc=[];Hinc=[];E_semicon=[];H_semicon=[];x_semicon=[];y_semicon=[];z_semicon=[]
 Ex=[];Ey=[];Ez=[];Hx=[];Hy=[];Hz=[];
 xx=[];yy=[];zz=[];indice=[];
 Ntre=1;
-Height=[h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12,h13,h14,h15,h16,h17,h18];
 H=Height(1:(Nb_couches));
 if cal_abs==1||cal_champ==1||trace_champ==1;op_retcouche=1; else; op_retcouche=0; end
 if H(Nb_couches)<1e-5;disp('WARNING : There is a problem in the definition of the layers number !!'); return; end
@@ -352,8 +366,17 @@ for zou=1:length(wavelength)
     k0=2*pi/lwa;
     %tic
     period=[periodicity_x,periodicity_y];
-    
+
     ns=nsub(zou);
+    %Number = zeros(length(n));
+    %for index = 1:length(n)
+    %    if length(n(index))==1; Number(index)=n(index); else; Number(index)=n(index, zou); end
+    %end
+    
+    %Numberm = zeros(length(nm));
+    %for index = 1:length(nm)
+    %    if length(nm(index))==1; Numberm(index)=nm(index); else; Numberm(index)=nm(index, zou); end
+    %end
     if length(n1)==1;nn1=n1; else; nn1=n1(zou); end
     if length(n2)==1;nn2=n2; else; nn2=n2(zou); end
     if length(n3)==1;nn3=n3; else; nn3=n3(zou); end
@@ -622,7 +645,7 @@ for zou=1:length(wavelength)
     ref_TM_TM(:,zou)=ref_TM_TM_vect;
     
     if op_granet==1
-        %         [Xdisc,Ydisc]=retgranet(init,[-diameter_x/2,-diameter_x/2+w_rectangle,diameter_x/2,diameter_x/2+h_rectangle],[-diameter_y/2,-diameter_y/2+w_rectangle,diameter_y/2,diameter_y/2+h_rectangle]);
+        % [Xdisc,Ydisc]=retgranet(init,[-diameter_x/2,-diameter_x/2+w_rectangle,diameter_x/2,diameter_x/2+h_rectangle],[-diameter_y/2,-diameter_y/2+w_rectangle,diameter_y/2,diameter_y/2+h_rectangle]);
         [Xdisc,Ydisc]=retgranet(init,[-diameter_x/2,diameter_x/2],[-diameter_y/2,diameter_y/2]);
         [X,wX]=retgauss(-periodicity_x/2,periodicity_x/2,15,10,Xdisc);
         [Y,wY]=retgauss(-periodicity_y/2,periodicity_y/2,15,10,Ydisc);
@@ -782,7 +805,7 @@ end
 
 if cal_abs == 1
     %%%% Example to save the data into a file
-    text=['period_',int2str(periodicity_x*1000),'_diam_',int2str(dx1*1000),'wav',int2str(wavelength(1)*1000),'_',int2str(wavelength(end)*1000),'_nbpoints',int2str(length(wavelength)),'_Fourier',int2str(Mx),'.mat'];
+    text=['period_',int2str(periodicity_x*1000),'_diam_',int2str(diam*1000),'wav',int2str(wavelength(1)*1000),'_',int2str(wavelength(end)*1000),'_nbpoints',int2str(length(wavelength)),'_Fourier',int2str(Mx),'.mat'];
     save(text);
 
     %%%% Example to plot the absorption
