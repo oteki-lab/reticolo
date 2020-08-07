@@ -1,5 +1,3 @@
-
-
 %%%%                Calculate diffraction in a system composed of 1-12 layers
 %%%%                                         (17/06/2014)
 %%%%
@@ -128,7 +126,7 @@ clear;retio;
 %% Parameters of the structure and the calculation
 
 %%%%%% Wavelengths and angle of incidence
-npoints=101;                          % 1 for only structure
+npoints=1;                          % 1 for only structure
 lambdamin=0.4;
 lambdamax=1.2;
 wavelength=linspace(lambdamin,lambdamax,npoints);
@@ -157,24 +155,15 @@ params = {
     periodicity_x,          0.14,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength));
     periodicity_x,          1.7,    retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));
     periodicity_x,          0.04,   1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*17/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*16/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*15/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*14/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*13/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*12/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*11/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*10/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*9/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*8/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*7/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*6/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*5/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*4/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*3/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*2/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*1/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*0.5/18,   0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*9/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*8/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*7/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*6/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*5/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*4/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*3/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*2/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*1/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
     periodicity_x,          0.01,   retindice_chen(wavelength,1.72),    0.00*ones(size(wavelength));
 };
 nsub=retindice_chen(wavelength,1.72);       % the substrate     Ag
@@ -255,9 +244,9 @@ if trace_champ&&isempty(x0)==0&&isempty(y0)==0;disp('WARNING : There is a proble
 if trace_champ&&isempty(x0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 if trace_champ&&isempty(y0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 
-%parpool
-%parfor zou=1:length(wavelength)
-for zou=1:length(wavelength)
+parpool
+parfor zou=1:length(wavelength)
+%for zou=1:length(wavelength)
     disp(['Calculation n-' int2str(zou) ' of ' int2str(length(wavelength))])
     
     inc=[];
@@ -287,13 +276,14 @@ for zou=1:length(wavelength)
 
     Number = zeros(length(n(:,1)));    %Number = [];
     for index = 1:length(n(:,1))
-        if length(n(index,:))==1; Number=[Number,n(index)]; else; Number=[Number,n(index, zou)]; end
-        if length(n(index,:))==1; Number=[Number,n(index)]; else; Number=[Number,n(index, zou)]; end
+        if length(n(index,:))==1; Number(index)=n(index); else; Number(index)=n(index, zou); end
+        %if length(n(index,:))==1; Number=[Number,n(index)]; else; Number=[Number,n(index, zou)]; end
     end
     
-    Numberm = [];
+    Numberm = zeros(length(nm(:,1)));    %Numberm = [];
     for index = 1:length(nm(:,1))
-        if length(nm(index,:))==1; Numberm=[Numberm,nm(index)]; else; Numberm=[Numberm,nm(index, zou)]; end
+        if length(nm(index,:))==1; Numberm(index)=nm(index); else; Numberm(index)=nm(index, zou); end
+        %if length(nm(index,:))==1; Numberm=[Numberm,nm(index)]; else; Numberm=[Numberm,nm(index, zou)]; end
     end
     
     N=Number(1:Nb_couches);
@@ -328,7 +318,7 @@ for zou=1:length(wavelength)
                         structure_array = [structure_array, [1200*2*px/11,1200*2*py/11,diameter_x(az),diameter_y(az),Nm(az),Ntre]];
                     end
                 end
-                texture={N(az),structure_array{:},k0};
+                texture=[{N(az)},structure_array(:)',{k0}];
             else
                 structure=[0,0,diameter_x(az),diameter_y(az),Nm(az),Ntre];
                 texture={N(az),structure,k0};
@@ -430,7 +420,6 @@ for zou=1:length(wavelength)
     if cal_abs
         nunu=find(Nm~=0);
         num=[];
-        disp(nunu)
         for zer=1:length(nunu)
             if nunu(zer)==1
                 num=[num,nunu(zer),nunu(zer)+1];
@@ -438,7 +427,6 @@ for zou=1:length(wavelength)
                 num=[num,nunu(zer)-1,nunu(zer),nunu(zer)+1];
             end
         end
-        disp(size(num))
         num=retelimine(num);
         
         tab=zeros(Nb_couches,3); %tab=[];
@@ -518,9 +506,9 @@ for zou=1:length(wavelength)
         [yy,wy]=retgauss(-periodicity_y/2,periodicity_y/2,15,12,[-diameter_y/2,diameter_y/2]);
       
         if isempty(x0)==1&&isempty(z0)==1
-            [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,y0},tab0,[],[1:6]+7.25i,1,1,1:6);
+            [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,y0},tab0,[],(1:6)+7.25i,1,1,1:6);
         elseif isempty(y0)==1&&isempty(z0)==1
-            [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{x0,yy},tab0,[],[1:6]+7.25i,1,1,1:6);
+            [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{x0,yy},tab0,[],(1:6)+7.25i,1,1,1:6);
         elseif isempty(x0)==1&&isempty(y0)==1
             tab0(:,3)=0;
             HH=cumsum(tab0(:,1));
@@ -542,7 +530,7 @@ for zou=1:length(wavelength)
     end
 
 end
-%delete(gcp('nocreate'))
+delete(gcp('nocreate'))
 %% Saving and plotting output data
 
 %%%% Example to plot a cross section with trace_champ=1, x0=[], y0=0, z0=[]
@@ -550,13 +538,11 @@ end
 %%%% The separation between the layers is in white (indice contains the position of all indices)
 if trace_champ
     figure
-    %pcolor(XX,ZZ,abs(E_y).^2);
-    pcolor(xx,zz,abs(Ey).^2);
+    pcolor(XX,ZZ,abs(E_y).^2);
     shading interp;
     colormap(jet);
     hold on
-    %contour(real(XX),real(ZZ),real(INDICE),'black','linewidth',2);
-    contour(real(xx),real(zz),real(indice),'black','linewidth',2);
+    contour(real(XX),real(ZZ),real(INDICE),'black','linewidth',2);
     xlabel('x')
     ylabel('z')
 end
@@ -570,9 +556,9 @@ if cal_abs
     figure
     %plot(wavelength,A_tot(1,:),'Linewidth',3)
     %legend({'Total'})
-    plot(wavelength,Abs(1,:)+Abs(2,:)+Abs(3,:)+Abs(4,:)+Abs(5,:)+Abs(6,:)+Abs(7,:)+Abs(8,:), wavelength,Abs(9,:), wavelength,Abs(10,:), wavelength,Abs(11,:), wavelength,Abs(12,:)+Abs(13,:)+Abs(14,:)+Abs(15,:)+Abs(16,:)+Abs(17,:)+Abs(18,:)+Abs(19,:)+Abs(20,:)+Abs(21,:)+Abs(22,:)+Abs(23,:)+Abs(24,:)+Abs(25,:)+Abs(26,:)+Abs(27,:)+Abs(28,:)+Abs(29,:)+Abs(30,:), wavelength,Abs(31,:), wavelength,Abs(9,:)+Abs(10,:)+Abs(11,:), 'Linewidth',3)
-    legend({'AlInP(1-8)','GaAs(9)','QD(10)','GaAs(11)','AlInP(12-30)','Silver mirror(31)','active region(9-11)'})
-    xlabel('\lambda (É m)')
+    plot(wavelength,Abs(1,:)+Abs(2,:)+Abs(3,:)+Abs(4,:)+Abs(5,:)+Abs(6,:)+Abs(7,:)+Abs(8,:), wavelength,Abs(9,:), wavelength,Abs(10,:), wavelength,Abs(11,:), wavelength,Abs(12,:)+Abs(13,:)+Abs(14,:)+Abs(15,:)+Abs(16,:)+Abs(17,:)+Abs(18,:)+Abs(19,:)+Abs(20,:)+Abs(21,:), wavelength,Abs(32,:), wavelength,Abs(9,:)+Abs(10,:)+Abs(11,:), 'Linewidth',3)
+    legend({'AlInP(1-8)','GaAs(9)','QD(10)','GaAs(11)','AlInP(12-21)','Silver mirror(22)','active region(9-11)'})
+    xlabel('\lambda (??m)')
     ylabel('Absorption')
     xlim([min(wavelength) max(wavelength)])
     ylim([0 1])

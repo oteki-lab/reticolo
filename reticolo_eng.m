@@ -1,5 +1,3 @@
-
-
 %%%%                Calculate diffraction in a system composed of 1-12 layers
 %%%%                                         (17/06/2014)
 %%%%
@@ -320,7 +318,7 @@ parfor zou=1:length(wavelength)
                         structure_array = [structure_array, [1200*2*px/11,1200*2*py/11,diameter_x(az),diameter_y(az),Nm(az),Ntre]];
                     end
                 end
-                texture={N(az),structure_array{:},k0};
+                texture=[{N(az)},structure_array(:)',{k0}];
             else
                 structure=[0,0,diameter_x(az),diameter_y(az),Nm(az),Ntre];
                 texture={N(az),structure,k0};
@@ -508,16 +506,16 @@ parfor zou=1:length(wavelength)
         [yy,wy]=retgauss(-periodicity_y/2,periodicity_y/2,15,12,[-diameter_y/2,diameter_y/2]);
       
         if isempty(x0)==1&&isempty(z0)==1
-            [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,y0},tab0,[],[1:6]+7.25i,1,1,1:6);
+            [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,y0},tab0,[],(1:6)+7.25i,1,1,1:6);
         elseif isempty(y0)==1&&isempty(z0)==1
-            [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{x0,yy},tab0,[],[1:6]+7.25i,1,1,1:6);
+            [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{x0,yy},tab0,[],(1:6)+7.25i,1,1,1:6);
         elseif isempty(x0)==1&&isempty(y0)==1
             tab0(:,3)=0;
             HH=cumsum(tab0(:,1));
             numz=1;
             while (HH(end)-z0)>HH(numz);numz=numz+1; end
             tab1=[tab0(1:numz-1,:);[tab0(numz,1)-(z0-sum(tab0(numz+1:end,1))),numz,0];[0,numz,1];[z0-sum(tab0(numz+1:end,1)),numz,0];tab0(numz+1:end,:)];
-            [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,yy},tab1,[],[1:6]+7.25i,1,1,1:6);
+            [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,yy},tab1,[],(1:6)+7.25i,1,1,1:6);
         end
         
         for ii=1:3
@@ -560,7 +558,7 @@ if cal_abs
     %legend({'Total'})
     plot(wavelength,Abs(1,:)+Abs(2,:)+Abs(3,:)+Abs(4,:)+Abs(5,:)+Abs(6,:)+Abs(7,:)+Abs(8,:), wavelength,Abs(9,:), wavelength,Abs(10,:), wavelength,Abs(11,:), wavelength,Abs(12,:)+Abs(13,:)+Abs(14,:)+Abs(15,:)+Abs(16,:)+Abs(17,:)+Abs(18,:)+Abs(19,:)+Abs(20,:)+Abs(21,:), wavelength,Abs(32,:), wavelength,Abs(9,:)+Abs(10,:)+Abs(11,:), 'Linewidth',3)
     legend({'AlInP(1-8)','GaAs(9)','QD(10)','GaAs(11)','AlInP(12-21)','Silver mirror(22)','active region(9-11)'})
-    xlabel('\lambda (É m)')
+    xlabel('\lambda (um)')
     ylabel('Absorption')
     xlim([min(wavelength) max(wavelength)])
     ylim([0 1])
