@@ -128,7 +128,7 @@ clear;retio;
 %% Parameters of the structure and the calculation
 
 %%%%%% Wavelengths and angle of incidence
-npoints=101;                          % 1 for only structure
+npoints=1;                          % 1 for only structure
 lambdamin=0.4;
 lambdamax=1.2;
 wavelength=linspace(lambdamin,lambdamax,npoints);
@@ -157,24 +157,15 @@ params = {
     periodicity_x,          0.14,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength));
     periodicity_x,          1.7,    retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));
     periodicity_x,          0.04,   1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*17/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*16/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*15/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*14/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*13/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*12/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*11/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*10/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*9/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*8/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*7/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*6/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*5/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*4/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*3/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*2/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*1/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*0.5/18,   0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*9/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*8/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*7/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*6/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*5/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*4/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*3/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*2/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*1/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
     periodicity_x,          0.01,   retindice_chen(wavelength,1.72),    0.00*ones(size(wavelength));
 };
 nsub=retindice_chen(wavelength,1.72);       % the substrate     Ag
@@ -549,13 +540,11 @@ delete(gcp('nocreate'))
 %%%% The separation between the layers is in white (indice contains the position of all indices)
 if trace_champ
     figure
-    %pcolor(XX,ZZ,abs(E_y).^2);
-    pcolor(xx,zz,abs(Ey).^2);
+    pcolor(XX,ZZ,abs(E_y).^2);
     shading interp;
     colormap(jet);
     hold on
-    %contour(real(XX),real(ZZ),real(INDICE),'black','linewidth',2);
-    contour(real(xx),real(zz),real(indice),'black','linewidth',2);
+    contour(real(XX),real(ZZ),real(INDICE),'black','linewidth',2);
     xlabel('x')
     ylabel('z')
 end
@@ -569,8 +558,8 @@ if cal_abs
     figure
     %plot(wavelength,A_tot(1,:),'Linewidth',3)
     %legend({'Total'})
-    plot(wavelength,Abs(1,:)+Abs(2,:)+Abs(3,:)+Abs(4,:)+Abs(5,:)+Abs(6,:)+Abs(7,:)+Abs(8,:), wavelength,Abs(9,:), wavelength,Abs(10,:), wavelength,Abs(11,:), wavelength,Abs(12,:)+Abs(13,:)+Abs(14,:)+Abs(15,:)+Abs(16,:)+Abs(17,:)+Abs(18,:)+Abs(19,:)+Abs(20,:)+Abs(21,:)+Abs(22,:)+Abs(23,:)+Abs(24,:)+Abs(25,:)+Abs(26,:)+Abs(27,:)+Abs(28,:)+Abs(29,:)+Abs(30,:), wavelength,Abs(31,:), wavelength,Abs(9,:)+Abs(10,:)+Abs(11,:), 'Linewidth',3)
-    legend({'AlInP(1-8)','GaAs(9)','QD(10)','GaAs(11)','AlInP(12-30)','Silver mirror(31)','active region(9-11)'})
+    plot(wavelength,Abs(1,:)+Abs(2,:)+Abs(3,:)+Abs(4,:)+Abs(5,:)+Abs(6,:)+Abs(7,:)+Abs(8,:), wavelength,Abs(9,:), wavelength,Abs(10,:), wavelength,Abs(11,:), wavelength,Abs(12,:)+Abs(13,:)+Abs(14,:)+Abs(15,:)+Abs(16,:)+Abs(17,:)+Abs(18,:)+Abs(19,:)+Abs(20,:)+Abs(21,:), wavelength,Abs(32,:), wavelength,Abs(9,:)+Abs(10,:)+Abs(11,:), 'Linewidth',3)
+    legend({'AlInP(1-8)','GaAs(9)','QD(10)','GaAs(11)','AlInP(12-21)','Silver mirror(22)','active region(9-11)'})
     xlabel('\lambda (É m)')
     ylabel('Absorption')
     xlim([min(wavelength) max(wavelength)])
