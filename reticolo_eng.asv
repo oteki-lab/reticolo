@@ -128,7 +128,7 @@ clear;retio;
 %% Parameters of the structure and the calculation
 
 %%%%%% Wavelengths and angle of incidence
-npoints=1;                          % 1 for only structure
+npoints=101;                          % 1 for only structure
 lambdamin=0.4;
 lambdamax=1.2;
 wavelength=linspace(lambdamin,lambdamax,npoints);
@@ -157,20 +157,24 @@ params = {
     periodicity_x,          0.14,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength));
     periodicity_x,          1.7,    retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));
     periodicity_x,          0.04,   1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*15/16,    0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*14/16,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*13/16,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*12/16,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*11/16,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*10/16,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*8/16,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*7/16,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*6/16,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*5/16,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*4/16,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*3/16,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*2/16,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*1/16,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*17/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*16/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*15/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*14/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*13/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*12/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*11/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*10/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*9/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*8/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*7/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*6/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*5/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*4/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*3/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*2/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*1/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
+    periodicity_x*0.5/18,   0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
     periodicity_x,          0.01,   retindice_chen(wavelength,1.72),    0.00*ones(size(wavelength));
 };
 nsub=retindice_chen(wavelength,1.72);       % the substrate     Ag
@@ -281,8 +285,9 @@ for zou=1:length(wavelength)
 
     ns=nsub(zou);
 
-    Number = [];
+    Number = zeros(length(n(:,1)));    %Number = [];
     for index = 1:length(n(:,1))
+        if length(n(index,:))==1; Number=[Number,n(index)]; else; Number=[Number,n(index, zou)]; end
         if length(n(index,:))==1; Number=[Number,n(index)]; else; Number=[Number,n(index, zou)]; end
     end
     
@@ -425,6 +430,7 @@ for zou=1:length(wavelength)
     if cal_abs
         nunu=find(Nm~=0);
         num=[];
+        disp(nunu)
         for zer=1:length(nunu)
             if nunu(zer)==1
                 num=[num,nunu(zer),nunu(zer)+1];
@@ -432,20 +438,22 @@ for zou=1:length(wavelength)
                 num=[num,nunu(zer)-1,nunu(zer),nunu(zer)+1];
             end
         end
+        disp(size(num))
         num=retelimine(num);
         
-        tab=[];tab2=tab;
+        tab=zeros(Nb_couches,3); %tab=[];
+        tab2=[];
         struct={ab};
         for az=1:Nb_couches
-            tab=[tab;[H(az),az+1,0]];
+            tab(az,:)=[H(az),az+1,0];               %tab=[tab;[H(az),az+1,0]];
             tab2=[tab2;[0,az+1,1];[H(az),az+1,0]];
-            struct={struct{:},a{az}};
+            struct=[struct(:)',a(az)];
         end
         tab(num,3)=Nb_pts_z;
         tab2=[tab2;[0,1,1];[1,1,0];[0,1,1]];
         
-        [e,z,wz,o]=retchamp(init,struct,sh,sb,inc,{x,y},tab,[],[1:6]+7.25i,1,1,1:6);
-        [e2,z2,wz2,o2]=retchamp(init,struct,sh,sb,inc,{x,y},tab2,[],[1:6]+7.25i,1,1,1:6);
+        [e,z,wz,o]=retchamp(init,struct,sh,sb,inc,{x,y},tab,[],(1:6)+7.25i,1,1,1:6);
+        [e2,z2,wz2,o2]=retchamp(init,struct,sh,sb,inc,{x,y},tab2,[],(1:6)+7.25i,1,1,1:6);
         for ii=1:3
             o(:,:,:,ii+3)=o(:,:,:,ii+3)./o(:,:,:,ii);
             o(:,:,:,ii)=1;
@@ -477,15 +485,15 @@ for zou=1:length(wavelength)
     end
     
     if cal_champ==1
-        tab_semicon=[];
+        tab_semicon=zeros(Nb_couches);  %tab_semicon=[];
         struct={ab};
         for az=1:Nb_couches
-            tab_semicon=[tab_semicon;[H(az),az+1,0]];
-            struct={struct{:},a{az}};
+            tab_semicon(az)=[tab_semicon;[H(az),az+1,0]];   %tab_semicon=[tab_semicon;[H(az),az+1,0]];
+            struct=[struct(:)',a(az)];
         end
         tab_semicon(N_semicon,3)=Nb_pts_z_semicon;
         
-        [e_semicon,z_semicon,wzs,o_semicon]=retchamp(init,struct,sh,sb,inc,{x,y},tab_semicon,[],[1:6]+7.25i,1,1,1:6);
+        [e_semicon,z_semicon,wzs,o_semicon]=retchamp(init,struct,sh,sb,inc,{x,y},tab_semicon,[],(1:6)+7.25i,1,1,1:6);
         [Wz,Wx,Wy]=ndgrid(wzs,wx,wy);
         W_semicon=Wz.*Wx.*Wy;
         
@@ -495,14 +503,15 @@ for zou=1:length(wavelength)
     end
     
     if trace_champ
-        tab0=[h_air,1,Nb_pts_z+10];
+        tab0 = zeros(Nb_couches+2,3);
+        tab0(1,:) = [h_air,1,Nb_pts_z+10];    %tab0=[h_air,1,Nb_pts_z+10];
         struct0={ah};
         for az=1:Nb_couches
-            tab0=[tab0;[H(az),az+1,Nb_pts_z+10]];
-            struct0={struct0{:},a{az}};
+            tab0(az+1,:)=[H(az),az+1,Nb_pts_z+10];  %tab0=[tab0;[H(az),az+1,Nb_pts_z+10]];
+            struct0=[struct0(:)',a(az)];
         end
-        struct0={struct0{:},ab};
-        tab0=[tab0;[h_sub,Nb_couches+2,Nb_pts_z+10]];
+        struct0=[struct0(:)',{ab}];
+        tab0(Nb_couches+2,:)=[h_sub,Nb_couches+2,Nb_pts_z+10];  %tab0=[tab0;[h_sub,Nb_couches+2,Nb_pts_z+10]];
         tab0(tab0(:,1)>1,3)=floor(tab0(tab0(:,1)>1,1)*1000/h_2pts);
         
         [xx,wx]=retgauss(-periodicity_x/2,periodicity_x/2,15,12,[-diameter_x/2,diameter_x/2]);
@@ -561,8 +570,8 @@ if cal_abs
     figure
     %plot(wavelength,A_tot(1,:),'Linewidth',3)
     %legend({'Total'})
-    plot(wavelength,Abs(1,:)+Abs(2,:)+Abs(3,:)+Abs(4,:)+Abs(5,:)+Abs(6,:)+Abs(7,:)+Abs(8,:), wavelength,Abs(9,:), wavelength,Abs(10,:), wavelength,Abs(11,:), wavelength,Abs(12,:)+Abs(13,:)+Abs(14,:)+Abs(15,:)+Abs(16,:)+Abs(17,:)+Abs(18,:)+Abs(19,:)+Abs(20,:)+Abs(21,:), wavelength,Abs(22,:), wavelength,Abs(9,:)+Abs(10,:)+Abs(11,:), 'Linewidth',3)
-    legend({'AlInP(1-8)','GaAs(9)','QD(10)','GaAs(11)','AlInP(12-21)','Silver mirror(22)','active region(9-11)'})
+    plot(wavelength,Abs(1,:)+Abs(2,:)+Abs(3,:)+Abs(4,:)+Abs(5,:)+Abs(6,:)+Abs(7,:)+Abs(8,:), wavelength,Abs(9,:), wavelength,Abs(10,:), wavelength,Abs(11,:), wavelength,Abs(12,:)+Abs(13,:)+Abs(14,:)+Abs(15,:)+Abs(16,:)+Abs(17,:)+Abs(18,:)+Abs(19,:)+Abs(20,:)+Abs(21,:)+Abs(22,:)+Abs(23,:)+Abs(24,:)+Abs(25,:)+Abs(26,:)+Abs(27,:)+Abs(28,:)+Abs(29,:)+Abs(30,:), wavelength,Abs(31,:), wavelength,Abs(9,:)+Abs(10,:)+Abs(11,:), 'Linewidth',3)
+    legend({'AlInP(1-8)','GaAs(9)','QD(10)','GaAs(11)','AlInP(12-30)','Silver mirror(31)','active region(9-11)'})
     xlabel('\lambda (É m)')
     ylabel('Absorption')
     xlim([min(wavelength) max(wavelength)])

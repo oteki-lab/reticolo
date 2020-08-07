@@ -128,7 +128,7 @@ clear;retio;
 %% Parameters of the structure and the calculation
 
 %%%%%% Wavelengths and angle of incidence
-npoints=1;                          % 1 for only structure
+npoints=101;                          % 1 for only structure
 lambdamin=0.4;
 lambdamax=1.2;
 wavelength=linspace(lambdamin,lambdamax,npoints);
@@ -255,9 +255,9 @@ if trace_champ&&isempty(x0)==0&&isempty(y0)==0;disp('WARNING : There is a proble
 if trace_champ&&isempty(x0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 if trace_champ&&isempty(y0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 
-%parpool
-%parfor zou=1:length(wavelength)
-for zou=1:length(wavelength)
+parpool
+parfor zou=1:length(wavelength)
+%for zou=1:length(wavelength)
     disp(['Calculation n-' int2str(zou) ' of ' int2str(length(wavelength))])
     
     inc=[];
@@ -285,14 +285,16 @@ for zou=1:length(wavelength)
 
     ns=nsub(zou);
 
-    Number = [];
+    Number = zeros(length(n(:,1)));    %Number = [];
     for index = 1:length(n(:,1))
-        if length(n(index,:))==1; Number=[Number,n(index)]; else; Number=[Number,n(index, zou)]; end
+        if length(n(index,:))==1; Number(index)=n(index); else; Number(index)=n(index, zou); end
+        %if length(n(index,:))==1; Number=[Number,n(index)]; else; Number=[Number,n(index, zou)]; end
     end
     
-    Numberm = [];
+    Numberm = zeros(length(nm(:,1)));    %Numberm = [];
     for index = 1:length(nm(:,1))
-        if length(nm(index,:))==1; Numberm=[Numberm,nm(index)]; else; Numberm=[Numberm,nm(index, zou)]; end
+        if length(nm(index,:))==1; Numberm(index)=nm(index); else; Numberm(index)=nm(index, zou); end
+        %if length(nm(index,:))==1; Numberm=[Numberm,nm(index)]; else; Numberm=[Numberm,nm(index, zou)]; end
     end
     
     N=Number(1:Nb_couches);
@@ -438,18 +440,19 @@ for zou=1:length(wavelength)
         end
         num=retelimine(num);
         
-        tab=[];tab2=tab;
+        tab=zeros(Nb_couches,3); %tab=[];
+        tab2=[];
         struct={ab};
         for az=1:Nb_couches
-            tab=[tab;[H(az),az+1,0]];
+            tab(az,:)=[H(az),az+1,0];               %tab=[tab;[H(az),az+1,0]];
             tab2=[tab2;[0,az+1,1];[H(az),az+1,0]];
-            struct={struct{:},a{az}};
+            struct=[struct(:)',a(az)];
         end
         tab(num,3)=Nb_pts_z;
         tab2=[tab2;[0,1,1];[1,1,0];[0,1,1]];
         
-        [e,z,wz,o]=retchamp(init,struct,sh,sb,inc,{x,y},tab,[],[1:6]+7.25i,1,1,1:6);
-        [e2,z2,wz2,o2]=retchamp(init,struct,sh,sb,inc,{x,y},tab2,[],[1:6]+7.25i,1,1,1:6);
+        [e,z,wz,o]=retchamp(init,struct,sh,sb,inc,{x,y},tab,[],(1:6)+7.25i,1,1,1:6);
+        [e2,z2,wz2,o2]=retchamp(init,struct,sh,sb,inc,{x,y},tab2,[],(1:6)+7.25i,1,1,1:6);
         for ii=1:3
             o(:,:,:,ii+3)=o(:,:,:,ii+3)./o(:,:,:,ii);
             o(:,:,:,ii)=1;
@@ -481,15 +484,15 @@ for zou=1:length(wavelength)
     end
     
     if cal_champ==1
-        tab_semicon=[];
+        tab_semicon=zeros(Nb_couches);  %tab_semicon=[];
         struct={ab};
         for az=1:Nb_couches
-            tab_semicon=[tab_semicon;[H(az),az+1,0]];
-            struct={struct{:},a{az}};
+            tab_semicon(az)=[tab_semicon;[H(az),az+1,0]];   %tab_semicon=[tab_semicon;[H(az),az+1,0]];
+            struct=[struct(:)',a(az)];
         end
         tab_semicon(N_semicon,3)=Nb_pts_z_semicon;
         
-        [e_semicon,z_semicon,wzs,o_semicon]=retchamp(init,struct,sh,sb,inc,{x,y},tab_semicon,[],[1:6]+7.25i,1,1,1:6);
+        [e_semicon,z_semicon,wzs,o_semicon]=retchamp(init,struct,sh,sb,inc,{x,y},tab_semicon,[],(1:6)+7.25i,1,1,1:6);
         [Wz,Wx,Wy]=ndgrid(wzs,wx,wy);
         W_semicon=Wz.*Wx.*Wy;
         
@@ -499,14 +502,15 @@ for zou=1:length(wavelength)
     end
     
     if trace_champ
-        tab0=[h_air,1,Nb_pts_z+10];
+        tab0 = zeros(Nb_couches+2,3);
+        tab0(1,:) = [h_air,1,Nb_pts_z+10];    %tab0=[h_air,1,Nb_pts_z+10];
         struct0={ah};
         for az=1:Nb_couches
-            tab0=[tab0;[H(az),az+1,Nb_pts_z+10]];
-            struct0={struct0{:},a{az}};
+            tab0(az+1,:)=[H(az),az+1,Nb_pts_z+10];  %tab0=[tab0;[H(az),az+1,Nb_pts_z+10]];
+            struct0=[struct0(:)',a(az)];
         end
-        struct0={struct0{:},ab};
-        tab0=[tab0;[h_sub,Nb_couches+2,Nb_pts_z+10]];
+        struct0=[struct0(:)',{ab}];
+        tab0(Nb_couches+2,:)=[h_sub,Nb_couches+2,Nb_pts_z+10];  %tab0=[tab0;[h_sub,Nb_couches+2,Nb_pts_z+10]];
         tab0(tab0(:,1)>1,3)=floor(tab0(tab0(:,1)>1,1)*1000/h_2pts);
         
         [xx,wx]=retgauss(-periodicity_x/2,periodicity_x/2,15,12,[-diameter_x/2,diameter_x/2]);
@@ -537,7 +541,7 @@ for zou=1:length(wavelength)
     end
 
 end
-%delete(gcp('nocreate'))
+delete(gcp('nocreate'))
 %% Saving and plotting output data
 
 %%%% Example to plot a cross section with trace_champ=1, x0=[], y0=0, z0=[]
