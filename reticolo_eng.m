@@ -120,6 +120,7 @@
 % Hx,Hy,Hz : cross-section of the H field at points zz,xx,yy
 % The direction of the cross-section can be chosen among x=x0, y=y0 ou z=z0
 
+addpath(genpath('./'))
 clear;retio;
 [prv,vmax]=retio([],inf*1i);
 
@@ -549,7 +550,7 @@ end
 
 if cal_abs
     %%%% Example to save the data into a file
-    text=['period_',int2str(periodicity_x*1000),'_diam_',int2str(diam*1000),'wav',int2str(wavelength(1)*1000),'_',int2str(wavelength(end)*1000),'_nbpoints',int2str(length(wavelength)),'_Fourier',int2str(Mx),'.mat'];
+    text=['Results\','period_',int2str(periodicity_x*1000),'_diam_',int2str(diam*1000),'wav',int2str(wavelength(1)*1000),'_',int2str(wavelength(end)*1000),'_nbpoints',int2str(length(wavelength)),'_Fourier',int2str(Mx),'.mat'];
     save(text);
 
     %%%% Example to plot the absorption
