@@ -127,7 +127,7 @@ clear;retio;
 %% Parameters of the structure and the calculation
 
 %%%%%% Wavelengths and angle of incidence
-npoints=1;                          % 1 for only structure
+npoints=101;                          % 1 for only structure
 lambdamin=0.4;
 lambdamax=1.2;
 wavelength=linspace(lambdamin,lambdamax,npoints);
@@ -144,12 +144,19 @@ diam=0.215/8;
 % params = [diameter_x, height, ni, nim]
 nh=1;       % Air
 params = {
-    periodicity_x,          0.08,   retindice_chen(wavelength,23.21),   retindice_chen(wavelength,23.21);   % 1
-    periodicity_x,          0.04,   ones(size(wavelength)),             retindice_chen(wavelength,4.802);   % 8
-    periodicity_x,          0.16,   retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));        % 9
-    periodicity_x,          0.14,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength));        % 10
-    periodicity_x,          1.7,    retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));        % 11
-    periodicity_x,          0.04,   1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 12
+    periodicity_x,          0.08,   retindice_chen(wavelength,23.21),   retindice_chen(wavelength,23.21);   % 
+%    diam*1,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+%    diam*2,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+%    diam*3,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+%    diam*4,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+%    diam*5,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+%    diam*6,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+%    diam*7,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+    periodicity_x,          0.04,   retindice_chen(wavelength,4.802),   0.00*ones(size(wavelength));        % 
+    periodicity_x,          0.16,   retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));        % 
+    periodicity_x,          0.14,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength));        % 
+    periodicity_x,          1.7,    retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));        % 
+    periodicity_x,          0.04,   retindice_chen(wavelength,4.802),   0.00*ones(size(wavelength));        % 
     periodicity_x*9/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 13
     periodicity_x*8/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 14
     periodicity_x*7/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 15
@@ -159,21 +166,34 @@ params = {
     periodicity_x*3/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 19
     periodicity_x*2/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 20
     periodicity_x*1/10,     0.9/9,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 21
-    periodicity_x,          0.01,   retindice_chen(wavelength,1.72),    0.00*ones(size(wavelength));        % 22
+    periodicity_x,          0.05,   retindice_chen(wavelength,1.72),    0.00*ones(size(wavelength));        % 
 };
-nsub=retindice_chen(wavelength,1.72);       % the substrate     Ag
+nsub=ones(size(wavelength)); % Air
+%nsub=retindice_chen(wavelength,1.72);       % the substrate     Ag
 Nb_couches = length(params);                %Number of layers
 
+% w/o nanostructure
 layers = {
-    'SiNx ARC', [1];
-    'AlInP window', [2];
-    'GaAs emitter', [3];
-    'QD', [4];
-    'GaAs base', [5];
-    'AlInP BSF', [6,7,8,9,10,11,12,13,14,15];
-    'Ag mirror', [16];
-    'active region', [3,4,5]
+    'SiNx ARC',         [1];
+    'AlInP window',     [2];
+    'GaAs emitter',     [3];
+    'QD',               [4];
+    'GaAs base',        [5];
+    'AlInP BSF',        [6,7,8,9,10,11,12,13,14,15];
+    'Ag mirror',        [16];
+    'active region',    [3,4,5]
 };
+
+% w/ nanostructure
+%layers = {
+%    'AlInP window',     [1,2,3,4,5,6,7,8];
+%    'GaAs emitter',     [9];
+%    'QD',               [10];
+%    'GaAs base',        [11];
+%    'AlInP BSF',        [12];
+%    'Ag mirror',        [13];
+%    'active region',    [9,10,11]
+%};
 
 %%%%%% Numerical parameters
 pol=0;                              % polarization of the incident wave, TM pol=2  TE pol=0
