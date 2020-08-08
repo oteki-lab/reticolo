@@ -137,7 +137,6 @@ theta=[0,0];                        %angle of incidence in degrees
 periodicity_x=2.4;                  % period in x
 periodicity_y=periodicity_x;        % period in y
 diam=0.215/8;
-backgrating_x=0.215/16;
 
 % diameter of each layer
 % Thicknesses, from top to bottom   (0 si if no layer)
@@ -158,22 +157,30 @@ params = {
     periodicity_x,          0.14,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength));        % 
     periodicity_x,          1.7,    retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));        % 
     periodicity_x,          0.04,   retindice_chen(wavelength,4.802),   0.00*ones(size(wavelength));        % 
-    backgrating_x*15,        0.4/16  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*14,        0.4/16  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*13,        0.4/16  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*12,        0.4/16,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*11,        0.4/16,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*10,        0.4/16,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*9,        0.4/16,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*8,        0.4/16,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*7,        0.4/16  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*6,        0.4/16  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*5,        0.4/16,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*4,        0.4/16,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*3,        0.4/16,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*2,        0.4/16,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*1,        0.4/16,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*0.5,      0.4/16,  1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*24/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*23/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*22/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*21/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*20/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*19/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*18/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*17/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*16/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*15/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*14/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*13/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*12/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*11/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*10/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*9/25,     0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*8/25,     0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*7/25,     0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*6/25,     0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*5/25,     0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*4/25,     0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*3/25,     0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*2/25,     0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
+    periodicity_x*1/25,     0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
     periodicity_x,          0.05,   retindice_chen(wavelength,1.72),    0.00*ones(size(wavelength));        % 
 };
 nsub=ones(size(wavelength));        % Air  %retindice_chen(wavelength,1.72); % Ag
@@ -186,8 +193,8 @@ layers = {
     'GaAs emitter',     [3];
     'QD',               [4];
     'GaAs base',        [5];
-    'AlInP BSF',        [6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22];
-    'Ag mirror',        [23];
+    'AlInP BSF',        [6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
+    'Ag mirror',        [31];
     'active region',    [3,4,5]
 };
 
@@ -341,7 +348,7 @@ parfor zou=1:length(wavelength)
             u{az}=retu(period,{N(az),k0});
         else
             % u{az}=retu(period,{N(az),[0,0,diameter_x,diameter_y,Nm(az),Ntre],[-diameter_x/2+w_rectangle/2,diameter_y/2+h_rectangle/2,w_rectangle,h_rectangle,Nm(az),Ntre],[diameter_x/2+h_rectangle/2,-diameter_y/2+w_rectangle/2,h_rectangle,w_rectangle,Nm(az),Ntre ],k0});
-            if Nm(az)~=0
+            if N(az)==0    %Nm(az)~=0
                 structure_array = {};
                 for px=-5:5
                     for py=-5:5
