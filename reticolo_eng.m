@@ -142,42 +142,29 @@ diam=0.215/8;
 % Thicknesses, from top to bottom   (0 si if no layer)
 % Refraction indices (from top to bottom), can be a function of the wavelength
 % params = [diameter_x, height, ni, nim]
-nh=1;
+nh=1;       % Air
 params = {
-    diam*1,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*2,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*3,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*4,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*5,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*6,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*7,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    periodicity_x,          0.04,   ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    periodicity_x,          0.16,   retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));
-    periodicity_x,          0.14,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength));
-    periodicity_x,          1.7,    retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));
-    periodicity_x,          0.04,   1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*17/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*16/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*15/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*14/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*13/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*12/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*11/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*10/18,    0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*9/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*8/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*7/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*6/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*5/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*4/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*3/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*2/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*1/18,     0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x*0.5/18,   0.9/18, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);
-    periodicity_x,          0.01,   retindice_chen(wavelength,1.72),    0.00*ones(size(wavelength));
+    periodicity_x,          0.08,   retindice_chen(wavelength,23.21),   retindice_chen(wavelength,23.21);   % 1
+    periodicity_x,          0.04,   ones(size(wavelength)),             retindice_chen(wavelength,4.802);   % 8
+    periodicity_x,          0.16,   retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));        % 9
+    periodicity_x,          0.14,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength));        % 10
+    periodicity_x,          1.7,    retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));        % 11
+    periodicity_x,          0.04,   1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 12
+    periodicity_x,          0.01,   retindice_chen(wavelength,1.72),    0.00*ones(size(wavelength));        % 22
 };
 nsub=retindice_chen(wavelength,1.72);       % the substrate     Ag
 Nb_couches = length(params);                %Number of layers
+
+layers = {
+    'SiNx ARC', [1];
+    'AlInP window', [2];
+    'GaAs emitter', [3];
+    'QD', [4];
+    'GaAs base', [5];
+    'AlInP BSF', [6];
+    'Ag mirror', [7];
+    'active region', [3,4,5]
+};
 
 %%%%%% Numerical parameters
 pol=0;                              % polarization of the incident wave, TM pol=2  TE pol=0
@@ -562,12 +549,32 @@ if cal_abs
     text=['Results\','period_',int2str(periodicity_x*1000),'_diam_',int2str(diam*1000),'wav',int2str(wavelength(1)*1000),'_',int2str(wavelength(end)*1000),'_nbpoints',int2str(length(wavelength)),'_Fourier',int2str(Mx),'.mat'];
     save(text);
 
+    layers_name = layers(:,1);
+    layer_numss = layers(:,2);
+    legends = cell(1,length(layers));
+    Abs_array = cell(1,length(layers));
+    for index=1:length(layers)
+        layer_nums = layer_numss{index};
+        if length(layer_nums)>1
+            legends(index) = append(layers_name(index),'(',int2str(layer_nums(1)),'-',int2str(layer_nums(length(layer_nums))),')');
+        else
+            legends(index) = append(layers_name(index),'(',int2str(layer_nums(1)),')');
+        end
+        Abs_temp = zeros(1,length(wavelength));
+        for index2=layer_nums(1):layer_nums(length(layer_nums))
+            Abs_temp = Abs_temp + Abs(index2,:);
+        end
+        Abs_array{index} = Abs_temp;
+    end
+
     %%%% Example to plot the absorption
     figure
-    %plot(wavelength,A_tot(1,:),'Linewidth',3)
-    %legend({'Total'})
-    plot(wavelength,Abs(1,:)+Abs(2,:)+Abs(3,:)+Abs(4,:)+Abs(5,:)+Abs(6,:)+Abs(7,:)+Abs(8,:), wavelength,Abs(9,:), wavelength,Abs(10,:), wavelength,Abs(11,:), wavelength,Abs(12,:)+Abs(13,:)+Abs(14,:)+Abs(15,:)+Abs(16,:)+Abs(17,:)+Abs(18,:)+Abs(19,:)+Abs(20,:)+Abs(21,:), wavelength,Abs(32,:), wavelength,Abs(9,:)+Abs(10,:)+Abs(11,:), 'Linewidth',3)
-    legend({'AlInP(1-8)','GaAs(9)','QD(10)','GaAs(11)','AlInP(12-21)','Silver mirror(22)','active region(9-11)'})
+    hold on
+    for index=1:length(layers)
+        plot(wavelength,cell2mat(Abs_array(:,index)), 'Linewidth',3);
+    end
+    hold off
+    legend(legends)
     xlabel('\lambda (um)')
     ylabel('Absorption')
     xlim([min(wavelength) max(wavelength)])
