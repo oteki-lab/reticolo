@@ -197,17 +197,6 @@ layers = {
     'active region',    [3,4,5]
 };
 
-% w/ nanostructure
-%layers = {
-%    'AlInP window',     [1,2,3,4,5,6,7,8];
-%    'GaAs emitter',     [9];
-%    'QD',               [10];
-%    'GaAs base',        [11];
-%    'AlInP BSF',        [12];
-%    'Ag mirror',        [13];
-%    'active region',    [9,10,11]
-%};
-
 %%%%%% Numerical parameters
 pol=0;                              % polarization of the incident wave, TM pol=2  TE pol=0
                                     % For normal incidence, TM <=> H//y and TE <=> E//y
@@ -270,7 +259,7 @@ test=zeros(1,length(wavelength));
 Einc=[];Hinc=[];E_semicon=[];H_semicon=[];x_semicon=[];y_semicon=[];z_semicon=[];W_semicon=[];
 Ex=[];Ey=[];Ez=[];Hx=[];Hy=[];Hz=[];
 xx=[];yy=[];zz=[];indice=[];
-XX = []; YY = []; ZZ = []; E_y = []; INDICE = [];
+XX = []; YY = []; ZZ = []; E_x = []; E_y = []; INDICE = [];
 Ntre=1;
 H=cell2mat(params(:,2));
 n = cell2mat(params(:,3));
@@ -282,9 +271,9 @@ if trace_champ&&isempty(x0)==0&&isempty(y0)==0;disp('WARNING : There is a proble
 if trace_champ&&isempty(x0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 if trace_champ&&isempty(y0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 
-parpool
-parfor zou=1:length(wavelength)
-%for zou=1:length(wavelength)
+%parpool
+%parfor zou=1:length(wavelength)
+for zou=1:length(wavelength)
     disp(['Calculation n-' int2str(zou) ' of ' int2str(length(wavelength))])
     
     inc=[];
@@ -562,25 +551,35 @@ parfor zou=1:length(wavelength)
         Ex=squeeze(e0(:,:,:,1));Ey=squeeze(e0(:,:,:,2));Ez=squeeze(e0(:,:,:,3));
         Hx=squeeze(e0(:,:,:,4));Hy=squeeze(e0(:,:,:,5));Hz=squeeze(e0(:,:,:,6));
 
-        XX = [XX,xx]; YY = [YY,yy]; ZZ = [ZZ,zz]; E_y = [E_y,Ey]; INDICE = [INDICE,indice];
+        XX = [XX,xx]; YY = [YY,yy]; ZZ = [ZZ,zz]; E_x = [E_y,Ex]; E_y = [E_y,Ey]; INDICE = [INDICE,indice];
     end
 
 end
-delete(gcp('nocreate'))
+%delete(gcp('nocreate'))
 %% Saving and plotting output data
 
 %%%% Example to plot a cross section with trace_champ=1, x0=[], y0=0, z0=[]
 %%%% Hy as a function of x and z
 %%%% The separation between the layers is in white (indice contains the position of all indices)
 if trace_champ
+    if pol==0
+        horizontal = XX;
+        E = E_y;
+        horizontal_label = 'x';
+    else
+        horizontal = YY;
+        E = E_x;
+        horizontal_label = 'y';
+    end
     figure
-    pcolor(XX,ZZ,abs(E_y).^2);
+    pcolor(horizontal,ZZ,abs(E).^2);
     shading interp;
     colormap(jet);
     hold on
-    contour(real(XX),real(ZZ),real(INDICE),'black','linewidth',2);
-    xlabel('x')
+    contour(real(horizontal),real(ZZ),real(INDICE),'black','linewidth',2);
+    xlabel(horizontal_label)
     ylabel('z')
+    hold off    
 end
 
 if cal_abs
