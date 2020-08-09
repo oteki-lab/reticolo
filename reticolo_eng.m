@@ -170,58 +170,34 @@ params = {
 %    periodicity_x*15/25,    0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
 %    periodicity_x*14/25,    0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
 %    periodicity_x*13/25,    0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*48,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*47,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*46,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*45,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*44,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*43,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*42,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*41,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*40,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*39,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*38,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*37,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*36,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*35,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*34,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*33,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*32,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*31,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*30,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*29,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*28,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*27,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*26,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*25,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*24,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*23,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*22,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*21,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*20,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*19,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*18,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*17,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*16,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*15,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*14,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*13,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*12,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*11,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*10,       0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*9,        0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*8,        0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*7,        0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*6,        0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*5,        0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*4,        0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*3,        0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*2,        0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*1,        0.9/48, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    periodicity_x,          0.5,    retindice_chen(wavelength,1.72),    0.00*ones(size(wavelength));        % 
+    backgrating_x*47,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*46,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*45,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*44,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*43,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*42,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*41,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*40,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*39,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*38,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*37,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*36,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*35,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*34,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*33,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*32,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*31,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*30,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*29,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*28,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*27,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*26,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*25,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*24,       0.9/24, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+%    periodicity_x,          0.5,    retindice_chen(wavelength,1.72),    0.00*ones(size(wavelength));        % 
 };
-nsub=ones(size(wavelength));        % Air  
-%nsub=retindice_chen(wavelength,1.72); % Ag
+%nsub=ones(size(wavelength));        % Air  
+nsub=retindice_chen(wavelength,1.72); % Ag
 Nb_couches = length(params);        % Number of layers
 
 % w/o nanostructure
@@ -231,8 +207,8 @@ layers = {
     'GaAs emitter',     [3];
     'QD',               [4];
     'GaAs base',        [5];
-    'AlInP BSF',        [6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54];
-    'Ag mirror',        [55];
+    'AlInP BSF',        [6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
+%    'Ag mirror',        [19];
     'active region',    [3,4,5]
 };
 
