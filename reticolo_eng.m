@@ -144,7 +144,7 @@ diam=0.215/8;
 % params = [diameter_x, height, ni, nim]
 nh=1;       % Air
 params = {
-    periodicity_x,          0.08,   retindice_chen(wavelength,23.21),   retindice_chen(wavelength,23.21);   % 
+    periodicity_x,          0.075,   retindice_chen(wavelength,23.21),   retindice_chen(wavelength,23.21);   % 
 %    diam*1,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
 %    diam*2,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
 %    diam*3,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
