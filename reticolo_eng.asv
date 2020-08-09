@@ -127,7 +127,7 @@ clear;retio;
 %% Parameters of the structure and the calculation
 
 %%%%%% Wavelengths and angle of incidence
-npoints=101;                          % 1 for only structure
+npoints=1;                          % 1 for only structure
 lambdamin=0.4;
 lambdamax=1.2;
 wavelength=linspace(lambdamin,lambdamax,npoints);
@@ -136,7 +136,7 @@ theta=[0,0];                        %angle of incidence in degrees
 %%%%%% Geometric parameters
 periodicity_x=2.4;                  % period in x
 periodicity_y=periodicity_x;        % period in y
-diam=0.215/9;
+diam=0.215/11;
 
 % diameter of each layer
 % Thicknesses, from top to bottom   (0 si if no layer)
@@ -144,44 +144,21 @@ diam=0.215/9;
 % params = [diameter_x, height, ni, nim]
 nh=1;       % Air
 params = {
-%    periodicity_x,          0.08,   retindice_chen(wavelength,23.21),   retindice_chen(wavelength,23.21);   % 
-    diam*1,                 0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*2,                 0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*3,                 0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*4,                 0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*5,                 0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*6,                 0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*7,                 0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*8,                 0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+    diam*1,                 0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+    diam*2,                 0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+    diam*3,                 0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+    diam*4,                 0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+    diam*5,                 0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+    diam*6,                 0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+    diam*7,                 0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+    diam*8,                 0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+    diam*9,                 0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+    diam*10,                0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
     periodicity_x,          0.04,   retindice_chen(wavelength,4.802),   0.00*ones(size(wavelength));        % 
     periodicity_x,          0.16,   retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));        % 
     periodicity_x,          0.14,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength));        % 
     periodicity_x,          1.7,    retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));        % 
     periodicity_x,          0.04,   retindice_chen(wavelength,4.802),   0.00*ones(size(wavelength));        % 
-%    periodicity_x*24/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*23/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*22/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*21/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*20/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*19/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*18/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*17/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*16/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*15/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*14/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*13/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*12/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*11/25,    0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*9/25,     0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*8/25,     0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*7/25,     0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*6/25,     0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*5/25,     0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*4/25,     0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*3/25,     0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*2/25,     0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x*1/25,     0.9/24, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x,          0.5,   retindice_chen(wavelength,1.72),    0.00*ones(size(wavelength));        % 
 };
 %nsub=ones(size(wavelength));        % Air  
 nsub=retindice_chen(wavelength,1.72); % Ag
@@ -201,13 +178,13 @@ Nb_couches = length(params);        % Number of layers
 
 % w/ nanostructure
 layers = {
-    'AlInP window',     [1,2,3,4,5,6,7];
-    'GaAs emitter',     [8];
-    'QD',               [9];
-    'GaAs base',        [10];
-    'AlInP BSF',        [11];
+    'AlInP window',     [1,2,3,4,5,6,7,8,9,10,11];
+    'GaAs emitter',     [12];
+    'QD',               [13];
+    'GaAs base',        [14];
+    'AlInP BSF',        [15];
 %    'Ag mirror',        [12];
-    'active region',    [8,9,10]
+    'active region',    [12,13,14]
 };
 
 %%%%%% Numerical parameters
@@ -272,7 +249,7 @@ test=zeros(1,length(wavelength));
 Einc=[];Hinc=[];E_semicon=[];H_semicon=[];x_semicon=[];y_semicon=[];z_semicon=[];W_semicon=[];
 Ex=[];Ey=[];Ez=[];Hx=[];Hy=[];Hz=[];
 xx=[];yy=[];zz=[];indice=[];
-XX = []; YY = []; ZZ = []; E_y = []; INDICE = [];
+XX = []; YY = []; ZZ = []; E_x = []; E_y = []; INDICE = [];
 Ntre=1;
 H=cell2mat(params(:,2));
 n = cell2mat(params(:,3));
@@ -284,9 +261,9 @@ if trace_champ&&isempty(x0)==0&&isempty(y0)==0;disp('WARNING : There is a proble
 if trace_champ&&isempty(x0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 if trace_champ&&isempty(y0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 
-parpool
-parfor zou=1:length(wavelength)
-%for zou=1:length(wavelength)
+%parpool
+%parfor zou=1:length(wavelength)
+for zou=1:length(wavelength)
     disp(['Calculation n-' int2str(zou) ' of ' int2str(length(wavelength))])
     
     inc=[];
@@ -564,11 +541,11 @@ parfor zou=1:length(wavelength)
         Ex=squeeze(e0(:,:,:,1));Ey=squeeze(e0(:,:,:,2));Ez=squeeze(e0(:,:,:,3));
         Hx=squeeze(e0(:,:,:,4));Hy=squeeze(e0(:,:,:,5));Hz=squeeze(e0(:,:,:,6));
 
-        XX = [XX,xx]; YY = [YY,yy]; ZZ = [ZZ,zz]; E_y = [E_y,Ey]; INDICE = [INDICE,indice];
+        XX = [XX,xx]; YY = [YY,yy]; ZZ = [ZZ,zz]; E_x = [E_y,Ex]; E_y = [E_y,Ey]; INDICE = [INDICE,indice];
     end
 
 end
-delete(gcp('nocreate'))
+%delete(gcp('nocreate'))
 %% Saving and plotting output data
 
 %%%% Example to plot a cross section with trace_champ=1, x0=[], y0=0, z0=[]
@@ -576,13 +553,39 @@ delete(gcp('nocreate'))
 %%%% The separation between the layers is in white (indice contains the position of all indices)
 if trace_champ
     figure
-    pcolor(XX,ZZ,abs(E_y).^2);
+    if pol==0
+        horizontal = XX;
+        E = E_y;
+        horizontal_label = 'x';
+        %pcolor(XX,ZZ,abs(E_y).^2);
+        %shading interp;
+        %colormap(jet);
+        %hold on
+        contour(real(XX),real(ZZ),real(INDICE),'black','linewidth',2);
+%        xlabel('x')
+        %ylabel('z')
+        %hold off
+    else
+        horizontal = YY;
+        E = E_x;
+        horizontal_label = 'y';
+        %pcolor(YY,ZZ,abs(E_x).^2);
+        %shading interp;
+        %colormap(jet);
+        %hold on
+        contour(real(YY),real(ZZ),real(INDICE),'black','linewidth',2);
+%        xlabel('y')
+        %ylabel('z')
+        %hold off
+    end
+    pcolor(horizontal,ZZ,abs(E).^2);
     shading interp;
     colormap(jet);
     hold on
     contour(real(XX),real(ZZ),real(INDICE),'black','linewidth',2);
-    xlabel('x')
+    xlabel(horizontal_label)
     ylabel('z')
+    hold off    
 end
 
 if cal_abs
