@@ -181,17 +181,6 @@ layers = {
     'active region',    [3,4,5]
 };
 
-% w/ nanostructure
-%layers = {
-%    'AlInP window',     [1,2,3,4,5,6,7,8];
-%    'GaAs emitter',     [9];
-%    'QD',               [10];
-%    'GaAs base',        [11];
-%    'AlInP BSF',        [12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36];
-%    'Ag mirror',        [37];
-%    'active region',    [9,10,11]
-%};
-
 %%%%%% Numerical parameters
 pol=0;                              % polarization of the incident wave, TM pol=2  TE pol=0
                                     % For normal incidence, TM <=> H//y and TE <=> E//y
