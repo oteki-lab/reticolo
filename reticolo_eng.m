@@ -164,18 +164,6 @@ params = {
 nsub=retindice_chen(wavelength,1.72); % Ag
 Nb_couches = length(params);        % Number of layers
 
-% w/o nanostructure
-%layers = {
-%    'SiNx ARC',         [1];
-%    'AlInP window',     [2];
-%    'GaAs emitter',     [3];
-%    'QD',               [4];
-%    'GaAs base',        [5];
-%    'AlInP BSF',        [6];%,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
-%    'Ag mirror',        [7];
-%    'active region',    [3,4,5]
-%};
-
 % w/ nanostructure
 layers = {
     'AlInP window',     [1,2,3,4,5,6,7,8,9,10,11];
