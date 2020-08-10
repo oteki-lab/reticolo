@@ -271,11 +271,11 @@ if trace_champ&&isempty(x0)==0&&isempty(y0)==0;disp('WARNING : There is a proble
 if trace_champ&&isempty(x0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 if trace_champ&&isempty(y0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 
-%parpool
-%parfor zou=1:length(wavelength)
-for zou=1:length(wavelength)
+parpool
+parfor zou=1:length(wavelength)
+%for zou=1:length(wavelength)
     disp(['Calculation n-' int2str(zou) ' of ' int2str(length(wavelength))])
-    
+
     inc=[];
     sym=[];
     e0=[];
@@ -292,7 +292,7 @@ for zou=1:length(wavelength)
     test_vect=zeros(1);
     Einc=[];Hinc=[];E_semicon=[];H_semicon=[];x_semicon=[];y_semicon=[];z_semicon=[];W_semicon=[];
     Ex=[];Ey=[];Ez=[];Hx=[];Hy=[];Hz=[];
-    
+
     xx=[];yy=[];zz=[];indice=[];
     lwa=wavelength(zou);
     k0=2*pi/lwa;
@@ -305,12 +305,12 @@ for zou=1:length(wavelength)
     for index = 1:length(n(:,1))
         if length(n(index,:))==1; Number(index)=n(index); else; Number(index)=n(index, zou); end
     end
-    
+
     Numberm = zeros(length(nm(:,1)));
     for index = 1:length(nm(:,1))
         if length(nm(index,:))==1; Numberm(index)=nm(index); else; Numberm(index)=nm(index, zou); end
     end
-    
+
     N=Number(1:Nb_couches);
     Nm=Numberm(1:Nb_couches);
     diameter_x=cell2mat(params(:,1));
@@ -318,17 +318,17 @@ for zou=1:length(wavelength)
     kx=k0*nh*sin(theta(1)*pi/180);
     ky=k0*nh*sin(theta(2)*pi/180);
     beta=[kx,ky];
-    
+
     uh=retu(period,{nh,k0});
     ub=retu(period,{ns,k0});
-    
+
     if op_granet==1
         init=retinit(period,[-Mx,Mx,-My,My],beta,sym,{[],{xdisc,Ax,Bx,ydisc,Ay,By}});ah=retcouche(init,uh,1);
     else
         init=retinit(period,[-Mx,Mx,-My,My],beta,sym);ah=retcouche(init,uh,op_retcouche);
     end
     ab=retcouche(init,ub,op_retcouche);
-    
+
     u=[];
     a=[];
     for az=1:Nb_couches
@@ -348,7 +348,7 @@ for zou=1:length(wavelength)
                 structure=[0,0,diameter_x(az),diameter_y(az),Nm(az),Ntre];
                 texture={N(az),structure,k0};
             end
-            
+
             u{az}=retu(period,texture);
         end
         a{az}=retcouche(init,u{az},op_retcouche);
@@ -364,7 +364,7 @@ for zou=1:length(wavelength)
         rettestobjet(period,struct_test,[0,-1.5,1],[2,2,-period/2]);
         rettestobjet(period,struct_test,[0,-2],[2,2,-period/2]);
     end
-    
+
     if op_granet==1
         init_pasgranet=retinit(period,[-Mx,Mx,-My,My],beta,sym);
         ah_pasgranet=retcouche(init_pasgranet,uh,1);
@@ -379,7 +379,7 @@ for zou=1:length(wavelength)
     inch=find(((K(1)-beth(:,1)).^2+(K(2)-beth(:,2)).^2)<1e-8);
     difh=inch;
     sh=rettronc(sh,haut(inch,1),haut(difh,1),1);
-    
+
     [sb,bas,betb,cb,anglb]=retb(init,ab,-0.001);
     incb=[];difb=[];
     sb=rettronc(sb,bas(incb,1),bas(difb,1),-1);
@@ -387,19 +387,19 @@ for zou=1:length(wavelength)
     for az=2:Nb_couches
         stemp=retss(stemp,retc(a{az},H(az)));
     end
-    
+
     stot=retss(sh,stemp,sb);
     ef=retreseau(init,stot,betb,cb,anglb,incb,difb,beth,ch,anglh,inch,difh);
     if isempty(ef.amplitude(ef.dif.TEh,ef.inc.TEh))==0;ref_TE_TE_vect=ef.amplitude(ef.dif.TEh,ef.inc.TEh); end
     if isempty(ef.amplitude(ef.dif.TMh,ef.inc.TEh))==0;ref_TE_TM_vect=ef.amplitude(ef.dif.TMh,ef.inc.TEh); end
     if isempty(ef.amplitude(ef.dif.TMh,ef.inc.TMh))==0;ref_TM_TM_vect=ef.amplitude(ef.dif.TMh,ef.inc.TMh); end
     if isempty(ef.amplitude(ef.dif.TEh,ef.inc.TMh))==0;ref_TM_TE_vect=ef.amplitude(ef.dif.TEh,ef.inc.TMh); end
-    
+
     R0_TE_TE_vect=abs(ref_TE_TE_vect)^2;
     R0_TE_TM_vect=abs(ref_TE_TM_vect)^2;
     R0_TM_TM_vect=abs(ref_TM_TM_vect)^2;
     R0_TM_TE_vect=abs(ref_TM_TE_vect)^2;
-    
+
     R0_TE_TE(:,zou)=R0_TE_TE_vect;
     R0_TE_TM(:,zou)=R0_TE_TM_vect;
     R0_TM_TE(:,zou)=R0_TM_TE_vect;
@@ -408,7 +408,7 @@ for zou=1:length(wavelength)
     ref_TE_TM(:,zou)=ref_TE_TM_vect;
     ref_TM_TE(:,zou)=ref_TM_TE_vect;
     ref_TM_TM(:,zou)=ref_TM_TM_vect;
-    
+
     if op_granet==1
         % [Xdisc,Ydisc]=retgranet(init,[-diameter_x/2,-diameter_x/2+w_rectangle,diameter_x/2,diameter_x/2+h_rectangle],[-diameter_y/2,-diameter_y/2+w_rectangle,diameter_y/2,diameter_y/2+h_rectangle]);
         [Xdisc,Ydisc]=retgranet(init,[-diameter_x/2,diameter_x/2],[-diameter_y/2,diameter_y/2]);
@@ -421,7 +421,7 @@ for zou=1:length(wavelength)
         [x,wx]=retgauss(-periodicity_x/2,periodicity_x/2,15,10,[-unique(diameter_x)/2,unique(diameter_x)/2]);
         [y,wy]=retgauss(-periodicity_y/2,periodicity_y/2,15,10,[-unique(diameter_y)/2,unique(diameter_y)/2]);
     end
-    
+
     if cal_abs||cal_champ==1||trace_champ
         sb_norm=retb(init,ah,-0.1,0,[],[]);
         tab_norm=[0,1,1];
@@ -441,7 +441,7 @@ for zou=1:length(wavelength)
             Hinc=squeeze(einc(:,:,:,4:6));
         end
     end
-    
+
     if cal_abs
         nunu=find(Nm~=0);
         num=[];
@@ -453,7 +453,7 @@ for zou=1:length(wavelength)
             end
         end
         num=retelimine(num);
-        
+
         tab=zeros(Nb_couches,3); %tab=[];
         tab2=[];
         struct={ab};
@@ -464,7 +464,7 @@ for zou=1:length(wavelength)
         end
         tab(num,3)=Nb_pts_z;
         tab2=[tab2;[0,1,1];[1,1,0];[0,1,1]];
-        
+
         [e,z,wz,o]=retchamp(init,struct,sh,sb,inc,{x,y},tab,[],(1:6)+7.25i,1,1,1:6);
         [e2,z2,wz2,o2]=retchamp(init,struct,sh,sb,inc,{x,y},tab2,[],(1:6)+7.25i,1,1,1:6);
         for ii=1:3
@@ -474,20 +474,20 @@ for zou=1:length(wavelength)
         [Wz,Wx,Wy]=ndgrid(wz,wx,wy);
         W=Wz.*Wx.*Wy;
         flux_poyn=retpoynting(e2,[0,0,-1],wx,wy,[]);
-        
+
         A_sub_vect=flux_poyn(2)-flux_poyn(1);
-        
+
         for az=1:Nb_couches
             Abs_vect(Nb_couches-az+1)=flux_poyn(az+2)-flux_poyn(az+1);
         end
-        
+
         for az=1:length(num)
             numx=find(x>-diameter_x(az)/2 & x<diameter_x(az)/2);
             numy=find(y>-diameter_y(az)/2 & y<diameter_y(az)/2);
             Abs_plots_vect(num(az))=0.5*k0*sum(sum(sum(W((length(num)-az)*Nb_pts_z+1:(length(num)-az+1)*Nb_pts_z,numx(az),numy(az)).*imag(o((length(num)-az)*Nb_pts_z+1:(length(num)-az+1)*Nb_pts_z,numx(az),numy(az),4)).*sum(abs(e((length(num)-az)*Nb_pts_z+1:(length(num)-az+1)*Nb_pts_z,numx(az),numy(az),1:3)).^2,4))));
             Abs_vect(num(az))=0.5*k0*sum(sum(sum(W((length(num)-az)*Nb_pts_z+1:(length(num)-az+1)*Nb_pts_z,:,:).*imag(o((length(num)-az)*Nb_pts_z+1:(length(num)-az+1)*Nb_pts_z,:,:,4)).*sum(abs(e((length(num)-az)*Nb_pts_z+1:(length(num)-az+1)*Nb_pts_z,:,:,1:3)).^2,4))));
         end
-        
+
         Abs(:,zou)=Abs_vect;
         Abs_plots(:,zou)=Abs_plots_vect;
         A_tot_vect=flux_poyn(end)-flux_poyn(1);
@@ -496,7 +496,7 @@ for zou=1:length(wavelength)
         A_tot(:,zou)=A_tot_vect;
         A_sub(:,zou)=A_sub_vect;
     end
-    
+
     if cal_champ==1
         tab_semicon=zeros(Nb_couches);  %tab_semicon=[];
         struct={ab};
@@ -505,16 +505,16 @@ for zou=1:length(wavelength)
             struct=[struct(:)',a(az)];
         end
         tab_semicon(N_semicon,3)=Nb_pts_z_semicon;
-        
+
         [e_semicon,z_semicon,wzs,o_semicon]=retchamp(init,struct,sh,sb,inc,{x,y},tab_semicon,[],(1:6)+7.25i,1,1,1:6);
         [Wz,Wx,Wy]=ndgrid(wzs,wx,wy);
         W_semicon=Wz.*Wx.*Wy;
-        
+
         E_semicon=e_semicon(:,:,:,1:3);
         H_semicon=e_semicon(:,:,:,4:6);
         x_semicon=x;y_semicon=y;
     end
-    
+
     if trace_champ
         tab0 = zeros(Nb_couches+2,3);
         tab0(1,:) = [h_air,1,Nb_pts_z+10];    %tab0=[h_air,1,Nb_pts_z+10];
@@ -526,10 +526,10 @@ for zou=1:length(wavelength)
         struct0=[struct0(:)',{ab}];
         tab0(Nb_couches+2,:)=[h_sub,Nb_couches+2,Nb_pts_z+10];  %tab0=[tab0;[h_sub,Nb_couches+2,Nb_pts_z+10]];
         tab0(tab0(:,1)>1,3)=floor(tab0(tab0(:,1)>1,1)*1000/h_2pts);
-        
+
         [xx,wx]=retgauss(-periodicity_x/2,periodicity_x/2,15,12,[-diameter_x/2,diameter_x/2]);
         [yy,wy]=retgauss(-periodicity_y/2,periodicity_y/2,15,12,[-diameter_y/2,diameter_y/2]);
-      
+
         if isempty(x0)==1&&isempty(z0)==1
             [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,y0},tab0,[],(1:6)+7.25i,1,1,1:6);
         elseif isempty(y0)==1&&isempty(z0)==1
@@ -542,7 +542,7 @@ for zou=1:length(wavelength)
             tab1=[tab0(1:numz-1,:);[tab0(numz,1)-(z0-sum(tab0(numz+1:end,1))),numz,0];[0,numz,1];[z0-sum(tab0(numz+1:end,1)),numz,0];tab0(numz+1:end,:)];
             [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,yy},tab1,[],(1:6)+7.25i,1,1,1:6);
         end
-        
+
         for ii=1:3
             o0(:,:,:,ii+3)=o0(:,:,:,ii+3)./o0(:,:,:,ii);
             o0(:,:,:,ii)=1;
@@ -551,11 +551,11 @@ for zou=1:length(wavelength)
         Ex=squeeze(e0(:,:,:,1));Ey=squeeze(e0(:,:,:,2));Ez=squeeze(e0(:,:,:,3));
         Hx=squeeze(e0(:,:,:,4));Hy=squeeze(e0(:,:,:,5));Hz=squeeze(e0(:,:,:,6));
 
-        XX = [XX,xx]; YY = [YY,yy]; ZZ = [ZZ,zz]; E_x = [E_y,Ex]; E_y = [E_y,Ey]; INDICE = [INDICE,indice];
+        XX = [XX,xx]; YY = [YY,yy]; ZZ = [ZZ,zz]; E_x = [E_x,Ex]; E_y = [E_y,Ey]; INDICE = [INDICE,indice];
     end
 
 end
-%delete(gcp('nocreate'))
+delete(gcp('nocreate')) 
 %% Saving and plotting output data
 
 %%%% Example to plot a cross section with trace_champ=1, x0=[], y0=0, z0=[]
