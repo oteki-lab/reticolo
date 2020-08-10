@@ -145,13 +145,6 @@ diam=0.215/8;
 nh=1;       % Air
 params = {
     periodicity_x,          0.08,   retindice_chen(wavelength,23.21),   retindice_chen(wavelength,23.21);   % 1
-%    diam*1,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-%    diam*2,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-%    diam*3,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-%    diam*4,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-%    diam*5,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-%    diam*6,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-%    diam*7,                 0.4/7,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
     periodicity_x,          0.04,   retindice_chen(wavelength,4.802),   0.00*ones(size(wavelength));        % 2
     periodicity_x,          0.16,   retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));        % 3
     periodicity_x,          0.14,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength));        % 4
@@ -174,17 +167,6 @@ layers = {
     'Ag mirror',        [7];
     'active region',    [3,4,5]
 };
-
-% w/ nanostructure
-%layers = {
-%    'AlInP window',     [1,2,3,4,5,6,7,8];
-%    'GaAs emitter',     [9];
-%    'QD',               [10];
-%    'GaAs base',        [11];
-%    'AlInP BSF',        [12];
-%    'Ag mirror',        [13];
-%    'active region',    [9,10,11]
-%};
 
 %%%%%% Numerical parameters
 pol=0;                              % polarization of the incident wave, TM pol=2  TE pol=0
