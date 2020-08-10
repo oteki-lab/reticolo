@@ -123,11 +123,11 @@
 addpath(genpath('./'))
 clear;retio;
 [prv,vmax]=retio([],inf*1i);
+hallelujah = @()structfun(@(y)sound(y,8192),load('handel.mat','y'));
 
 %% Parameters of the structure and the calculation
-
 %%%%%% Wavelengths and angle of incidence
-npoints=101;                          % 1 for only structure
+npoints=1;                          % 1 for only structure
 lambdamin=0.4;
 lambdamax=1.2;
 wavelength=linspace(lambdamin,lambdamax,npoints);
@@ -196,7 +196,8 @@ layers = {
     'Ag mirror',        [7];
     'active region',    [3,4,5]
 };
-
+disp(layers(1:length(layers)-1,2));
+disp(max(cell2mat(layers(1:length(layers)-1,2)),[],1));
 %%%%%% Numerical parameters
 pol=0;                              % polarization of the incident wave, TM pol=2  TE pol=0
                                     % For normal incidence, TM <=> H//y and TE <=> E//y
@@ -272,9 +273,9 @@ if trace_champ&&isempty(x0)==0&&isempty(z0)==0;disp('WARNING : There is a proble
 if trace_champ&&isempty(y0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 
 try
-    parpool
-    parfor zou=1:length(wavelength)
-    %for zou=1:length(wavelength)
+    %parpool
+    %parfor zou=1:length(wavelength)
+    for zou=1:length(wavelength)
         disp(['Calculation n-' int2str(zou) ' of ' int2str(length(wavelength))])
 
         inc=[];
@@ -556,13 +557,10 @@ try
         end
 
     end
-    delete(gcp('nocreate'))
+    %delete(gcp('nocreate'))
 catch
-    body = "reticolo Simulation Done.";
-    sendMail(body);           
+    hallelujah();
 end
-body = "reticolo Simulation Done.";
-sendMail(body);        
 %% Saving and plotting output data
 
 %%%% Example to plot a cross section with trace_champ=1, x0=[], y0=0, z0=[]
