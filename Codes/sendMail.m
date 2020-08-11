@@ -7,11 +7,11 @@
 %sendMail(body);
 
 % ===== Main =====
-function [] = sendMail(body)
+function [] = sendMail(body,attachmentFilePath)
     % Modify these two lines to reflect your account and password.
-    email = '';
-    password = '';
-    recipients = email;
+    email = 'okadalab.matlab.notification@gmail.com';
+    password = 'Xw8fPKh4';
+    recipients = 'oteki@g.ecc.u-tokyo.ac.jp';
 
     setpref('Internet', 'E_mail', email);
     setpref('Internet', 'SMTP_Server', 'smtp.gmail.com');
@@ -24,11 +24,11 @@ function [] = sendMail(body)
     props.setProperty('mail.smtp.socketFactory.port','465');  %Socket for SSL (465)
 
     subject = 'Matlab Notification.';
-    message_line1 = strcat('Matlab PGM Ended.');
-    message_line2 = strcat('Attachment: [ Att ]');
-    message_line3 = strcat('Datetime: [ ', datestr(datetime('now','TimeZone','local','Format','d-MMM-y HH:mm:ss Z')), ' ]');
-
-    sendmail(recipients, subject, body);
+    if attachmentFilePath == ""
+        sendmail(recipients, subject, body);
+    else
+        sendmail(recipients, subject, body, {char(attachmentFilePath)});
+    end
 
     return
 
