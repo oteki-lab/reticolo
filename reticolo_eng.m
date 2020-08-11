@@ -555,7 +555,7 @@ try
         ylabel('z')
         hold off
 
-        filename = append("results\", "cross-section", ".png");
+        filename = append("results\", "cross-section ", datestr(datetime('now'),'yyyyMMddHHmmssFFF'), ".png");
         saveas(gcf, filename);
     end
 
@@ -599,7 +599,7 @@ try
         set(gcf,'color','w');
         box on
 
-        filename = append("results\", "absorption graph", ".png");
+        filename = append("results\", "absorption graph ", datestr(datetime('now'),'yyyyMMddHHmmssFFF'), ".png");
         saveas(gcf, filename);
     end
 
