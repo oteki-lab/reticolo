@@ -148,7 +148,8 @@ params = {
     periodicity_x,          0.08,   retindice_chen(wavelength,23.21),   retindice_chen(wavelength,23.21);   % 1
     periodicity_x,          0.04,   retindice_chen(wavelength,4.802),   0.00*ones(size(wavelength));        % 2
     periodicity_x,          0.16,   retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));        % 3
-    periodicity_x,          0.14,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength));        % 4
+    periodicity_x,          0.14,
+    retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength));        % 4
     periodicity_x,          1.7,    retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));        % 5
     periodicity_x,          0.04,   retindice_chen(wavelength,4.802),   0.00*ones(size(wavelength));        % 6
     periodicity_x,          0.05,   retindice_chen(wavelength,1.72),    0.00*ones(size(wavelength));        % 7
@@ -180,7 +181,7 @@ sym=[pol-1,pol-1,0,0];              % The symmetry of the structure, more symmet
 % if theta(1)~=0 && theta(2)~=0;sym=[];end;
 
 %% 
-Mx=0;                                % Number of Fourier terms in x
+Mx=15;                                % Number of Fourier terms in x
 My=Mx;                               % Number of Fourier terms in y
 op_granet=0;                         % If 1, RCWA is modified to improve convergence (Transforms the real coordinates at discontinuities)
 % IMPORTANT: this parameter is tricky to use, and does not work out of normal incidence. Better keep it at zero
@@ -244,9 +245,9 @@ if trace_champ&&isempty(x0)==0&&isempty(z0)==0;disp('WARNING : There is a proble
 if trace_champ&&isempty(y0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 
 try
-    %parpool
-    %parfor zou=1:length(wavelength)
-    for zou=1:length(wavelength)
+    parpool
+    parfor zou=1:length(wavelength)
+    %for zou=1:length(wavelength)
         disp(['Calculation n-' int2str(zou) ' of ' int2str(length(wavelength))])
 
         inc=[];
@@ -528,7 +529,7 @@ try
         end
 
     end
-    %delete(gcp('nocreate'))
+    delete(gcp('nocreate'))
     
     %% Saving and plotting output data
 
