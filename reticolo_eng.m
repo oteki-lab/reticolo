@@ -123,6 +123,7 @@
 addpath(genpath('./'))
 clear;retio;
 [prv,vmax]=retio([],inf*1i);
+notification = true;
 
 %% Parameters of the structure and the calculation
 
