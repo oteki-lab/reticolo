@@ -128,7 +128,7 @@ notification = true;
 %% Parameters of the structure and the calculation
 
 %%%%%% Wavelengths and angle of incidence
-npoints=1;                          % 1 for only structure
+npoints=101;                          % 1 for only structure
 lambdamin=0.4;
 lambdamax=1.2;
 wavelength=linspace(lambdamin,lambdamax,npoints);
@@ -160,33 +160,33 @@ params = {
     periodicity_x,          0.14,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength));        % 
     periodicity_x,          1.7,    retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));        % 
     periodicity_x,          0.04,   retindice_chen(wavelength,4.802),   0.00*ones(size(wavelength));        % 
-    backgrating_x*11,       0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*10,       0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*9,        0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*8,        0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*7,        0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*6,        0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*5,        0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*4,        0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*3,        0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*2,        0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*1,        0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-    backgrating_x*0.5,      0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802);   % 
-%    periodicity_x,          0.05,   retindice_chen(wavelength,1.72),    0.00*ones(size(wavelength));        % 
+    backgrating_x*11,       0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*10,       0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*9,        0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*8,        0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*7,        0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*6,        0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*5,        0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*4,        0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*3,        0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*2,        0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*1,        0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*0.5,      0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    periodicity_x,          0.5,    retindice_chen(wavelength,1.72),    0.00*ones(size(wavelength));        % 
 };
-%nsub=ones(size(wavelength)); % Air
-nsub=retindice_chen(wavelength,1.72);       % the substrate     Ag
+nsub=ones(size(wavelength)); % Air
+%nsub=retindice_chen(wavelength,1.72);       % the substrate     Ag
 Nb_couches = length(params);                %Number of layers
 
 % w/ nanostructure
 layers = {
-    'AlInP window',     [1,2,3,4,5,6,7,8];
-    'GaAs emitter',     [9];
-    'QD',               [10];
-    'GaAs base',        [11];
-    'AlInP BSF',        [12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
-    'Ag mirror',        [31];
-    'active region',    [9,10,11]
+    'AlInP window',     [1,2,3,4,5,6,7,8,9];
+    'GaAs emitter',     [10];
+    'QD',               [11];
+    'GaAs base',        [12];
+    'AlInP BSF',        [13,14,15,16,17,18,19,20,21,22,23,24,25];
+    'Ag mirror',        [26];
+    'active region',    [10,11,12]
 };
 
 %%%%%% Numerical parameters
@@ -200,7 +200,7 @@ sym=[pol-1,pol-1,0,0];              % The symmetry of the structure, more symmet
 % if theta(1)~=0 && theta(2)~=0;sym=[];end;
 
 %% 
-Mx=0;                                % Number of Fourier terms in x
+Mx=10;                                % Number of Fourier terms in x
 My=Mx;                               % Number of Fourier terms in y
 op_granet=0;                         % If 1, RCWA is modified to improve convergence (Transforms the real coordinates at discontinuities)
 % IMPORTANT: this parameter is tricky to use, and does not work out of normal incidence. Better keep it at zero
@@ -575,7 +575,7 @@ try
         ylabel('z')
         hold off
 
-        filename = append("results\", "cross-section", ".png");
+        filename = append("results\", "cross-section ", datestr(datetime('now'),'yyyyMMddHHmmssFFF'), ".png");
         saveas(gcf, filename);
     end
 
@@ -619,7 +619,7 @@ try
         set(gcf,'color','w');
         box on
 
-        filename = append("results\", "absorption graph", ".png");
+        filename = append("results\", "absorption graph ", datestr(datetime('now'),'yyyyMMddHHmmssFFF'), ".png");
         saveas(gcf, filename);
     end
 
