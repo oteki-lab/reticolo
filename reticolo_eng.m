@@ -123,7 +123,7 @@
 addpath(genpath('./'))
 clear;retio;
 [prv,vmax]=retio([],inf*1i);
-hallelujah = @()structfun(@(y)sound(y,8192),load('handel.mat','y'));
+notification = true;
 
 %% Parameters of the structure and the calculation
 %%%%%% Wavelengths and angle of incidence
@@ -272,9 +272,9 @@ if trace_champ&&isempty(x0)==0&&isempty(z0)==0;disp('WARNING : There is a proble
 if trace_champ&&isempty(y0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 
 try
-    parpool
-    parfor zou=1:length(wavelength)
-    %for zou=1:length(wavelength)
+    %parpool
+    %parfor zou=1:length(wavelength)
+    for zou=1:length(wavelength)
         disp(['Calculation n-' int2str(zou) ' of ' int2str(length(wavelength))])
 
         inc=[];
@@ -556,73 +556,82 @@ try
         end
 
     end
-    delete(gcp('nocreate'))
-catch
-    hallelujah();
-end
-%% Saving and plotting output data
+    %delete(gcp('nocreate'))
+    
+    %% Saving and plotting output data
 
-%%%% Example to plot a cross section with trace_champ=1, x0=[], y0=0, z0=[]
-%%%% Hy as a function of x and z
-%%%% The separation between the layers is in white (indice contains the position of all indices)
-if trace_champ
-    if pol==0
-        horizontal = XX;
-        E = E_y;
-        horizontal_label = 'x';
-    else
-        horizontal = YY;
-        E = E_x;
-        horizontal_label = 'y';
-    end
-    figure
-    pcolor(horizontal,ZZ,abs(E).^2);
-    shading interp;
-    colormap(jet);
-    hold on
-    contour(real(horizontal),real(ZZ),real(INDICE),'black','linewidth',2);
-    xlabel(horizontal_label)
-    ylabel('z')
-    hold off    
-end
-
-if cal_abs
-    %%%% Example to save the data into a file
-    text=['Results\','period_',int2str(periodicity_x*1000),'_diam_',int2str(diam*1000),'wav',int2str(wavelength(1)*1000),'_',int2str(wavelength(end)*1000),'_nbpoints',int2str(length(wavelength)),'_Fourier',int2str(Mx),'.mat'];
-    save(text);
-
-    layers_name = layers(:,1);
-    layer_numss = layers(:,2);
-    legends = cell(1,length(layers));
-    Abs_array = cell(1,length(layers));
-    for index=1:length(layers)
-        layer_nums = layer_numss{index};
-        if length(layer_nums)>1
-            legends(index) = append(layers_name(index),'(',int2str(layer_nums(1)),'-',int2str(layer_nums(length(layer_nums))),')');
+    %%%% Example to plot a cross section with trace_champ=1, x0=[], y0=0, z0=[]
+    %%%% Hy as a function of x and z
+    %%%% The separation between the layers is in white (indice contains the position of all indices)
+    if trace_champ
+        if pol==0
+            horizontal = XX;
+            E = E_y;
+            horizontal_label = 'x';
         else
-            legends(index) = append(layers_name(index),'(',int2str(layer_nums(1)),')');
+            horizontal = YY;
+            E = E_x;
+            horizontal_label = 'y';
         end
-        Abs_temp = zeros(1,length(wavelength));
-        for index2=layer_nums(1):layer_nums(length(layer_nums))
-            Abs_temp = Abs_temp + Abs(index2,:);
-        end
-        Abs_array{index} = Abs_temp;
+        figure
+        pcolor(horizontal,ZZ,abs(E).^2);
+        shading interp;
+        colormap(jet);
+        hold on
+        contour(real(horizontal),real(ZZ),real(INDICE),'black','linewidth',2);
+        xlabel(horizontal_label)
+        ylabel('z')
+        hold off
+
+        filename = append("results\", "cross-section", ".png");
+        saveas(gcf, filename);
     end
 
-    %%%% Example to plot the absorption
-    figure
-    hold on
-    for index=1:length(layers)
-        plot(wavelength,cell2mat(Abs_array(:,index)), 'Linewidth',3);
+    if cal_abs
+        %%%% Save the data into a file
+        text=['Results\','period_',int2str(periodicity_x*1000),'_diam_',int2str(diam*1000),'wav',int2str(wavelength(1)*1000),'_',int2str(wavelength(end)*1000),'_nbpoints',int2str(length(wavelength)),'_Fourier',int2str(Mx),'.mat'];
+        save(text);
+
+        layers_name = layers(:,1);
+        layer_numss = layers(:,2);
+        legends = cell(1,length(layers));
+        Abs_array = cell(1,length(layers));
+        for index=1:length(layers)
+            layer_nums = layer_numss{index};
+            if length(layer_nums)>1
+                legends(index) = append(layers_name(index),'(',int2str(layer_nums(1)),'-',int2str(layer_nums(length(layer_nums))),')');
+            else
+                legends(index) = append(layers_name(index),'(',int2str(layer_nums(1)),')');
+            end
+            Abs_temp = zeros(1,length(wavelength));
+            for index2=layer_nums(1):layer_nums(length(layer_nums))
+                Abs_temp = Abs_temp + Abs(index2,:);
+            end
+            Abs_array{index} = Abs_temp;
+        end
+
+        %%%% Example to plot the absorption
+        figure
+        hold on
+        for index=1:length(layers)
+            plot(wavelength,cell2mat(Abs_array(:,index)), 'Linewidth',3);
+        end
+        hold off
+        legend(legends)
+        xlabel('\lambda (um)')
+        ylabel('Absorption')
+        xlim([min(wavelength) max(wavelength)])
+        ylim([0 1])
+        set(gca,'Fontsize',12)
+        set(gca,'XMinorTick','on','YMinorTick','on')
+        set(gcf,'color','w');
+        box on
+
+        filename = append("results\", "absorption graph", ".png");
+        saveas(gcf, filename);
     end
-    hold off
-    legend(legends)
-    xlabel('\lambda (um)')
-    ylabel('Absorption')
-    xlim([min(wavelength) max(wavelength)])
-    ylim([0 1])
-    set(gca,'Fontsize',12)
-    set(gca,'XMinorTick','on','YMinorTick','on')
-    set(gcf,'color','w');
-    box on
+
+    if notification; sendMail("reticolo Simulation Done.", filename); end
+catch
+    if notification; sendMail("reticolo Simulation Error.", ""); end
 end
