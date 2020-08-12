@@ -137,7 +137,7 @@ theta=[0,0];                        %angle of incidence in degrees
 %%%%%% Geometric parameters
 periodicity_x=2.4;                  % period in x
 periodicity_y=periodicity_x;        % period in y
-diam=0.215/11;
+diam=0.215/9;
 
 % diameter of each layer
 % Thicknesses, from top to bottom   (0 si if no layer)
@@ -145,22 +145,20 @@ diam=0.215/11;
 % params = [diameter_x, height, ni, nim]
 nh=1;       % Air
 params = {
-    diam*1,                 0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*2,                 0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*3,                 0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*4,                 0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*5,                 0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*6,                 0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*7,                 0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*8,                 0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*9,                 0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    diam*10,                0.4/10, ones(size(wavelength)),             retindice_chen(wavelength,4.802);
-    periodicity_x,          0.04,   retindice_chen(wavelength,4.802),   0.00*ones(size(wavelength));        % 
-    periodicity_x,          0.16,   retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));        % 
-    periodicity_x,          0.14,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength));        % 
-    periodicity_x,          1.7,    retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));        % 
-    periodicity_x,          0.04,   retindice_chen(wavelength,4.802),   0.00*ones(size(wavelength));        % 
-    periodicity_x,          0.5,    retindice_chen(wavelength,1.72),    0.00*ones(size(wavelength));        % 
+    diam*1,             0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+    diam*2,             0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+    diam*3,             0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+    diam*4,             0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+    diam*5,             0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+    diam*6,             0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+    diam*7,             0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+    diam*8,             0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802);
+    periodicity_x,      0.04,   retindice_chen(wavelength,4.802),   0.00*ones(size(wavelength));        
+    periodicity_x,      0.16,   retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));        
+    periodicity_x,      0.14,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength));        
+    periodicity_x,      1.7,    retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));        
+    periodicity_x,      0.04,   retindice_chen(wavelength,4.802),   0.00*ones(size(wavelength));        
+    periodicity_x,      0.5,    retindice_chen(wavelength,1.72),    0.00*ones(size(wavelength));        
 };
 nsub=ones(size(wavelength));        % Air  
 %nsub=retindice_chen(wavelength,1.72); % Ag
@@ -168,13 +166,13 @@ Nb_couches = length(params);        % Number of layers
 
 % w/ nanostructure
 layers = {
-    'AlInP window',     [1,2,3,4,5,6,7,8,9,10,11];
-    'GaAs emitter',     [12];
-    'QD',               [13];
-    'GaAs base',        [14];
-    'AlInP BSF',        [15];
-    'Ag mirror',        [16];
-    'active region',    [12,13,14]
+    'AlInP window',     [1,2,3,4,5,6,7,8,9];
+    'GaAs emitter',     [10];
+    'QD',               [11];
+    'GaAs base',        [12];
+    'AlInP BSF',        [13];
+    'Ag mirror',        [14];
+    'active region',    [10,11,12]
 };
 
 %%%%%% Numerical parameters
@@ -188,7 +186,7 @@ sym=[pol-1,pol-1,0,0];              % The symmetry of the structure, more symmet
 % if theta(1)~=0 && theta(2)~=0;sym=[];end;
 
 %% 
-Mx=0;                                % Number of Fourier terms in x
+Mx=10;                                % Number of Fourier terms in x
 My=Mx;                               % Number of Fourier terms in y
 op_granet=0;                         % If 1, RCWA is modified to improve convergence (Transforms the real coordinates at discontinuities)
 % IMPORTANT: this parameter is tricky to use, and does not work out of normal incidence. Better keep it at zero
@@ -252,9 +250,9 @@ if trace_champ&&isempty(x0)==0&&isempty(z0)==0;disp('WARNING : There is a proble
 if trace_champ&&isempty(y0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 
 try
-    %parpool
-    %parfor zou=1:length(wavelength)
-    for zou=1:length(wavelength)
+    parpool
+    parfor zou=1:length(wavelength)
+    %for zou=1:length(wavelength)
         disp(['Calculation n-' int2str(zou) ' of ' int2str(length(wavelength))])
 
         inc=[];
@@ -536,7 +534,7 @@ try
         end
 
     end
-    %delete(gcp('nocreate'))
+    delete(gcp('nocreate'))
     
     %% Saving and plotting output data
 
