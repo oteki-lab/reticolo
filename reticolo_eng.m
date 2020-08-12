@@ -128,7 +128,7 @@ notification = true;
 %% Parameters of the structure and the calculation
 
 %%%%%% Wavelengths and angle of incidence
-npoints=101;                          % 1 for only structure
+npoints=1;                          % 1 for only structure
 lambdamin=0.4;
 lambdamax=1.2;
 wavelength=linspace(lambdamin,lambdamax,npoints);
@@ -138,7 +138,7 @@ theta=[0,0];                        %angle of incidence in degrees
 periodicity_x=2.4;                  % period in x
 periodicity_y=periodicity_x;        % period in y
 diam=0.215/8;
-backgrating_x = periodicity_x/24;
+backgrating_x = periodicity_x/12;
 
 % diameter of each layer
 % Thicknesses, from top to bottom   (0 si if no layer)
@@ -152,22 +152,22 @@ params = {
     periodicity_x,          0.14,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength));        % 
     periodicity_x,          1.7,    retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength));        % 
     periodicity_x,          0.04,   retindice_chen(wavelength,4.802),   0.00*ones(size(wavelength));        % 
-    backgrating_x*23,       0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*22,       0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*21,       0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*20,       0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*19,       0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*18,       0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*17,       0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*16,       0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*15,       0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*14,       0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    backgrating_x*13,       0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
     backgrating_x*12,       0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
-    periodicity_x,          0.5,    retindice_chen(wavelength,1.72),    0.00*ones(size(wavelength));        % 
+    backgrating_x*11,       0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*10,       0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*9,        0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*8,        0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*7,        0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*6,        0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*5,        0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*4,        0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*3,        0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*2,        0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+    backgrating_x*1,        0.9/12, retindice_chen(wavelength,1.73),    retindice_chen(wavelength,4.802);   % 
+%    periodicity_x,          0.5,    retindice_chen(wavelength,1.72),    0.00*ones(size(wavelength));        % 
 };
-nsub=ones(size(wavelength));        % Air  
-%nsub=retindice_chen(wavelength,1.72); % Ag
+%nsub=ones(size(wavelength));        % Air  
+nsub=retindice_chen(wavelength,1.72); % Ag
 Nb_couches = length(params);        % Number of layers
 
 % w/o nanostructure
@@ -193,7 +193,7 @@ sym=[pol-1,pol-1,0,0];              % The symmetry of the structure, more symmet
 % if theta(1)~=0 && theta(2)~=0;sym=[];end;
 
 %% 
-Mx=0;                                % Number of Fourier terms in x
+Mx=10;                                % Number of Fourier terms in x
 My=Mx;                               % Number of Fourier terms in y
 op_granet=0;                         % If 1, RCWA is modified to improve convergence (Transforms the real coordinates at discontinuities)
 % IMPORTANT: this parameter is tricky to use, and does not work out of normal incidence. Better keep it at zero
