@@ -130,7 +130,7 @@ notification = true;
 %%%%%% Wavelengths and angle of incidence
 npoints=1;                          % 1 for only structure
 lambdamin=0.4;
-lambdamax=1.2;
+lambdamax=0.55;
 wavelength=linspace(lambdamin,lambdamax,npoints);
 theta=[0,0];                        %angle of incidence in degrees
 
@@ -186,7 +186,7 @@ sym=[pol-1,pol-1,0,0];              % The symmetry of the structure, more symmet
 % if theta(1)~=0 && theta(2)~=0;sym=[];end;
 
 %% 
-Mx=10;                                % Number of Fourier terms in x
+Mx=15;                                % Number of Fourier terms in x
 My=Mx;                               % Number of Fourier terms in y
 op_granet=0;                         % If 1, RCWA is modified to improve convergence (Transforms the real coordinates at discontinuities)
 % IMPORTANT: this parameter is tricky to use, and does not work out of normal incidence. Better keep it at zero
