@@ -1,3 +1,4 @@
+function x=reticolo_eng(in, params, layers, res)
 %%%%                Calculate diffraction in a system composed of 1-12 layers
 %%%%                                         (17/06/2014)
 %%%%
@@ -56,11 +57,11 @@
 % -----------------------------
 % View from above
 %
-%                              periodicity_x
+%                              period_x
 %                             <------------->
 %         *******       *******       *******       *******       ******* ^
 %         *******       *******       *******       *******       ******* |
-%         *******       *******       *******       *******       ******* | periodicity_y
+%         *******       *******       *******       *******       ******* | period_y
 %                                                                         |
 %                                                                         |
 %         *******       *******       *******       *******       ******* v
@@ -119,47 +120,33 @@
 % Ex,Ey,Ez : cross-section of the E field at points zz,xx,yy
 % Hx,Hy,Hz : cross-section of the H field at points zz,xx,yy
 % The direction of the cross-section can be chosen among x=x0, y=y0 ou z=z0
-
-addpath(genpath('./'))
-clear;retio;
+%addpath(genpath('./'))
+%clear;retio;
 [prv,vmax]=retio([],inf*1i);
 notification = false;
 
 %% Parameters of the structure and the calculation
-%%%%%% Wavelengths and angle of incidence
-npoints=1;                          % 1 for only structure
-lambdamin=0.4;
-lambdamax=1.2;
-wavelength=linspace(lambdamin,lambdamax,npoints);
-theta=[0,0];                        %angle of incidence in degrees
+% Wavelengths and angle of incidence
+npoints=in.npoints;                                 % 1 for only structure
+lambdamin=in.lambdamin;                             % min wavelength
+lambdamax=in.lambdamax;                             % max wavelength
+wavelength=linspace(lambdamin,lambdamax,npoints);   % range of wavelength
+theta=[0,0];                                        % angle of incidence in degrees
 
-%%%%%% Geometric parameters
-periodicity_x=2.4;                  % period in x
-periodicity_y=periodicity_x;        % period in y
-diam=0.215/8;
+% Geometric parameters
+period_x=in.period_x;                               % period in x
+period_y=in.period_y;                               % period in y
 
-% diameter of each layer
-% Thicknesses, from top to bottom   (0 si if no layer)
-% Refraction indices (from top to bottom), can be a function of the wavelength
-% params = [diameter_x, height, ni, nim]
-nh=1;       % Air
-params = structure(wavelength);
-nsub=ones(size(wavelength));        % Air  %retindice_chen(wavelength,1.72); % Ag
-Nb_couches = length(params);        % Number of layers
+% Number of Fourier terms
+Mx=double(in.Mx);                                   % Number of Fourier terms in x
+My=double(in.My);                                   % Number of Fourier terms in y
 
-% w/o nanostructure
-layers = {
-    'SiNx ARC',         [1];
-    'AlInP window',     [2];
-    'GaAs emitter',     [3];
-    'QD',               [4];
-    'GaAs base',        [5];
-    'AlInP BSF',        [6];%,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
-    'Ag mirror',        [7];
-    'active region',    [3,4,5]
-};
+% Parameters of each layer
+nh=1;                                               % Refraction indices of Air (front)
+nsub=ones(size(wavelength));                        % Refraction indices of Air (back)
+Nb_couches = length(params);                        % Total number of layers
 
-%%%%%% Numerical parameters
+%% Numerical parameters
 pol=0;                              % polarization of the incident wave, TM pol=2  TE pol=0
                                     % For normal incidence, TM <=> H//y and TE <=> E//y
 sym=[pol-1,pol-1,0,0];              % The symmetry of the structure, more symmetry means shorter calculation time
@@ -169,31 +156,27 @@ sym=[pol-1,pol-1,0,0];              % The symmetry of the structure, more symmet
 % if theta(1)==0 && theta(2)~=0;sym=[1-pol,0,0,0];end;
 % if theta(1)~=0 && theta(2)~=0;sym=[];end;
 
-%% 
-Mx=0;                                % Number of Fourier terms in x
-My=Mx;                               % Number of Fourier terms in y
-op_granet=0;                         % If 1, RCWA is modified to improve convergence (Transforms the real coordinates at discontinuities)
-% IMPORTANT: this parameter is tricky to use, and does not work out of normal incidence. Better keep it at zero
+cal_abs=npoints>1;                  % If 1, calculate absorption in each layer
+Nb_pts_z=10;                        % Number of points in z to calculate absorption, when absorption is calculated in each layer
 
-cal_abs=npoints>1;                   % If 1, calculate absorption in each layer
-Nb_pts_z=10;                         % Number of points in z to calculate absorption, when absorption is calculated in each layer
-
-cal_champ=0;                         % If 1, calculate the field in layer N_semicon
 % IMPORTANT: only one wavelength (calculate can be quite heavy, depending on Nb_pts_z_semicon)
-N_semicon=3;                         % Layer where field is calculated (if cal_champ=1)
-Nb_pts_z_semicon=50;                 % Number of points in the z direction to calculate the field in N_semicon (if cal_champ=1)
+cal_champ=0;                        % If 1, calculate the field in layer N_semicon
+N_semicon=3;                        % Layer where field is calculated (if cal_champ=1)
+Nb_pts_z_semicon=50;                % Number of points in the z direction to calculate the field in N_semicon (if cal_champ=1)
 
-trace_champ=npoints==1;              % si 1,calculates a cross-section of the field
 % IMPORTANT: only one wavelength
-x0=0;                                % Cross section along x=x0 if trace_champ=1 ([] if the cross-section is along another direction)
-y0=[];                               % Cross section along y=y0 if trace_champ=1 ([] if the cross-section is along another direction)
-z0=[];                               % Cross section along z=z0 if trace_champ=1 ([] if the cross-section is along another direction)
-% note: z=0 corresponds to the bottom of the considered stack, at a depth h_sub inside the substrate
-h_air=0.05;                          % Thickness in incident medium to represent the cross-section (trace_champ=1)
-h_sub=0.05;                          % Thickness in the substrate to represent the cross-section  (trace_champ=1)
-h_2pts=20;                           % distance between 2 points in z pour the layers whose thickness is higher than 1??m (trace_champ=1)
-op_objet=0;                          % If 1, plot the geometry to verify the calculated structure is correct
+trace_champ=npoints==1;             % si 1,calculates a cross-section of the field
+x0=0;                               % Cross section along x=x0 if trace_champ=1 ([] if the cross-section is along another direction)
+y0=[];                              % Cross section along y=y0 if trace_champ=1 ([] if the cross-section is along another direction)
+z0=[];                              % Cross section along z=z0 if trace_champ=1 ([] if the cross-section is along another direction)
+                                    % note: z=0 corresponds to the bottom of the considered stack, at a depth h_sub inside the substrate
+h_air=0.05;                         % Thickness in incident medium to represent the cross-section (trace_champ=1)
+h_sub=0.05;                         % Thickness in the substrate to represent the cross-section  (trace_champ=1)
+h_2pts=20;                          % distance between 2 points in z pour the layers whose thickness is higher than 1??m (trace_champ=1)
+op_objet=0;                         % If 1, plot the geometry to verify the calculated structure is correct
 
+% IMPORTANT: this parameter is tricky to use, and does not work out of normal incidence. Better keep it at zero
+op_granet=0;                        % If 1, RCWA is modified to improve convergence (Transforms the real coordinates at discontinuities)
 if op_granet==1
     Bx=500;Ax=0.02/Bx;By=Bx;Ay=Ax;
     diameter_x=cell2mat(params(:,1));diameter_y=diameter_x;
@@ -260,7 +243,7 @@ try
         lwa=wavelength(zou);
         k0=2*pi/lwa;
         %tic
-        period=[periodicity_x,periodicity_y];
+        period=[period_x,period_y];
 
         ns=nsub(zou);
 
@@ -375,14 +358,14 @@ try
         if op_granet==1
             % [Xdisc,Ydisc]=retgranet(init,[-diameter_x/2,-diameter_x/2+w_rectangle,diameter_x/2,diameter_x/2+h_rectangle],[-diameter_y/2,-diameter_y/2+w_rectangle,diameter_y/2,diameter_y/2+h_rectangle]);
             [Xdisc,Ydisc]=retgranet(init,[-diameter_x/2,diameter_x/2],[-diameter_y/2,diameter_y/2]);
-            [X,wX]=retgauss(-periodicity_x/2,periodicity_x/2,15,10,Xdisc);
-            [Y,wY]=retgauss(-periodicity_y/2,periodicity_y/2,15,10,Ydisc);
+            [X,wX]=retgauss(-period_x/2,period_x/2,15,10,Xdisc);
+            [Y,wY]=retgauss(-period_y/2,period_y/2,15,10,Ydisc);
             [x,y]=retgranet(init,'num2phys',X,Y);
             [X,Y,Xder,Yder]=retgranet(init,x,y);
             wx=wX./Xder;wy=wY./Yder;
         else
-            [x,wx]=retgauss(-periodicity_x/2,periodicity_x/2,15,10,[-unique(diameter_x)/2,unique(diameter_x)/2]);
-            [y,wy]=retgauss(-periodicity_y/2,periodicity_y/2,15,10,[-unique(diameter_y)/2,unique(diameter_y)/2]);
+            [x,wx]=retgauss(-period_x/2,period_x/2,15,10,[-unique(diameter_x)/2,unique(diameter_x)/2]);
+            [y,wy]=retgauss(-period_y/2,period_y/2,15,10,[-unique(diameter_y)/2,unique(diameter_y)/2]);
         end
 
         if cal_abs||cal_champ==1||trace_champ
@@ -490,8 +473,8 @@ try
             tab0(Nb_couches+2,:)=[h_sub,Nb_couches+2,Nb_pts_z+10];  %tab0=[tab0;[h_sub,Nb_couches+2,Nb_pts_z+10]];
             tab0(tab0(:,1)>1,3)=floor(tab0(tab0(:,1)>1,1)*1000/h_2pts);
 
-            [xx,wx]=retgauss(-periodicity_x/2,periodicity_x/2,15,12,[-diameter_x/2,diameter_x/2]);
-            [yy,wy]=retgauss(-periodicity_y/2,periodicity_y/2,15,12,[-diameter_y/2,diameter_y/2]);
+            [xx,wx]=retgauss(-period_x/2,period_x/2,15,12,[-diameter_x/2,diameter_x/2]);
+            [yy,wy]=retgauss(-period_y/2,period_y/2,15,12,[-diameter_y/2,diameter_y/2]);
 
             if isempty(x0)==1&&isempty(z0)==1
                 [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,y0},tab0,[],(1:6)+7.25i,1,1,1:6);
@@ -551,7 +534,7 @@ try
 
     if cal_abs
         %%%% Save the data into a file
-        text=['Results\','period_',int2str(periodicity_x*1000),'_diam_',int2str(diam*1000),'wav',int2str(wavelength(1)*1000),'_',int2str(wavelength(end)*1000),'_nbpoints',int2str(length(wavelength)),'_Fourier',int2str(Mx),'.mat'];
+        text=['Results\', res, '.mat'];
         save(text);
 
         layers_name = layers(:,1);
@@ -594,6 +577,7 @@ try
     end
 
     if notification; sendMail("reticolo Simulation Done.", filename); end
-catch
+catch e
+    disp(e)
     if notification; sendMail("reticolo Simulation Error.", ""); end
 end
