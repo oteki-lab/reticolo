@@ -127,7 +127,7 @@ notification = false;
 
 %% Parameters of the structure and the calculation
 % Wavelengths and angle of incidence
-npoints=in.npoints;                                 % 1 for only structure
+npoints=in.npoints;                                 % point number of wavelength
 lambdamin=in.lambdamin;                             % min wavelength
 lambdamax=in.lambdamax;                             % max wavelength
 wavelength=linspace(lambdamin,lambdamax,npoints);   % range of wavelength

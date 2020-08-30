@@ -1,9 +1,9 @@
 """ reticolo input parameters """
-asymmetry = False   # True: Combination only when the x-axis and the y-axis have the same value
+asymmetry = False
 
-npoints = 21        # point number of wavelength
-lambdamin = 0.4     # min wavelength
-lambdamax = 1.2     # max wavelength
+npoints = 21
+lambdamin = 0.4
+lambdamax = 1.2
 
 ## x
 # Number of Fourier terms

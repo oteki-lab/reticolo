@@ -10,7 +10,9 @@ res_dir = ['Results\',dateString];
 mkdir(res_dir);
 
 % make input file
-command = ['python combination.py input.py ',res_dir];
+copyfile('input.py', [res_dir,'\input.py'])
+copyfile('input.py', [res_dir,'\init_structure.m'])
+command = ['python Codes\combination.py input.py ',res_dir];
 status = dos(command);
 
 % Run simulation
