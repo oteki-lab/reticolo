@@ -545,7 +545,8 @@ try
         end
 
     end
-    %delete(gcp('nocreate'))
+    %
+    delete(gcp('nocreate'))
     
     %% Saving and plotting output data
 
