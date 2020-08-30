@@ -12,14 +12,14 @@ import argparse
 import pickle
 import numpy, scipy.io
 
-def write_csv(csv_file, save_dict):
+def write_mat(csv_file, save_dict, directory):
     """Save parameter list in mat"""
-    scipy.io.savemat('input.mat', mdict={'input_data': save_dict})
+    scipy.io.savemat(directory+'\\input_list.mat', mdict={'input_data': save_dict})
     print("Output combination list file")
 
 class Listing:
     """Parse command line arguments and Take an input file and outputs a matrix with a column"""
-    def __init__(self, input_file):
+    def __init__(self, input_file, directory):
         # Set up
         for k in ["in_param", "ite_list"]:
             setattr(self, k, None)
@@ -62,20 +62,24 @@ class Listing:
         params_list = []
         for _, ite_para in enumerate(copy.deepcopy(ite_list)):
             ite_para.update(in_param)
-            params_list.append(ite_para)
-        write_csv("file.pickle", params_list)
+            if ite_para["asymmetry"] == True:
+                params_list.append(ite_para)
+            elif (ite_para["Mx"] == ite_para["My"]) and (ite_para["period_x"] == ite_para["period_y"]) and (ite_para["diam_x"] == ite_para["diam_y"]):
+                params_list.append(ite_para)
+        write_mat("file.pickle", params_list, directory)
 
 def main(arguments=None):
     """Main function"""
     def parsing(arguments):
         """Parsing arguments"""
-        parser = argparse.ArgumentParser(description="Calculates IBSC in DB model.")
+        parser = argparse.ArgumentParser(description="Combination of parameters.")
         parser.add_argument('input_file', nargs="?", default="input.py")
+        parser.add_argument('dir', nargs="?", default="temp")
         return parser.parse_args(arguments.split() if arguments else None)
 
     args = parsing(arguments)
     try:
-        Listing(args.input_file)
+        Listing(args.input_file, args.dir)
     except NameError:
         print("Input Files Error")
 

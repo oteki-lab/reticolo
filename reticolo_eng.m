@@ -1,4 +1,4 @@
-function x=reticolo_eng(in, params, layers, res)
+function x=reticolo_eng(count, in, params, layers, res_dir, res)
 %%%%                Calculate diffraction in a system composed of 1-12 layers
 %%%%                                         (17/06/2014)
 %%%%
@@ -177,11 +177,6 @@ op_objet=0;                         % If 1, plot the geometry to verify the calc
 
 % IMPORTANT: this parameter is tricky to use, and does not work out of normal incidence. Better keep it at zero
 op_granet=0;                        % If 1, RCWA is modified to improve convergence (Transforms the real coordinates at discontinuities)
-if op_granet==1
-    Bx=500;Ax=0.02/Bx;By=Bx;Ay=Ax;
-    diameter_x=cell2mat(params(:,1));diameter_y=diameter_x;
-    xdisc=[-diameter_x/2,diameter_x/2];ydisc=[-diameter_y/2,diameter_y/2];
-end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -218,18 +213,18 @@ if trace_champ&&isempty(y0)==0&&isempty(z0)==0;disp('WARNING : There is a proble
 
 try
     %parpool
-    %parfor zou=1:length(wavelength)
-    for zou=1:length(wavelength)
+    parfor zou=1:length(wavelength)
+    %for zou=1:length(wavelength)
         disp(['Calculation n-' int2str(zou) ' of ' int2str(length(wavelength))])
 
         inc=[];
         sym=[];
         e0=[];
         o0=[];
-        % R0_TE_TE_vect=zeros(1);
-        % R0_TE_TM_vect=R0_TE_TE_vect;
-        % R0_TM_TM_vect=R0_TE_TE_vect;
-        % R0_TM_TE_vect=R0_TE_TE_vect;
+        R0_TE_TE_vect=zeros(1);
+        R0_TE_TM_vect=R0_TE_TE_vect;
+        R0_TM_TM_vect=R0_TE_TE_vect;
+        R0_TM_TE_vect=R0_TE_TE_vect;
         ref_TE_TE_vect=zeros(1);ref_TE_TM_vect=ref_TE_TE_vect;ref_TM_TM_vect=ref_TE_TE_vect;ref_TM_TE_vect=ref_TE_TE_vect;
         A_tot_vect=zeros(1);
         A_sub_vect=zeros(1);
@@ -261,6 +256,8 @@ try
         Nm=Numberm(1:Nb_couches);
         diameter_x=cell2mat(params(:,1));
         diameter_y=diameter_x;
+        Bx=500;Ax=0.02/Bx;By=Bx;Ay=Ax;
+        xdisc=[-diameter_x/2,diameter_x/2];ydisc=[-diameter_y/2,diameter_y/2];
         kx=k0*nh*sin(theta(1)*pi/180);
         ky=k0*nh*sin(theta(2)*pi/180);
         beta=[kx,ky];
@@ -528,13 +525,13 @@ try
         ylabel('z')
         hold off
 
-        filename = append("results\", "cross-section ", datestr(datetime('now'),'yyyyMMddHHmmssFFF'), ".png");
+        filename = append(res_dir, "\no_", int2str(count),"_cross-section.png");
         saveas(gcf, filename);
     end
 
     if cal_abs
         %%%% Save the data into a file
-        text=['Results\', res, '.mat'];
+        text=[res_dir,'\', res, '.mat'];
         save(text);
 
         layers_name = layers(:,1);
@@ -572,7 +569,7 @@ try
         set(gcf,'color','w');
         box on
 
-        filename = append("results\", "absorption graph ", datestr(datetime('now'),'yyyyMMddHHmmssFFF'), ".png");
+        filename = append(res_dir, "\no_", int2str(count),"_absorption graph.png");
         saveas(gcf, filename);
     end
 

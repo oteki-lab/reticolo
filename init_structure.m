@@ -1,4 +1,4 @@
-function [x,y,z]=init_structure(in)
+function [x,y]=init_structure(in)
 npoints=in.npoints;                    % 1 for only structure
 lambdamin=in.lambdamin;                % min wavelength
 lambdamax=in.lambdamax;                % max wavelength
@@ -64,5 +64,3 @@ layers = {
     'active region',    [3,4,5]
 };
 y = layers;
-
-z = ['period_',int2str(period_x*1000),'_diam_',int2str(diam_x*1000),'wav',int2str(lambdamin*1000),'_',int2str(lambdamax*1000),'_npoints',int2str(npoints),'_Fourier',int2str(Mx)];

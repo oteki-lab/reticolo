@@ -1,8 +1,9 @@
 """ reticolo input parameters """
+asymmetry = False
 
-npoints = 1
+npoints = 21
 lambdamin = 0.4
-lambdamax = 0.8
+lambdamax = 1.2
 
 ## x
 # Number of Fourier terms
