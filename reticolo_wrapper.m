@@ -40,6 +40,8 @@ for index = 1:length(data.input_data)
     
     % calculate structure
     if cal_structure == true
+        in.Mx = 0;
+        in.My = 0;
         in.npoints = 1;
         reticolo_eng(index, in, params, layers, res_dir, res);
     end
