@@ -123,7 +123,7 @@ function x=reticolo_eng(count, in, params, layers, res_dir, res)
 %addpath(genpath('./'))
 %clear;retio;
 [prv,vmax]=retio([],inf*1i);
-notification = false;
+notification = true;
 
 %% Parameters of the structure and the calculation
 % Wavelengths and angle of incidence
