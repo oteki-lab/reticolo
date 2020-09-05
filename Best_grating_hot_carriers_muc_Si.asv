@@ -39,21 +39,43 @@ number=1;
 dir = 'results';
 file = 'period_2400_diam_27wav400_1200_nbpoints101_Fourier0.mat';
 text = [dir,'\',file];
-
-% read aborption rate
 load(text,'A_tot','Abs','Abs_array','layers','wavelength');
 
+% read aborption rate
+Abs_array;
+A_front_AlGaAs{number}=Abs(2,:);
+A_GaAs{number}=Abs(3,:)+Abs(5,:);
+A_QD{number}=Abs(4,:);
+A_back_AlGaAs{number}=Abs(6,:);
+A_Ag{number}=Abs(7,:);
+A_active{number}=Abs(3,:)+Abs(4,:)+Abs(5,:);
+A_total{number}=A_tot;
+
 % from wavelength [nm] to energy [eV]
-E_A=fliplr(h*c./(q*wavelength*1e-6));
 for index = 1:length(Abs_array)
     Abs_array_E{index} = fliplr(Abs_array{index});
 end
+E_A=fliplr(h*c./(q*wavelength*1e-6));
+A_front_AlGaAs_E=fliplr(A_front_AlGaAs{number});
+A_GaAs_E=fliplr(A_GaAs{number});
+A_QD_E=fliplr(A_QD{number});
+A_back_AlGaAs_E=fliplr(A_back_AlGaAs{number});
+A_Ag_E=fliplr(A_Ag{number});
+A_active_E=fliplr(A_active{number});
+A_total_E=fliplr(A_total{number});
 
 % 1-D data interpolation
-E=fliplr(E);
 for index = 1:length(Abs_array)
     Abs_array_eV{index} = interp1(E_A,Abs_array_E{index},E,'makima');
 end
+E=fliplr(E);
+A_front_AlGaAs_eV{number}=interp1(E_A,A_front_AlGaAs_E,E,'makima');
+A_GaAs_eV{number}=interp1(E_A,A_GaAs_E,E,'makima');
+A_QD_eV{number}=interp1(E_A,A_QD_E,E,'makima');
+A_back_AlGaAs_eV{number}=interp1(E_A,A_back_AlGaAs_E,E,'makima');
+A_Ag_eV{number}=interp1(E_A,A_Ag_E,E,'makima');
+A_active_eV{number}=interp1(E_A,A_active_E,E,'makima');
+A_total_eV{number}=interp1(E_A,A_total_E,E,'makima');
 
 % absorption table
 header = ["wavelength","energy"];
@@ -67,16 +89,15 @@ Abs_layers = containers.Map(layers(:,1), Abs_array_eV);
 %disp(Abs_layers(char(layers(1,1))));
 
 % calculate J
-header = ["No"];
-J_array = [number];
+header = ['No'];
+J_layers = [1];
 for index = 1:length(Abs_array)
     header= horzcat(header, layers{index});
     J_layer=nansum(Abs_array_eV{index}(1:end-1).*(irr_eV(1:end-1)./E(1:end-1)).*(E(2:end)-E(1:end-1)));
-    J_array = horzcat(J_array, J_layer);
+    J_layers = horzcat(J_layers, J_layer);
 end
-J_table = vertcat(header,J_array);
-
-A_active = Abs_layers(char('Active region'));
+J_table = vertcat(header,data);
+A_active = Abs_layers(char('active region'));
 P_kin(number)=nansum(A_active(1:end-1).*irr_kin_eV(1:end-1).*(E(2:end)-E(1:end-1)));
 J(number)=nansum(A_active(1:end-1).*(irr_eV(1:end-1)./E(1:end-1)).*(E(2:end)-E(1:end-1)));
 

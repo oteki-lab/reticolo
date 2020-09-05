@@ -194,9 +194,8 @@ layers = {
     'GaAs base',        [5];
     'AlInP BSF',        [6];%,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
     'Ag mirror',        [7];
-    'Active region',    [3,4,5];
-    'GaAs',             [3,5];
-    'Total',            [1,2,3,4,5,6,7];
+    'active region',    [3,4,5];
+    'GaAs',             [3,4,5];
 };
 
 %%%%%% Numerical parameters
