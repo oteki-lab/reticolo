@@ -1,61 +1,12 @@
 clearvars
 close all
 
-E_G=1.424;
-h=6.63e-34;
-c=3e8;
-q=1.60e-19;
-k_B = 1.381e-23; %Boltzmann's constant
-T_s=5800; %Sun Temperature
-
-% sequence 1
-% seq_num=1;
-% period=[0.4:0.05:0.55];
-% diam_perc=[0.4:0.1:0.6];
-% height=[0.04:0.02:0.1];
-% ref_index=1.3;
-% npoints=101;
-% Mx=10;
-% wavmin=400;
-% wavmax=900;
-% h_plan=0.100;
-% 
-% %sequence 2
-% seq_num=2;
-% period=[0.45];%:0.05:0.55];
-% diam_perc=[0.6:0.05:0.80];
-% height=[0.03:0.02:0.05];
-% ref_index=1.3;
-% npoints=72;
-% Mx=10;
-% wavmin=400;
-% wavmax=900;
-% h_plan=0.100;
-
-
-% %sequence 3
-% seq_num=3;
-% period=[0.45:0.05:0.55];%:0.05:0.55];
-% diam_perc=[0.70:0.05:0.75];
-% height=[0.03:0.01:0.05];
-% ref_index=1.3;
-% npoints=72;
-% Mx=10;
-% wavmin=400;
-% wavmax=900;
-% h_plan=0.100;
-
-% %sequence 4
-% seq_num=4;
-% period=[0.50];%:0.05:0.55];
-% diam_perc=[0.75];
-% height=[0.03:0.005:0.05];
-% ref_index=1.3;
-% npoints=72;
-% Mx=10;
-% wavmin=400;
-% wavmax=900;
-% h_plan=0.100;
+E_G=1.424;          % bandgap
+h=6.63e-34;         % planck constant
+c=3e8;              % speed of light
+q=1.60e-19;         % elementary charge
+k_B = 1.381e-23;    % Boltzmann's constant
+T_s=5800;           % Sun Temperature
 
 %sequence 5
 seq_num=5;
@@ -70,40 +21,42 @@ wavmax=900;
 h_plan=0.100;
 
 
+load('Solarspectrum.mat') % spectra loaded in [W.m^-2.nm^-1]
+% wavelength
+wwavelength = wavelength(find(wavelength==wavmin):find(wavelength==wavmax));    % wavelength from wavmin to wavmax [nm]
+E = flipud(h*c./(wwavelength*1e-9))/q;                                          % from wavelength [nm] to energy [eV]
+% solar spectrum
+AM1_5G = AM1_5G(find(wavelength==wavmin):find(wavelength==wavmax));             % solar spectrum from wavmin to wavmax [W.m^-2.nm^-1]
+irr_nm = 1e-4*AM1_5G;                                                           % solar spectrum from [W.m^-2.nm^-1] to [W.cm^-2.nm^-1]
+irr_eV = flipud(irr_nm*1e9)*h*c./(q*E.^2);                                      % solar spectrum from [W.cm-2.nm^-1] to [W.cm^-2.eV^-1]
+irr_kin_eV = max((1-E_G./E).*irr_eV,0);                                         % the kinetic power in [W.cm^-2.eV^-1]
+J_tot = nansum((irr_eV(1:end-1)./E(1:end-1)).*(E(2:end)-E(1:end-1)));           % Total current that can be converted from sunlight
+% back in nm
+irr_kin_nm = flipud(irr_kin_eV*q.*E.^2/(1e9*h*c));                              % the kinetic power from [W.cm-2.eV^-1] to [W.cm^-2.nm^-1]
+P_kin_tot = nansum(irr_kin_eV(1:end-1).*(E(2:end)-E(1:end-1)));                 % Heat irradiance, or ideal thermalization intensity, assuming A=1, in W.cm^-2
 
-load('Solarspectrum.mat') %spectra loaded in W.m^-2.nm^-1
-wwavelength=wavelength(find(wavelength==wavmin):find(wavelength==wavmax));
-AM1_5G=AM1_5G(find(wavelength==wavmin):find(wavelength==wavmax));
-E=flipud(h*c./(wwavelength*1e-9))/q; %in eV
-irr_nm=1e-4*AM1_5G; % in W.cm^-2.nm^-1
-irr_eV=flipud(irr_nm*1e9)*h*c./(q*E.^2); %from W.cm-2.nm^-1 to W.cm^-2.eV^-1
-irr_kin_eV=max((1-E_G./E).*irr_eV,0); %the kinetic power in W.cm^-2.eV^-1
-%back in nm
-irr_kin_nm=flipud(irr_kin_eV*q.*E.^2/(1e9*h*c)); %from W.cm-2.eV^-1 to W.cm^-2.nm^-1
-P_kin_tot=nansum(irr_kin_eV(1:end-1).*(E(2:end)-E(1:end-1))); %Heat irradiance, or ideal thermalization intensity, assuming A=1, in W.cm^-2
-J_tot=nansum((irr_eV(1:end-1)./E(1:end-1)).*(E(2:end)-E(1:end-1)));
 
-load('GaAs_20nm_wav400_850_flat_mirror.mat')
-A_flat=A;
-A_GaAs_flat=Abs_layer(4,:);
-ratio_to_GaAs=Abs_layer(4,:)./(Abs_layer(3,:)+Abs_layer(4,:)+Abs_layer(5,:)); % A rough idea to know which fraction of the absorbed power will end up in the GaAs
-
-E_A_flat=fliplr(h*c./(q*lambda));
-ratio_to_GaAs_E=fliplr(ratio_to_GaAs);
-ratio_to_GaAs_eV=interp1(E_A_flat,ratio_to_GaAs_E,E,'makima');
-A_GaAs_flat_E=fliplr(A_GaAs_flat);
-A_GaAs_flat_eV=interp1(E_A_flat,A_GaAs_flat_E,E,'makima');
-P_kin_flat=nansum(A_GaAs_flat_eV(1:end-1).*irr_kin_eV(1:end-1).*(E(2:end)-E(1:end-1)));
-J_flat=nansum(A_GaAs_flat_eV(1:end-1).*(irr_eV(1:end-1)./E(1:end-1)).*(E(2:end)-E(1:end-1)));
+load('GaAs_20nm_wav400_850_flat_mirror.mat') % absorbance loaded in [-]
+E_A_flat = fliplr(h*c./(q*lambda));                                             % from wavelength [nm] to energy [eV]
+% absorbance
+A_flat = A;                                                                     % total absorbance
+A_GaAs_flat = Abs_layer(4,:);                                                   % absorbance in layer 4 (GaAs)
+A_GaAs_flat_eV = interp1(E_A_flat, fliplr(A_GaAs_flat), E, 'makima');           % order from [nm] to [eV]
+J_flat = nansum(A_GaAs_flat_eV(1:end-1).*(irr_eV(1:end-1)./E(1:end-1)).*(E(2:end)-E(1:end-1)));
+% ratio
+ratio_to_GaAs = Abs_layer(4,:)./(Abs_layer(3,:)+Abs_layer(4,:)+Abs_layer(5,:)); % A rough idea to know which fraction of the absorbed power will end up in the GaAs
+ratio_to_GaAs_E = fliplr(ratio_to_GaAs);
+ratio_to_GaAs_eV = interp1(E_A_flat, ratio_to_GaAs_E,E,'makima');
+% back in nm
+P_kin_flat = nansum(A_GaAs_flat_eV(1:end-1).*irr_kin_eV(1:end-1).*(E(2:end)-E(1:end-1)));
 clear A
 
-load('Reflection_ARC_20GaAs_wav400_850.mat')
-A_max=1-R;
-A_max_E=fliplr(A_max);
-A_max_eV=interp1(E_A_flat,A_max_E,E,'makima');
-P_kin_max=nansum(A_max_eV(1:end-1).*ratio_to_GaAs_eV(1:end-1).*irr_kin_eV(1:end-1).*(E(2:end)-E(1:end-1)));
 
-
+%load('Reflection_ARC_20GaAs_wav400_850.mat')
+%A_max=1-R;
+%A_max_E=fliplr(A_max);
+%A_max_eV=interp1(E_A_flat,A_max_E,E,'makima');
+%P_kin_max=nansum(A_max_eV(1:end-1).*ratio_to_GaAs_eV(1:end-1).*irr_kin_eV(1:end-1).*(E(2:end)-E(1:end-1)));
 
 
 ii=1;
