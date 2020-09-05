@@ -17,21 +17,21 @@ copyfile('init_structure.m', [res_dir,'\init_structure.m'])
 % make inpout list
 command = ['python Codes\combination.py input.py ',res_dir];
 status = dos(command);
-data=load([res_dir,'\input_list']);
-l = length(data.input_data);
+input_list=load([res_dir,'\input_list']);
+l = length(input_list.data);
 
 % Run simulation
 parpool
-for index = 1:length(data.input_data)
+for index = 1:length(input_list.data)
     disp(['Simulation: ', int2str(index), '/', int2str(l)]);
     % load input parameters
-    in = data.input_data{index};
+    in = input_list.data{index};
     
     % get structure parameters
     [params, layers] = init_structure(in);
     
     % output file name
-    res = ['no_',int2str(index),'period_',int2str(in.period_x*1000),'_diam_',int2str(in.diam_x*1000),'wav',int2str(in.lambdamin*1000),'_',int2str(in.lambdamax*1000),'_npoints',int2str(in.npoints),'_Fourier',int2str(in.Mx)];
+    res = ['no_',int2str(index),'_period_',int2str(in.period_x*1000),'_diam_',int2str(in.diam_x*1000),'wav',int2str(in.lambdamin*1000),'_',int2str(in.lambdamax*1000),'_npoints',int2str(in.npoints),'_Fourier',int2str(in.Mx)];
     
     % calculate absorption
     if cal_absorption == true

@@ -14,7 +14,7 @@ import numpy, scipy.io
 
 def write_mat(csv_file, save_dict, directory):
     """Save parameter list in mat"""
-    scipy.io.savemat(directory+'\\input_list.mat', mdict={'input_data': save_dict})
+    scipy.io.savemat(directory+'\\input_list.mat', mdict={'data': save_dict})
     print("Output combination list file")
 
 class Listing:
