@@ -571,18 +571,16 @@ try
         filename = append(res_dir, "\no_", int2str(count),"_absorption graph.png");
         saveas(gcf, filename);
 
+        
         % constants
         E_G=1.424;          % bandgap
         h=6.63e-34;         % planck constant
         c=3e8;              % speed of light
         q=1.60e-19;         % elementary charge
 
-        number=1;
-
         wavelength_A=wavelength;
         wavmin=lambdamin*1000;
         wavmax=lambdamax*1000;
-
 
         load('Solarspectrum.mat') % spectra loaded in [W.m^-2.nm^-1]
         % wavelength
@@ -619,7 +617,7 @@ try
 
         % create J table
         J_header = ["No"];
-        J_array = [number];
+        J_array = ["AM1.5"];
         for index = 1:length(Abs_array)
             J_header = horzcat(J_header, layers{index});
             J_layer = nansum(Abs_array_eV{index}(1:end-1).*(irr_eV(1:end-1)./E(1:end-1)).*(E(2:end)-E(1:end-1)));
@@ -632,8 +630,8 @@ try
         % calculate J of active region
         Abs_layers = containers.Map(layers(:,1), Abs_array_eV);
         A_active = Abs_layers(char('Active region'));
-        P_kin(number)=nansum(A_active(1:end-1).*irr_kin_eV(1:end-1).*(E(2:end)-E(1:end-1)));
-        J(number)=nansum(A_active(1:end-1).*(irr_eV(1:end-1)./E(1:end-1)).*(E(2:end)-E(1:end-1)));
+        P_kin=nansum(A_active(1:end-1).*irr_kin_eV(1:end-1).*(E(2:end)-E(1:end-1)));
+        J=nansum(A_active(1:end-1).*(irr_eV(1:end-1)./E(1:end-1)).*(E(2:end)-E(1:end-1)));
         
         save(text);
     end
