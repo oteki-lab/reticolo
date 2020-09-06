@@ -1,4 +1,4 @@
-load('.\results\back grating\period_2400_diam_27wav400_1200_nbpoints101_Fourier10.mat')
+load('.\back grating\period_2400_diam_27wav400_1200_nbpoints101_Fourier10.mat')
 
 layers_name = layers(:,1);
 layer_numss = layers(:,2);
