@@ -1,9 +1,8 @@
 addpath(genpath('./'))
 clear;retio;
 
-pole = 0;                   % polarization of the incident wave, TM pol=2  TE pol=0
 cal_absorption = true;      % ture: calculate absorption
-cal_structure_x = true;     % ture: calculate structure (x direction)
+cal_structure_x = true;     % ture: calculate structure
 cal_structure_y = true;     % ture: calculate structure (y direction)
 
 % make output direcory in Results
@@ -26,7 +25,6 @@ l = length(input_list.data);
 parpool
 for index = 1:length(input_list.data)
     disp(['Simulation: ', int2str(index), '/', int2str(l)]);
-
     % load input parameters
     in = input_list.data{index};
     
@@ -38,23 +36,26 @@ for index = 1:length(input_list.data)
     
     % calculate absorption
     if cal_absorption == true
-        horizontal_label = 'x';
-        reticolo_eng(index, in, pole, horizontal_label, params, layers, res_dir, res);
+        
+        pole = 0;
+        reticolo_eng(index, in, pole, params, layers, res_dir, res);
     end
     
     % calculate structure
-    in.Mx = 0;
-    in.My = 0;
-    in.npoints = 1;
-    % x direction
     if cal_structure_x == true
-        horizontal_label = 'x';
-        reticolo_eng(index, in, pole, horizontal_label, params, layers, res_dir, res);
+        in.Mx = 0;
+        in.My = 0;
+        in.npoints = 1;
+        pole = 0;
+        reticolo_eng(index, in, params, layers, res_dir, res);
     end
-    % y direction
+    % calculate structure (y direction)
     if cal_structure_y == true
-        horizontal_label = 'y';
-        reticolo_eng(index, in, pole, horizontal_label, params, layers, res_dir, res);
+        in.Mx = 0;
+        in.My = 0;
+        in.npoints = 1;
+        pole = 2;
+        reticolo_eng(index, in, pole, params, layers, res_dir, res);
     end
 end
 delete(gcp('nocreate'))

@@ -12,7 +12,7 @@ Mx=in.Mx;
 % diameter of each layer
 % Thicknesses, from top to bottom   (0 si if no layer)
 % Refraction indices (from top to bottom), can be a function of the wavelength
-% params = [height, ni, nim, period_x, period_y]
+% params = [height, ni, nim, period_x, period_x]
 structure_params = {
     0.08,   retindice_chen(wavelength,23.21),   retindice_chen(wavelength,23.21),   period_x,           period_y;
 %	0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802),   diam_x*1/9,         diam_y*1/9;

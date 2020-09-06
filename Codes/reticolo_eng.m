@@ -1,4 +1,4 @@
-function x=reticolo_eng(count, in, params, layers, res_dir, res)
+function x=reticolo_eng(count, in, pole, horizontal_label, params, layers, res_dir, res)
 %%%%                Calculate diffraction in a system composed of 1-12 layers
 %%%%                                         (17/06/2014)
 %%%%
@@ -147,7 +147,7 @@ nsub=ones(size(wavelength));                        % Refraction indices of Air 
 Nb_couches = length(params);                        % Total number of layers
 
 %% Numerical parameters
-pol=0;                              % polarization of the incident wave, TM pol=2  TE pol=0
+pol=pole;                           % polarization of the incident wave, TM pol=2  TE pol=0
                                     % For normal incidence, TM <=> H//y and TE <=> E//y
 sym=[pol-1,pol-1,0,0];              % The symmetry of the structure, more symmetry means shorter calculation time
 % IMPORTANT: To be changed if non-normal incident or if non-rectangular structures
@@ -201,9 +201,9 @@ Ex=[];Ey=[];Ez=[];Hx=[];Hy=[];Hz=[];
 xx=[];yy=[];zz=[];indice=[];
 XX = []; YY = []; ZZ = []; E_x = []; E_y = []; INDICE = [];
 Ntre=1;
-H=cell2mat(params(:,2));
-n = cell2mat(params(:,3));
-nm = cell2mat(params(:,4));
+H=cell2mat(params(:,1));
+n = cell2mat(params(:,2));
+nm = cell2mat(params(:,3));
 if cal_abs||cal_champ==1||trace_champ;op_retcouche=1; else; op_retcouche=0; end
 if H(Nb_couches)<1e-5;disp('WARNING : There is a problem in the definition of the layers number !!'); return; end
 if trace_champ&&isempty(x0)==1&&isempty(y0)==1&&isempty(z0)==1;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
@@ -254,8 +254,8 @@ try
 
         N=Number(1:Nb_couches);
         Nm=Numberm(1:Nb_couches);
-        diameter_x=cell2mat(params(:,1));
-        diameter_y=diameter_x;
+        diameter_x=cell2mat(params(:,4));
+        diameter_y=cell2mat(params(:,5));
         Bx=500;Ax=0.02/Bx;By=Bx;Ay=Ax;
         xdisc=[-diameter_x/2,diameter_x/2];ydisc=[-diameter_y/2,diameter_y/2];
         kx=k0*nh*sin(theta(1)*pi/180);
@@ -506,14 +506,12 @@ try
     %%%% Hy as a function of x and z
     %%%% The separation between the layers is in white (indice contains the position of all indices)
     if trace_champ
-        if pol==0
+        if horizontal_label == 'x'
             horizontal = XX;
             E = E_y;
-            horizontal_label = 'x';
         else
             horizontal = YY;
             E = E_x;
-            horizontal_label = 'y';
         end
         figure
         pcolor(horizontal,ZZ,abs(E).^2);
@@ -525,7 +523,7 @@ try
         ylabel('z')
         hold off
 
-        filename = append(res_dir, "\no_", int2str(count),"_cross-section.png");
+        filename = append(res_dir, "\no_", int2str(count),"_cross-section_",horizontal_label,"_.png");
         saveas(gcf, filename);
     end
 
