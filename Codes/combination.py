@@ -8,11 +8,7 @@ from importlib.abc import MetaPathFinder
 from importlib.util import spec_from_file_location
 import sys
 import argparse
-
-def write_mat(csv_file, save_dict, directory):
-    """Save parameter list in mat"""
-    scipy.io.savemat(directory+'\\input_list.mat', mdict={'data': save_dict})
-    print("Output combination list file")
+import scipy.io
 
 class Listing:
     """Parse command line arguments and Take an input file and outputs a matrix with a column"""
@@ -59,11 +55,14 @@ class Listing:
         params_list = []
         for _, ite_para in enumerate(copy.deepcopy(ite_list)):
             ite_para.update(in_param)
-            if ite_para["asymmetry"] == True:
+            if ite_para["asymmetry"]:
                 params_list.append(ite_para)
             elif (ite_para["Mx"] == ite_para["My"]) and (ite_para["period_x"] == ite_para["period_y"]) and (ite_para["diam_x"] == ite_para["diam_y"]):
                 params_list.append(ite_para)
-        write_mat("file.pickle", params_list, directory)
+
+        ### Save parameter list in mat
+        scipy.io.savemat(directory+'\\input_list.mat', mdict={'data': params_list})
+        print("Output combination list file")
 
 def main(arguments=None):
     """Main function"""
