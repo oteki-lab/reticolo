@@ -3,14 +3,11 @@
 
 import copy
 import itertools
-import csv
 from importlib import import_module
 from importlib.abc import MetaPathFinder
 from importlib.util import spec_from_file_location
 import sys
 import argparse
-import pickle
-import numpy, scipy.io
 
 def write_mat(csv_file, save_dict, directory):
     """Save parameter list in mat"""
