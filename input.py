@@ -1,6 +1,7 @@
 """ reticolo input parameters """
-asymmetry = True   # True: Combination only when the x-axis and the y-axis have the same value
+asymmetry = True    # True: Combination only when the x-axis and the y-axis have the same value
 
+pol = 0             # polarization of the incident wave, TM pol=2  TE pol=0
 npoints = 21        # point number of wavelength
 lambdamin = 0.4     # min wavelength
 lambdamax = 1.2     # max wavelength

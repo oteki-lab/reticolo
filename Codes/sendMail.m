@@ -27,7 +27,7 @@ function [] = sendMail(body,attachmentFilePath)
     if attachmentFilePath == ""
         sendmail(recipients, subject, body);
     else
-        sendmail(recipients, subject, body, {char(attachmentFilePath)});
+        sendmail(recipients, subject, body, attachmentFilePath);
     end
 
     return
