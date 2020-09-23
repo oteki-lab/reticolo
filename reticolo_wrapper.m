@@ -24,7 +24,7 @@ save([res_dir, '\input_list.mat'], 'data');
 l = height(data);
 
 %% Run simulation
-parpool
+%parpool
 for index = 1:l
     disp(['Simulation: ', int2str(index), '/', int2str(l)]);
     attachments = strings(3:1);
@@ -69,4 +69,4 @@ for index = 1:l
     end
     if notification; sendMail(msg, attachments); end
 end
-delete(gcp('nocreate'))
+%delete(gcp('nocreate'))

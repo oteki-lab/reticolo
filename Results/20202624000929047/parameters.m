@@ -1,4 +1,4 @@
-function in=input_parameters()
+function in=parameters()
 %%reticolo input parameters
 in.asymmetry = true;    % True: Combination only when the x-axis and the y-axis have the same value
 
@@ -15,10 +15,10 @@ in.diam_x = 0.215;
 % height of nano structure
 in.height_nanostructure = 0.4;
 % period of back grating
-in.period_x = [2.4, 2.6];
+in.period_x = [2.4, 2.5, 2.6];
 % height of back grating
 in.height_backgrating = 0.9;
 
 in.My = in.Mx;                 % Number of Fourier terms in y
-in.period_y = 4.8;          % period in y
+in.period_y = in.period_x;     % period in y
 in.diam_y = in.diam_x;
