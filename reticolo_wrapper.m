@@ -3,7 +3,7 @@ addpath(genpath('./'))
 clear;retio;
 
 %% flags
-notification    = true;    % true: send result mail (set address in sendMail.m)
+notification    = false;    % true: send result mail (set address in sendMail.m)
 cal_absorption  = true;     % true: calculate absorption
 cal_structure_x = true;     % true: calculate structure (x direction)
 cal_structure_y = true;     % true: calculate structure (y direction)
@@ -15,14 +15,13 @@ res_dir = ['Results\',dateString];
 mkdir(res_dir);
 
 %% copy input file into output directory
-copyfile('input.py', [res_dir,'\input.py'])
-copyfile('init_structure.m', [res_dir,'\init_structure.m'])
+copyfile('parameters.m', [res_dir,'\parameters.m'])
+copyfile('structure.m', [res_dir,'\structure.m'])
 
 %% make inpout list
-command = ['python Codes\combination.py input.py ',res_dir];
-status = dos(command);
-input_list=load([res_dir,'\input_list']);
-l = length(input_list.data);
+data = combination(parameters());
+save([res_dir, '\input_list.mat'], 'data');
+l = height(data);
 
 %% Run simulation
 parpool
@@ -32,10 +31,10 @@ for index = 1:l
 
     try
         % load input parameters
-        in = input_list.data{index};
+        in = table2struct(data(index,:));
 
         % get structure parameters
-        [in.params, in.layers] = init_structure(in);
+        [in.params, in.layers] = structure(in);
 
         % output file name
         in.prefix = append(res_dir, "\no_", int2str(index), "_");
