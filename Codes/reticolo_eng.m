@@ -148,7 +148,11 @@ Nb_couches = length(in.params);                        % Total number of layers
 pol=in.pol;                         % For normal incidence, TM <=> H//y and TE <=> E//y
 
 % IMPORTANT: To be changed if non-normal incident or if non-rectangular structures
-% sym=[pol-1,pol-1,0,0];            % The symmetry of the structure, more symmetry means shorter calculation time
+if in.asymmetry
+    sym=[];            
+else
+    sym=[pol-1,pol-1,0,0];      % The symmetry of the structure, more symmetry means shorter calculation time
+end
 % if theta(1)==0 && theta(2)==0;sym=[pol-1,pol-1,0,0];end;
 % if theta(1)~=0 && theta(2)==0;sym=[0,pol-1,0,0];end;
 % if theta(1)==0 && theta(2)~=0;sym=[1-pol,0,0,0];end;
@@ -209,7 +213,6 @@ parfor zou=1:length(wavelength)
     disp(['Calculation n-' int2str(zou) ' of ' int2str(length(wavelength))])
 
     inc=[];
-    sym=[];
     e0=[];
     o0=[];
     R0_TE_TE_vect=zeros(1);
@@ -287,9 +290,8 @@ parfor zou=1:length(wavelength)
         end
         a{az}=retcouche(init,u{az},op_retcouche);
     end
-    struct_test=[];
     if op_objet==1
-        struc_test=cell(1,Nb_couches+2);    %struct_test ?
+        struct_test=cell(1,Nb_couches+2);
         struct_test{1}={0.1,uh};
         for az=1:Nb_couches
             struct_test{az+1}={H(az),u{az}};
