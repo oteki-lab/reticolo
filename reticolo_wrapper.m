@@ -69,4 +69,4 @@ for index = 1:l
     end
     if notification; sendMail(msg, attachments); end
 end
-%delete(gcp('nocreate'))
+delete(gcp('nocreate'))
