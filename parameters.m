@@ -15,7 +15,7 @@ in.diam_x = 0.215;
 % height of nano structure
 in.height_nanostructure = 0.4;
 % period of back grating
-in.period_x = 2.4;%[2.4, 2.5, 2.6];
+in.period_x = [2.4, 2.5, 2.6];
 % height of back grating
 in.height_backgrating = 0.9;
 

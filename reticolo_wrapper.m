@@ -38,7 +38,8 @@ for index = 1:l
         [in.params, in.layers] = structure(in);
 
         % output file name
-        in.prefix = append(res_dir, "\no_", int2str(index), "_");
+        mkdir(append(res_dir, "\no_", int2str(index)));
+        in.prefix = append(res_dir, "\no_", int2str(index), "\no_", int2str(index), "_");
         in.res = ['period_',int2str(in.period_x*1000),'_diam_',int2str(in.diam_x*1000),'wav',int2str(in.lambdamin*1000),'_',int2str(in.lambdamax*1000),'_npoints',int2str(in.npoints),'_Fourier',int2str(in.Mx)];
 
         % calculate absorption
