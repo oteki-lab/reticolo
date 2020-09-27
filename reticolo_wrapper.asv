@@ -47,7 +47,7 @@ for index = 1:l
         end
 
         % calculate current density
-        if cal_current
+        if cal_absorption
             attachments(length(attachments)+1) = reticolo_eng(in);
         end
         
