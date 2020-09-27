@@ -25,7 +25,7 @@ save([res_dir, '\input_list.mat'], 'data');
 l = height(data);
 
 %% Run simulation
-%parpool
+parpool
 for index = 1:l
     disp(['Simulation: ', int2str(index), '/', int2str(l)]);
     attachments = strings(3:1);

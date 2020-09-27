@@ -588,6 +588,8 @@ if cal_abs
     Abs_table = vertcat(header,data);
     filename = append(in.prefix,"Abs.mat");
     save(filename, 'Abs_table');
+    filename = append(in.prefix, "Abs.csv");
+    writematrix(Abs_table, filename, 'Delimiter',',');
 
     save(text);
 end

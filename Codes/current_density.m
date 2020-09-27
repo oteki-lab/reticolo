@@ -36,6 +36,8 @@ if exist(text, 'file')
     end
     filename = append(in.prefix,"J.mat");
     save(filename, 'J_table');
+    filename = append(in.prefix, "J.csv");
+    writematrix(J_table, filename, 'Delimiter',',');
 
     save(text);
 else
