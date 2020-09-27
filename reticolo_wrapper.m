@@ -48,7 +48,7 @@ for index = 1:l
 
         % calculate current density
         if cal_current
-            attachments(length(attachments)+1) = reticolo_eng(in);
+            current_density(in);
         end
         
         % calculate structure
