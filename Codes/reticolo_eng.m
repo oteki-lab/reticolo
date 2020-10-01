@@ -519,6 +519,9 @@ if trace_champ
 end
 
 if cal_abs
+    %%%% Save the data into a file
+    text=append(in.prefix, in.res, '.mat');
+    
     layers_name = in.layers(:,1);
     layer_numss = in.layers(:,2);
     legends = cell(1,length(in.layers));
@@ -531,8 +534,8 @@ if cal_abs
             legends(index) = append(layers_name(index),'(',int2str(layer_nums(1)),')');
         end
         Abs_temp = zeros(1,length(wavelength));
-        for index2=layer_nums(1):layer_nums(length(layer_nums))
-            Abs_temp = Abs_temp + Abs(index2,:);
+        for index2=1:length(layer_nums)
+            Abs_temp = Abs_temp + Abs(layer_nums(index2),:);
         end
         Abs_array{index} = Abs_temp;
     end
@@ -557,7 +560,36 @@ if cal_abs
     filename = append(in.prefix,"absorption graph.png");
     saveas(gcf, filename);
     
-    %%%% Save the data into a file
-    text=append(in.prefix, in.res, '.mat');
+    % constants
+    E_G=1.424;          % bandgap
+    h=6.63e-34;         % planck constant
+    c=3e8;              % speed of light
+    q=1.60e-19;         % elementary charge
+
+    wavelength_A = wavelength;
+    load('Solarspectrum.mat','wavelength')                                          % spectra loaded in [W.m^-2.nm^-1]
+    w_range = find(wavelength==lambdamin*1000):find(wavelength==lambdamax*1000);
+    wavelength_S = wavelength(w_range);                                             % wavelength from wavmin to wavmax [nm]
+    E_A = fliplr(h*c./(q*wavelength_A*1e-6));                                       % from wavelength [nm] to energy [eV]
+    E_S = fliplr(flipud(h*c./(wavelength_S*1e-9))/q);                               % from wavelength [nm] to energy [eV]
+
+    % 1-D data interpolation
+    for index = 1:length(Abs_array)
+        Abs_array_eV{index} = interp1(E_A,fliplr(Abs_array{index}),E_S,'makima');
+    end
+
+    % create absorption table
+    header = ["wavelength","energy"];
+    data = [flipud(wavelength_S),E_S];
+    for index = 1:length(Abs_array)
+        header= horzcat(header, in.layers{index});
+        data = horzcat(data, Abs_array_eV{index});
+    end
+    Abs_table = vertcat(header,data);
+    filename = append(in.prefix,"Abs.mat");
+    save(filename, 'Abs_table');
+    filename = append(in.prefix, "Abs.csv");
+    writematrix(Abs_table, filename, 'Delimiter',',');
+
     save(text);
 end
