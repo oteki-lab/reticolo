@@ -8,7 +8,7 @@ cal_structure_x = false;     % true: calculate structure (x direction)
 cal_structure_y = false;     % true: calculate structure (y direction)
 
 import_trial    = false;    % true: import trial list
-count_limit     = 100;      % limitation of iterative count
+count_limit     = 0;%100;      % limitation of iterative count
 
 %% make output direcory in Results
 dateString = datestr(datetime('now'),'yyyyMMddHHmmssFFF');
@@ -24,9 +24,14 @@ copyfile('structure.m', [res_dir,'\structure.m'])
 data = combination(parameters());
 save([res_dir, '\input_list.mat'], 'data');
 
+%% initilize steps
+load('step_list.mat')
+[hp_table, hp_list] = high_parameters();
+
+
 %% Run simulation
 count = 0;
-parpool
+%parpool
 while(true)
     count = count + 1;
     disp(['Simulation: ', int2str(count), '/', int2str(count_limit)]);
@@ -36,7 +41,7 @@ while(true)
 
     try
         % load input parameters
-        in = table2struct(data(0,:));
+        in = table2struct(data(1,:));
 
         % get structure parameters
         [in.params, in.layers] = structure(in);

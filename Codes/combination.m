@@ -3,7 +3,7 @@ params = {};
 keys = fieldnames(in);
 for k =1:length(keys)
     key = char(keys(k));
-    values = getfield(in, key);
+    values = in.(key);
     params = horzcat(params, values);
 end
 in_list = allcomb(params{:});

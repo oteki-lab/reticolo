@@ -15,6 +15,7 @@ hp_table = cell2table(table2cell(array2table(high_parameters)), 'VariableNames',
 %% list up combination of all high parameters
 params = {};
 for i =1:height(hp_table)
-    params = horzcat(params, (hp_table{i,2}:hp_table{i,4}:hp_table{i,3}));
+    params = horzcat(params, (hp_table{i,2}:hp_table{i,4}:hp_table{i,3};]);
 end
+disp(params{1})
 hp_list = cell2table(table2cell(array2table(allcomb(params{:}))), 'VariableNames',hp_table{:,'name'});
