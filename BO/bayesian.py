@@ -3,15 +3,41 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 import GPy
+from combination import combine
 
 def scaling(_df, _item):
     """ scaling """
-    scaler = MinMaxScaler().fit(np.array([_item['min'], _item['max']]).astype(float).reshape(-1, 1))  # scaling
+    scaler = MinMaxScaler(feature_range=(0, 1)).fit(np.array([_item['min'], _item['max']]).astype(float).reshape(-1, 1))  # scaling
     _df[_item['name']] = scaler.transform(_df[_item['name']].values.reshape(-1, 1))                     # scalingした探索点
     return _df[_item['name']]
 
-def search(params, combi, steps):
+def search(params_csv, steps_csv):
     """ search next point """
+    params_df = pd.read_csv(params_csv, header=0)
+    steps_df = pd.read_csv(steps_csv, header=0)
+
+    params_list = params_df.reset_index().T.reset_index().T.values.tolist()
+    params = []
+    for i in range(len(params_list)-1):
+        item = {}
+        for j in range(1, len(params_list[0])):
+            item[params_list[0][j]] = params_list[i+1][j]
+        params.append(item)
+
+    for item in params:
+        item['div'] = int((item['max']-item['min'])/item['step'])+1     # 探索分割数
+        item['space'] = 1/(item['div']-1)                               # 探索間隔
+
+    combi = combine(params)
+
+    steps_list = steps_df.reset_index().T.reset_index().T.values.tolist()
+    steps = []
+
+    for i in range(len(steps_list)-1):
+        item = []
+        for j in range(1, len(steps_list[0])):
+            item.append(steps_list[i+1][j])
+        steps.append(item)
     ### 探索項目の取得 ###
     keys = [d.get('name') for d in params]
     col = np.append(keys, 'score')
@@ -40,12 +66,15 @@ def search(params, combi, steps):
         com['acq'] = (y_mean + ((np.log(n) / n) ** 0.5 * y_var)).tolist()[0][0]
     max_acq = [com for com in combi if com['acq'] == max(com['acq'] for com in combi)][0]
 
+    next_step = {}
     for item in params:
-        item['next'] = max_acq[item['name']]
-        print(item['name'], ":", item['next'], "(", item['next']*item['max'], "ml)")
-    from plot_module import gaussian_2dim, gaussian_1dim
-    gaussian_2dim(model, keys, params, n, y_train)      # モデルの可視化
-    x = np.linspace(0, 1.0, params[0]['div'])
-    gaussian_1dim(model, keys, params, n, x)            # 獲得関数の可視化
+        item['next'] = max_acq[item['name']]*item['max']
+        #print(item['name'], ":", item['next']/item['max'], "(", item['next'], "ml)")
+        next_step[item['name']] = item['next']
 
-    return max_acq
+    #from plot_module import gaussian_2dim, gaussian_1dim
+    #gaussian_2dim(model, keys, params, n, y_train)      # モデルの可視化
+    #x = np.linspace(0, 1.0, params[0]['div'])
+    #gaussian_1dim(model, keys, params, n, x)            # 獲得関数の可視化
+
+    return next_step

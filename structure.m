@@ -15,9 +15,9 @@ structure_params = {
 %	0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802),   in.diam_x*6/9,         in.in.period_y*6/9;
 %	0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802),   in.diam_x*7/9,         in.in.period_y*7/9;
 %	0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802),   in.diam_x*8/9,         in.in.period_y*8/9;
-    0.04,   retindice_chen(wavelength,4.802),   0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
+    in.h2,   retindice_chen(wavelength,4.802),   0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
     0.16,   retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
-    0.14,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
+    in.h,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
     1.7,    retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
     0.04,   retindice_chen(wavelength,4.802),   0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
 %	0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802),   in.period_x*11/12,     in.period_x*11/12;

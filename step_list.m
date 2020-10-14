@@ -1,7 +1,7 @@
-period_x = [50; 0];
-period_y = [15; 0];
-score = [68; 44];
-steps = table(period_x,period_y,score);
+period_x = [0; 50];
+period_y = [0; 15];
+score = [44; 68];
+hp_steps = table(period_x,period_y,score);
 %steps = [
 %   [50, 15, 68], %初期点
 %   [0, 0, 44],   %初期点
@@ -12,4 +12,5 @@ steps = table(period_x,period_y,score);
 %   [50, 6, 90],
 %   [0, 15, 46],
 %];
-save('step_list.mat','steps');
+save('hp_steps.mat','hp_steps');
+writetable(hp_steps, "hp_steps.csv", 'Delimiter',',');

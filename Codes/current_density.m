@@ -1,4 +1,4 @@
-function y=current_density(in)
+function J_table=current_density(in)
 %% Saving and plotting output data
 %%%% Save the data into a file
 text=append(in.prefix, in.res, '.mat');

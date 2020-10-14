@@ -5,8 +5,9 @@ function [hp_table, hp_list]=high_parameters()
 
 %% set high parameters (name, min, max, step)
 high_parameters = {
-    'period_x' 0 50 5;
-    'period_y' 0 15 3
+    %'period_x' 1.0 3.0 0.1;
+    'h2' 0.0 10.0 0.5;
+    'h' 0.0 10.0 0.5
 };
 
 %% shape high parameters as table

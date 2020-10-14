@@ -4,7 +4,7 @@ in.asymmetry = true;    % True: Combination only when the x-axis and the y-axis 
 
 in.pol = 0;             % polarization of the incident wave, TM pol=2  TE pol=0
 in.npoints = 21;        % point number of wavelength
-in.lambdamin = 0.4;     % min wavelength
+in.lambdamin = 0.8;     % min wavelength
 in.lambdamax = 1.2;     % max wavelength
 
 %% x
@@ -15,7 +15,7 @@ in.diam_x = 0.215;
 % height of nano structure
 in.height_nanostructure = 0.4;
 % period of back grating
-in.period_x = [2.4, 2.5, 2.6];
+in.period_x = 2.4;
 % height of back grating
 in.height_backgrating = 0.9;
 
