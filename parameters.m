@@ -3,8 +3,8 @@ function in=parameters()
 in.asymmetry = true;    % True: Combination only when the x-axis and the y-axis have the same value
 
 in.pol = 0;             % polarization of the incident wave, TM pol=2  TE pol=0
-in.npoints = 21;        % point number of wavelength
-in.lambdamin = 0.8;     % min wavelength
+in.npoints = 16;        % point number of wavelength
+in.lambdamin = 0.9;     % min wavelength
 in.lambdamax = 1.2;     % max wavelength
 
 %% x

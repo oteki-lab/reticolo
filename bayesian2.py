@@ -1,9 +1,9 @@
 """ bayesian optimization """
 import numpy as np
 import pandas as pd
-import copy
 from sklearn.preprocessing import MinMaxScaler
 import GPy
+from scipy.stats import norm
 from combination import combine
 
 def scaling(_df, _item):
@@ -54,15 +54,7 @@ def search(params_csv, steps_csv):
     combi = combine(params)
     combi = [item for item in combi if not any([float(item[k]) == 0.0 for k in keys])]  # 値が0の探索点を削除
     for i, row in df.iterrows():                                                        # 探索済みの組み合わせを削除
-        combi = [item for item in combi if not all([abs(round(item[k] - row[k], 5)) < float(spaces[k]) for k in keys])]
-
-
-    combi_scaled = copy.deepcopy(combi)
-    for com in combi_scaled:
-        for k in keys:
-            scaler = MinMaxScaler(feature_range=(0, 1)).fit(np.array([params_df[params_df['name']==k]['min'].values[0], params_df[params_df['name']==k]['max'].values[0]]).astype(float).reshape(-1, 1))  # scaling
-            com[k] = scaler.transform([[com[k]]])[0][0]                     # scalingした探索点
-
+        combi = [item for item in combi if not all([abs(float(item[k]) - float(row[k])) < spaces[k] for k in keys])]
 
     ### 探索項目の整形とスケーリング ###
     for item in params:
@@ -71,18 +63,25 @@ def search(params_csv, steps_csv):
     y_train = df["score"].values
 
     ### 探索記録をガウス過程回帰してモデルを最適化 ###
-    kern = GPy.kern.RBF(dim, ARD=True)
-    model = GPy.models.GPRegression(X=x_train.reshape(-1, dim), Y=y_train.reshape(-1, 1), kernel=kern, normalizer=None)
-    model.optimize(max_iters=1e5)
+    kern = GPy.kern.Matern32(dim, ARD=True)
+    model = GPy.models.GPRegression(X=x_train.reshape(-1, dim), Y=y_train.reshape(-1, 1), kernel=kern, normalizer=True)
+    model.optimize()
 
     ### 探索点xに対する予測出力yから回帰モデルをもとに獲得関数acqを最大化し、次に探索すべき点を探す ###
+    x_pred = np.array([[com[k] for com in combi] for k in kyes]).T
+    x_pred = np.array([np.array([com[k] for k in keys]).T])
     max_acq = {'acq':0.0}
     for k in keys:
-        max_acq[k] = combi[0][k]
-    for i, com in enumerate(combi):
-        x_pred = np.array([np.array([combi_scaled[i][k] for k in keys])])
+        max_acq[k] = 0.0
+    for com in combi:
+        x_pred = np.array([np.array([com[k] for k in keys]).T])
         y_mean, y_var = model.predict(x_pred)
-        com['acq'] = (y_mean + ((np.log(n) / n) ** 0.5 * y_var)).tolist()[0][0] #need for optimization
+        pred_mu = y_mean[0][0]
+        pred_sigma = y_var[0][0]
+        z = (pred_mu - max(y_train)) / pred_sigma
+        ei = pred_sigma * z * np.array(norm.cdf(z)) + pred_sigma * np.array(norm.pdf(z))
+        com['acq'] = ei
+        #com['acq'] = (y_mean + ((np.log(n) / n) ** 0.5 * y_var)).tolist()[0][0] #need for optimization
         if max_acq['acq'] < com['acq']:
             max_acq['acq'] = com['acq']
             for k in keys:

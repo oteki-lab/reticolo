@@ -20,7 +20,8 @@ def combine(_params):
     # Generate all combinations of iterable parameters
     ite_comb = list(itertools.product(*[ite_vals[k] for k in ite_keys]))
     # list combinations of iterable parameters for each experiment
-    ite_list = [dict(zip(ite_keys, values)) for values in ite_comb]
+    ite_list = [dict() for values in ite_comb]
 
+    ite_list = [dict(zip(ite_keys, tuple(map(lambda x: isinstance(x, float) and round(x, 5) or x, values)))) for values in ite_comb]
     return ite_list
     
