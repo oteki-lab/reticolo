@@ -6,7 +6,8 @@ def combine(_params):
     """get params"""
     x_dict = {}
     for item in _params:
-        x_dict[item['name']] = np.linspace(item['min'], item['max'], item['div'])
+        seq = np.linspace(item['min'], item['max'], item['div'])
+        x_dict[item['name']] = seq[seq.nonzero()]
 
     ### Tacking all parameters by parsing command line arguments
     # All static parameters in parameters

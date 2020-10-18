@@ -5,13 +5,13 @@ from PIL import Image
 from plot_module import search
 
 if __name__ == "__main__":
-    res_dir = 'Results\\20200316181021699'
+    res_dir = 'Results\\20203617131044550'
 
     params = res_dir+'\\hp_table.csv'
     steps = res_dir+'\\hp_steps.csv'
 
     image_dir = res_dir+"/graphs/"
-    image_path = ["scores", "heatmaps", "acqs"]
+    image_path = ["score", "y_mean", "acq"]
     for path in image_path:
         os.makedirs(image_dir + '/' + path, exist_ok=True)
 

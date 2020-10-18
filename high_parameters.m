@@ -1,8 +1,8 @@
 function [hp_table, hp_list]=high_parameters()
 %% set high parameters (name, min, max, step)
 high_parameters = {
-    'h2' 0.0 1.0 0.1;
-    'h' 0.0 10.0 1.0
+    'h2' 0.0 1.0 0.2;
+    'h' 0.0 10.0 2
 };
 % shape high parameters as table
 hp_table = cell2table(table2cell(array2table(high_parameters)), 'VariableNames',{'name','min','max','step'});
