@@ -10,7 +10,7 @@ cal_structure_y = true;     % true: calculate structure (y direction)
 cal_current     = true;     % true: calculate current density from absorption
 
 %% make output direcory in Results
-dateString = datestr(datetime('now'),'yyyyMMddHHmmssFFF');
+dateString = datestr(datetime('now'),'yyyymmddHHMMssFFF');
 disp(['make new directory: ',dateString]);
 res_dir = ['Results\',dateString];
 mkdir(res_dir);

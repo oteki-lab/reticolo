@@ -11,7 +11,7 @@ cal_structure_x = false;    % true: calculate structure (x direction)
 cal_structure_y = false;    % true: calculate structure (y direction)
 
 import_trial    = false;    % true: import trial list
-count_limit     = 1;       % limitation of iterative count
+count_limit     = 21;       % limitation of iterative count
 
 %% make output direcory in Results
 dateString = datestr(datetime('now'),'yyyyMMddHHmmssFFF');
@@ -19,6 +19,7 @@ disp(['make new directory: ',dateString]);
 res_dir = ['Results\',dateString];
 mkdir(res_dir);
 mkdir([res_dir, '\graphs']);
+mkdir([res_dir, '\bo_data']);
 mkdir([res_dir, '\graphs/score']);
 mkdir([res_dir, '\graphs/y_mean']);
 mkdir([res_dir, '\graphs/acq']);
@@ -46,7 +47,7 @@ else
     params = {};
     for i =1:height(hp_table)
         %    params = horzcat(params, [hp_table{i,2}+hp_table{i,4},hp_table{i,3}]);
-        params = horzcat(params, [hp_table{i,2}+hp_table{i,4}, hp_table{i,3}*4/5]);
+        params = horzcat(params, [hp_table{i,2}+hp_table{i,4}, hp_table{i,3}-hp_table{i,4}]);
     end
     init_steps = cell2table(table2cell(array2table(allcomb(params{:}))), 'VariableNames',hp_table{:,'name'});
 
@@ -72,7 +73,7 @@ while(true)
                 next_step.(key) = init_steps.(key)(count);
             end
         else
-            next_step = struct2table(struct(py.bayesian.search(hp_table_csv, hp_steps_csv)));
+            next_step = struct2table(struct(py.bayesian.search(res_dir, hp_table_csv, hp_steps_csv)));
         end
         disp(next_step)
         
@@ -100,7 +101,7 @@ while(true)
 
             % calculate current density
             J_table = current_density(in);
-            next_step.score = str2double(J_table(2,10))*1000/17*100*100/60;
+            next_step.score = str2double(J_table(2,10))*1000;
         else
             next_step.score = 0.0;
         end
