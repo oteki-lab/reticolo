@@ -3,14 +3,10 @@ import copy
 import math
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 import GPy
 from combination import combine
-import seaborn as sns
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-import matplotlib.colors as colors
-from matplotlib.cm import ScalarMappable
 
 def add_graph(res, n, data, next_step, values, index, columns):
     """ モデルの可視化 """
@@ -31,13 +27,14 @@ def add_graph(res, n, data, next_step, values, index, columns):
     ax.set_title(values)
 
     contour = ax.contourf(
-        *np.meshgrid(*[x.values.astype(np.float32) for x in [table.columns, table.index]]), table.values
+        *np.meshgrid(*[x.values.astype(np.float32) for x in [table.columns, table.index]]), table.values,
+        cmap='nipy_spectral', levels=100, alpha=0.9
     )
     fig.colorbar(contour)
     contour.set_clim(vmin=data[values].min(), vmax=data[values].max())
 
-    plt.scatter(plots[columns], plots[index], s=5, c='black')
-    plt.scatter(next_step[columns], next_step[index], s=5, c='red')
+    plt.scatter(plots[columns], plots[index], s=5, c='green')
+    plt.scatter(next_step[columns], next_step[index], s=5, c='blue')
 
     fig.savefig(f'{res}/graphs/{values}/{values}_{str(n)}.png')
     plt.close()
@@ -124,4 +121,4 @@ def search(res, params_csv, steps_csv):
             {'values':'acq', 'index':keys[0], 'columns':keys[1]}    # 獲得関数 acq
         ]]
 
-    return next_step
+    #return next_step

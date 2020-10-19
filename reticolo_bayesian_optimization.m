@@ -11,7 +11,7 @@ cal_structure_x = false;    % true: calculate structure (x direction)
 cal_structure_y = false;    % true: calculate structure (y direction)
 
 import_trial    = false;    % true: import trial list
-count_limit     = 21;       % limitation of iterative count
+count_limit     = 1;       % limitation of iterative count
 
 %% make output direcory in Results
 dateString = datestr(datetime('now'),'yyyyMMddHHmmssFFF');
@@ -19,6 +19,9 @@ disp(['make new directory: ',dateString]);
 res_dir = ['Results\',dateString];
 mkdir(res_dir);
 mkdir([res_dir, '\graphs']);
+mkdir([res_dir, '\graphs/score']);
+mkdir([res_dir, '\graphs/y_mean']);
+mkdir([res_dir, '\graphs/acq']);
 
 %% make inpout list & copy input file into output directory
 data = combination(parameters());
@@ -43,8 +46,7 @@ else
     params = {};
     for i =1:height(hp_table)
         %    params = horzcat(params, [hp_table{i,2}+hp_table{i,4},hp_table{i,3}]);
-        params = horzcat(params, [hp_table{i,3}
-            *1/5,hp_table{i,3}*4/5]);
+        params = horzcat(params, [hp_table{i,2}+hp_table{i,4}, hp_table{i,3}*4/5]);
     end
     init_steps = cell2table(table2cell(array2table(allcomb(params{:}))), 'VariableNames',hp_table{:,'name'});
 
