@@ -1,0 +1,13 @@
+{
+    // 拡張機能のロード時にターミナルでPython環境をアクティブにする。
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    // 仮想環境のパス。作成した Anaconda仮想環境を指定する。
+    "python.venvPath": "${env:CONDA_ENVS_PATH}/Python37",
+    "python.autoComplete.extraPaths": [
+        "${env:CONDA_ENVS_PATH}/Python37/Lib/site-packages",
+    ],
+    // Pythonコマンドのパス。作成した Anaconda仮想環境配下の python.exe を指定する。
+    "python.pythonPath": "C:\\ProgramData\\Anaconda3\\python.exe",
+    // condaコマンドのパス。[Anacondaインストール先]/condabin/conda.bat を指定する。
+    "python.condaPath": "C:/ProgramData/Anaconda3/condabin/conda.bat",
+}
