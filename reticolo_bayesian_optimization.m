@@ -10,8 +10,8 @@ notification    = false;    % true: send result mail (set address in sendMail.m)
 cal_structure_x = false;    % true: calculate structure (x direction)
 cal_structure_y = false;    % true: calculate structure (y direction)
 
-import_trial    = false;    % true: import trial list
-count_limit     = 21;       % limitation of iterative count
+take_over = '20201020180326066';    % directory name of simulation on the way
+count_limit = 21;                   % limitation of iterative count, 0: only initialization
 
 %% make output direcory in Results
 dateString = datestr(datetime('now'),'yyyymmddHHMMssFFF');
@@ -25,37 +25,41 @@ mkdir([res_dir, '\graphs/y_mean']);
 mkdir([res_dir, '\graphs/acq']);
 
 %% make inpout list & copy input file into output directory
+mkdir([res_dir, '\input']);
+copyfile('parameters.m', [res_dir,'\input\parameters.m'])
+copyfile('structure.m', [res_dir,'\input\structure.m'])
+copyfile('high_parameters.m', [res_dir,'\input\high_parameters.m'])
 data = combination(parameters());
 save([res_dir, '\input_list.mat'], 'data');
-copyfile('parameters.m', [res_dir,'\parameters.m'])
-copyfile('structure.m', [res_dir,'\structure.m'])
 
 %% initizlize high parameters
 hp_table_csv = [res_dir, '\hp_table.csv'];
 hp_steps_csv = [res_dir, '\hp_steps.csv'];
-hp_steps_mat = 'hp_steps.mat';
+hp_steps_mat = [res_dir, '\hp_steps.mat'];
 [hp_table, hp_list] = high_parameters();
 writetable(hp_table, hp_table_csv, 'Delimiter',',');
 
 %% initilize steps
 init_hp_steps_num = 0;
-if import_trial
+import_flag = false;
+if isfile(['Results\', take_over, '\hp_steps.mat'])
+    copyfile(['Results\', take_over, '\*'], [res_dir, '\']);
     load(hp_steps_mat)
-    writetable(hp_steps, hp_steps_csv, 'Delimiter',',');
+    init_hp_steps_num = height(hp_steps);
+    import_flag = true;
+    count_limit = count_limit + init_hp_steps_num;
 else
     hp_steps = [];
     params = {};
     for i =1:height(hp_table)
-        %    params = horzcat(params, [hp_table{i,2}+hp_table{i,4},hp_table{i,3}]);
         params = horzcat(params, [hp_table{i,2}+hp_table{i,4}, hp_table{i,3}-hp_table{i,4}]);
     end
     init_steps = cell2table(table2cell(array2table(allcomb(params{:}))), 'VariableNames',hp_table{:,'name'});
-
     count_limit = count_limit + height(init_steps);
 end
 
 %% Run simulation
-count = 0;
+count = init_hp_steps_num;
 parpool
 while(true)
     count = count + 1;
@@ -66,7 +70,7 @@ while(true)
 
     try
         % estimate next step by bayesian optimization
-        if import_trial==false && count<=height(init_steps)
+        if import_flag==false && count<=height(init_steps)
             next_step = table();
             for i=1:length(init_steps{count,:})
                 key = char(init_steps.Properties.VariableNames(i));
@@ -131,6 +135,5 @@ while(true)
     
     if count>=count_limit; break; end
 end
-copyfile(hp_steps_mat, [res_dir,'\', hp_steps_mat])
 delete(gcp('nocreate'))
 clear;

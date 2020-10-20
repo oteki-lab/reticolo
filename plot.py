@@ -71,6 +71,6 @@ def draw_graph(res, keys):
         X[0].save(image_dir + '/gifs/' + path + '.gif', save_all=True, append_images=X[1:], optimize=False, duration=1000, loop=0)
 
 if __name__ == "__main__":
-    RES = 'Results\\20201020132648689'
+    RES = 'Results\\20201020180847496'
     keys_list = ['h2', 'h']
     draw_graph(RES, keys_list)
