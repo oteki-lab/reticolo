@@ -44,7 +44,7 @@ def draw_graph(res, keys):
 
     bo_data_path = res+'\\bo_data'
     bo_data = sorted(os.listdir(bo_data_path), key=lambda s: int(re.search(r'\d+', s).group()))
-    bo_data = [ f'{bo_data_path}/{d}' for d in bo_data]
+    bo_data = [f'{bo_data_path}/{d}' for d in bo_data]
 
     for path in bo_data:
         n = int(re.findall(r'bo_data_(\d+)', path)[0])
@@ -71,6 +71,6 @@ def draw_graph(res, keys):
         X[0].save(image_dir + '/gifs/' + path + '.gif', save_all=True, append_images=X[1:], optimize=False, duration=1000, loop=0)
 
 if __name__ == "__main__":
-    res = 'Results\\20204719191023200'
-    keys = ['h2', 'h']
-    draw_graph(res, keys)
+    RES = 'Results\\20201020132648689'
+    keys_list = ['h2', 'h']
+    draw_graph(RES, keys_list)

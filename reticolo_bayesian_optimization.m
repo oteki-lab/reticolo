@@ -14,7 +14,7 @@ import_trial    = false;    % true: import trial list
 count_limit     = 21;       % limitation of iterative count
 
 %% make output direcory in Results
-dateString = datestr(datetime('now'),'yyyyMMddHHmmssFFF');
+dateString = datestr(datetime('now'),'yyyymmddHHMMssFFF');
 disp(['make new directory: ',dateString]);
 res_dir = ['Results\',dateString];
 mkdir(res_dir);
@@ -83,28 +83,22 @@ while(true)
         for i=1:length(next_step.Properties.VariableNames)
             key = char(next_step.Properties.VariableNames(i));
             in.(key) = next_step.(key);
-            if in.(key)==0
-                skip_flag = false;
-            end
         end
-        
-        if skip_flag
-            % get structure parameters
-            [in.params, in.layers] = structure(in);
 
-            % output file name
-            in.prefix = append(item_dir, "\no_", int2str(count), "_");
-            in.res = ['period_',int2str(in.period_x*1000),'_diam_',int2str(in.diam_x*1000),'wav',int2str(in.lambdamin*1000),'_',int2str(in.lambdamax*1000),'_npoints',int2str(in.npoints),'_Fourier',int2str(in.Mx)];
+        % get structure parameters
+        [in.params, in.layers] = structure(in);
 
-            % calculate absorption
-            attachments(length(attachments)+1) = reticolo_eng(in);
+        % output file name
+        in.prefix = append(item_dir, "\no_", int2str(count), "_");
+        in.res = ['period_',int2str(in.period_x*1000),'_diam_',int2str(in.diam_x*1000),'wav',int2str(in.lambdamin*1000),'_',int2str(in.lambdamax*1000),'_npoints',int2str(in.npoints),'_Fourier',int2str(in.Mx)];
 
-            % calculate current density
-            J_table = current_density(in);
-            next_step.score = str2double(J_table(2,10))*1000;
-        else
-            next_step.score = 0.0;
-        end
+        % calculate absorption
+        attachments(length(attachments)+1) = reticolo_eng(in);
+
+        % calculate current density
+        J_table = current_density(in);
+        next_step.score = str2double(J_table(2,10))*1000;
+
         hp_steps = [hp_steps;next_step];
         writetable(hp_steps, hp_steps_csv, 'Delimiter',',');
         save(hp_steps_mat, 'hp_steps')

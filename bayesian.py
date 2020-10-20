@@ -1,5 +1,4 @@
 """ bayesian optimization """
-import copy
 import math
 import numpy as np
 import pandas as pd
@@ -7,18 +6,19 @@ from sklearn.preprocessing import MinMaxScaler
 import GPy
 from combination import combine
 
-def scaling(_df, _item):
-    """ scaling """
-    scaler = MinMaxScaler(feature_range=(0, 1)).fit(np.array([_item['min'], _item['max']]).astype(float).reshape(-1, 1))  # scaling
-    _df[_item['name']] = scaler.transform(_df[_item['name']].values.reshape(-1, 1))                     # scalingした探索点
-    return _df[_item['name']]
+def acq(mean, var, N):
+    """ Acquisition function """
+    return mean + ((np.log(N) / N) ** 0.5 * var)
+
+def scaling(com, pdf, k):
+    """ scaling function """
+    scaler = MinMaxScaler(feature_range=(0, 1)).fit(np.array([pdf[pdf['name'] == k]['min'].values[0], pdf[pdf['name'] == k]['max'].values[0]]).astype(float).reshape(-1, 1))
+    return scaler.transform([[com]])[0][0]
 
 def search(res, params_csv, steps_csv):
-    """ search next point """
-    params_df = pd.read_csv(params_csv, header=0)
-    steps_df = pd.read_csv(steps_csv, header=0)
-
+    """ predict next search point """
     ### 探索項目の取得 ###
+    params_df = pd.read_csv(params_csv, header=0)
     params = list(params_df.T.to_dict().values())
     keys = [d.get('name') for d in params]
     dim = len(keys)
@@ -29,77 +29,40 @@ def search(res, params_csv, steps_csv):
         spaces[item['name']] = item['space']
 
     ### 探索記録の取得 ###
-    steps_list = list(steps_df.T.to_dict().values())
-    df = pd.DataFrame(steps_list)
-    n = len(df) # データサイズ
+    steps_df = pd.read_csv(steps_csv, header=0)
+    list_df = pd.DataFrame(list(steps_df.T.to_dict().values()))
+    step = len(list_df)                                                 # データサイズ
+    for item in params:                                                 # 探索記録のスケーリング
+        scaler = MinMaxScaler(feature_range=(0, 1)).fit(np.array([item['min'], item['max']]).astype(float).reshape(-1, 1))
+        item['list'] = scaler.transform(list_df[item['name']].values.reshape(-1, 1))
 
-    ### 全探索点の列挙 ###
-    combi = combine(params)
-    for com in combi:
-        for i, row in df.iterrows():
+    ### 探索点の設定 ###
+    combi = combine(params)                                             # 全探索点の列挙
+    for com in combi:                                                   # 探索済点に探索記録のスコアをセット
+        for _, row in list_df.iterrows():
             if all([math.isclose(com[k], row[k], abs_tol=spaces[k]/1e3) for k in keys]):
                 com['score'] = row['score']
 
-    rest = combi
-    for i, row in df.iterrows():        # 探索済みの組み合わせを削除
-        rest = [item for item in rest if not all([math.isclose(item[k], row[k], abs_tol=spaces[k]/1e3) for k in keys])]
-
-    ### 探索項目の整形とスケーリング ###
-    s_df = copy.copy(df)
-    for item in params:
-        item['df'] = scaling(df, item)  # scalingした探索記録
-    x_train = np.stack([d.get('df') for d in params], axis=1)
-    y_train = df["score"].values
-
-    combi_scaled = copy.deepcopy(combi)
-    for com in combi_scaled:
-        for k in keys:
-            scaler = MinMaxScaler(feature_range=(0, 1)).fit(np.array([params_df[params_df['name']==k]['min'].values[0], params_df[params_df['name']==k]['max'].values[0]]).astype(float).reshape(-1, 1))  # scaling
-            com[k] = scaler.transform([[com[k]]])[0][0]                     # scalingした探索点
-
-    rest_scaled = copy.deepcopy(rest)
-    for com in rest_scaled:
-        for k in keys:
-            scaler = MinMaxScaler(feature_range=(0, 1)).fit(np.array([params_df[params_df['name']==k]['min'].values[0], params_df[params_df['name']==k]['max'].values[0]]).astype(float).reshape(-1, 1))  # scaling
-            com[k] = scaler.transform([[com[k]]])[0][0]                     # scalingした探索点
-
-
     ### 探索記録をガウス過程回帰してモデルを最適化 ###
-    kern = GPy.kern.RBF(dim, ARD=True)
-    model = GPy.models.GPRegression(X=x_train.reshape(-1, dim), Y=y_train.reshape(-1, 1), kernel=kern, normalizer=None)
+    kargs = {
+        'X': np.stack([d.get('list') for d in params], axis=1).reshape(-1, dim),
+        'Y': list_df["score"].values.reshape(-1, 1),
+        'kernel': GPy.kern.RBF(dim, ARD=True),
+        'normalizer': None
+    }
+    model = GPy.models.GPRegression(**kargs)
     model.optimize(max_iters=1e5)
 
     ### 探索点xに対する予測出力yから回帰モデルをもとに獲得関数acqを最大化し、次に探索すべき点を探す ###
-    max_acq = {'acq':0.0}
-    for k in keys:
-        max_acq[k] = rest[0][k]
-    for i, com in enumerate(rest):
-        x_pred = np.array([np.array([rest_scaled[i][k] for k in keys])])
+    for _, com in enumerate(combi):
+        x_pred = np.array([np.array([scaling(com[k], params_df, k) for k in keys])])
         com['y_mean'], com['y_var'] = [y[0][0] for y in list(model.predict(x_pred))]
-        y_mean, y_var = model.predict(x_pred)
-        com['acq'] = (y_mean + ((np.log(n) / n) ** 0.5 * y_var)).tolist()[0][0] #need for optimization
-        if max_acq['acq'] < com['acq']:
-            max_acq['acq'] = com['acq']
-            for k in keys:
-                max_acq[k] = com[k]
+        com['acq'] = acq(com['y_mean'], com['y_var'], step)
 
-    for i, com in enumerate(combi):
-        x_pred = np.array([np.array([combi_scaled[i][k] for k in keys])])
-        com['y_mean'], com['y_var'] = [y[0][0] for y in list(model.predict(x_pred))]
-        y_mean, y_var = com['y_mean'], com['y_var']
-        com['acq'] = (y_mean + ((np.log(n) / n) ** 0.5 * y_var))
-
-        for j, row in s_df.iterrows():
+        for _, row in list_df.iterrows():
             if all([math.isclose(com[k], row[k], abs_tol=spaces[k]/1e3) for k in keys]):
                 com['acq'] = 0.0
 
-    data = pd.DataFrame(combi)
-    data.to_pickle(f'{res}/bo_data/bo_data_{n}.pkl')
-
-    next_step = {}
-    for item in params:
-        item['next'] = max_acq[item['name']]
-        next_step[item['name']] = item['next']
-
-
-    return next_step
+    data = pd.DataFrame(combi)                                                    # all data
+    data.to_pickle(f'{res}/bo_data/bo_data_{step}.pkl')                           # save data
+    return {p['name']: data.loc[data['acq'].idxmax()][p['name']] for p in params} # return next step
