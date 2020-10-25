@@ -36,7 +36,7 @@ def combine(_params):
     # list combinations of iterable parameters for each experiment
     ite_list = [dict() for values in ite_comb]
 
-    ite_list = [dict(zip(ite_keys, tuple(map(lambda x: isinstance(x, float) and round(x, 5) or x, values)))) for values in ite_comb]
+    ite_list = [dict(zip(ite_keys, tuple(map(lambda x: isinstance(x, float) and round(x, 2) or x, values)))) for values in ite_comb]
     return ite_list
 
 def search(res, params_csv, steps_csv):
@@ -81,6 +81,11 @@ def search(res, params_csv, steps_csv):
     for _, com in enumerate(combi):
         x_pred = np.array([np.array([scaling(com[k], params_df, k) for k in keys])])
         com['y_mean'], com['y_var'] = [y[0][0] for y in list(model.predict(x_pred))]
+
+        if com['Eg'] <= com['Eic']:
+            com['y_mean'], com['y_var'] = 0.0, 0.0
+            com['score'] = 0.0
+
         com['acq'] = acq(com['y_mean'], com['y_var'], step)
 
         for _, row in list_df.iterrows():

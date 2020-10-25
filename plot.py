@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 
 def add_graph(res, n, data, next_step, values, index, columns):
     """ モデルの可視化 """
+    data = data[data[values]>0.0]
     plots = data.dropna()
     kargs = {
         'values':values, 'index':[index], 'columns':[columns],
@@ -15,24 +16,24 @@ def add_graph(res, n, data, next_step, values, index, columns):
     }
 
     table = pd.pivot_table(data, **kargs)
-    table = table.fillna(table.mean())
+    #table = table.fillna(table.mean())
 
     fig = plt.figure(figsize=(5, 4))
 
     ax = fig.add_subplot(111)
     ax.set_xlabel(columns)
     ax.set_ylabel(index)
-    ax.set_title(values)
+    ax.set_title(f'{values} step:{str(n)}')
 
     contour = ax.contourf(
         *np.meshgrid(*[x.values.astype(np.float32) for x in [table.columns, table.index]]), table.values,
-        cmap='nipy_spectral', levels=100, alpha=0.9
+        cmap='jet', levels=200, alpha=0.9
     )
     fig.colorbar(contour)
     contour.set_clim(vmin=data[values].min(), vmax=data[values].max())
 
-    plt.scatter(plots[columns], plots[index], s=5, c='green')
-    plt.scatter(next_step[columns], next_step[index], s=5, c='blue')
+    plt.scatter(plots[columns], plots[index], s=5, c='none', edgecolors='purple', alpha=0.7, linewidth=0.4)
+    plt.scatter(next_step[columns], next_step[index], s=5, c='pink', edgecolors='pink')
 
     fig.savefig(f'{res}/graphs/{values}/{values}_{str(n)}.png')
     plt.close()
@@ -68,9 +69,9 @@ def draw_graph(res, keys):
         for img_name in img_paths:
             X.append(Image.open(image_dir + '/' + path + '/' + img_name))
 
-        X[0].save(image_dir + '/gifs/' + path + '.gif', save_all=True, append_images=X[1:], optimize=False, duration=1000, loop=0)
+        X[0].save(image_dir + '/gifs/' + path + '.gif', save_all=True, append_images=X[1:], optimize=False, duration=200, loop=0)
 
 if __name__ == "__main__":
-    RES = 'Results\\20201020180847496'
-    keys_list = ['h2', 'h']
+    RES = 'Results\\20201024221834845'
+    keys_list = ['Eic', 'Eg']
     draw_graph(RES, keys_list)
