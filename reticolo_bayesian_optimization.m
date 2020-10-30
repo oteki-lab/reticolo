@@ -10,8 +10,8 @@ notification    = false;    % true: send result mail (set address in sendMail.m)
 cal_structure_x = false;    % true: calculate structure (x direction)
 cal_structure_y = false;    % true: calculate structure (y direction)
 
-take_over = '20201024221834845';    % directory name of simulation on the way
-count_limit = 500;                   % limitation of iterative count, 0: only initialization
+take_over = '20201026135706568';     % directory name of simulation on the way
+count_limit = 163;                   % limitation of iterative count, 0: only initialization
 
 %% make output direcory in Results
 dateString = datestr(datetime('now'),'yyyymmddHHMMssFFF');
@@ -54,8 +54,8 @@ else
     %for i =1:height(hp_table)
     %    params = horzcat(params, [hp_table{i,2}, hp_table{i,3}]);
     %end
-    params = horzcat(params, [0.06, 0.6, 1.2, 1.8, 2.4, 3.00]);
-    params = horzcat(params, [0.03, 0.3, 0.9, 1.5, 2.1, 2.97]);
+    params = horzcat(params, [0.10, 0.5, 1.0, 1.5, 2.5, 3.00]);
+    params = horzcat(params, [0.05, 0.4, 0.9, 1.4, 2.4, 2.95]);
     init_steps = cell2table(table2cell(array2table(allcomb(params{:}))), 'VariableNames',hp_table{:,'name'});
     count_limit = count_limit + height(init_steps);
 end
