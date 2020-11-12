@@ -586,10 +586,8 @@ if cal_abs
         data = horzcat(data, Abs_array_eV{index});
     end
     Abs_table = vertcat(header,data);
-    filename = append(in.prefix,"Abs.mat");
-    save(filename, 'Abs_table');
-    filename = append(in.prefix, "Abs.csv");
-    writematrix(Abs_table, filename, 'Delimiter',',');
+    save(append(in.prefix,"Abs.mat"), 'Abs_table');
+    writematrix(Abs_table, append(in.prefix, "Abs.csv"), 'Delimiter',',');
 
     save(text);
 end
