@@ -168,8 +168,13 @@ Nb_pts_z_semicon=50;                % Number of points in the z direction to cal
 
 % IMPORTANT: only one wavelength
 trace_champ = npoints==1;           % si 1,calculates a cross-section of the field
-x0=0;                               % Cross section along x=x0 if trace_champ=1 ([] if the cross-section is along another direction)
-y0=[];                              % Cross section along y=y0 if trace_champ=1 ([] if the cross-section is along another direction)
+if in.horizontal_label == 'x'
+    x0=0;                           % Cross section along x=x0 if trace_champ=1 ([] if the cross-section is along another direction)
+    y0=[];                          % Cross section along y=y0 if trace_champ=1 ([] if the cross-section is along another direction)
+else
+    x0=[];                          % Cross section along x=x0 if trace_champ=1 ([] if the cross-section is along another direction)
+    y0=0;                           % Cross section along y=y0 if trace_champ=1 ([] if the cross-section is along another direction)
+end
 z0=[];                              % Cross section along z=z0 if trace_champ=1 ([] if the cross-section is along another direction)
                                     % note: z=0 corresponds to the bottom of the considered stack, at a depth h_sub inside the substrate
 h_air=0.05;                         % Thickness in incident medium to represent the cross-section (trace_champ=1)

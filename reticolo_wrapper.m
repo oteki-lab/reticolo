@@ -4,13 +4,13 @@ clear;retio;
 
 %% flags
 notification    = false;    % true: send result mail (set address in sendMail.m)
-cal_absorption  = true;     % true: calculate absorption
+cal_absorption  = false;     % true: calculate absorption
 cal_structure_x = true;     % true: calculate structure (x direction)
 cal_structure_y = true;     % true: calculate structure (y direction)
-cal_current     = true;     % true: calculate current density from absorption
+cal_current     = false;     % true: calculate current density from absorption
 
 %% make output direcory in Results
-dateString = datestr(datetime('now'),'yyyymmddHHMMssFFF');
+dateString = datestr(datetime('now'),'yyyymmddHHMMSSFFF');
 disp(['make new directory: ',dateString]);
 res_dir = ['Results\',dateString];
 mkdir(res_dir);
