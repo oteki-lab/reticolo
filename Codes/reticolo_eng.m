@@ -142,7 +142,7 @@ My=double(in.My);                                   % Number of Fourier terms in
 % Parameters of each layer
 nh=1;                                               % Refraction indices of Air (front)
 nsub=ones(size(wavelength));                        % Refraction indices of Air (back)
-Nb_couches = length(in.params);                        % Total number of layers
+Nb_couches = size(in.params,1);                        % Total number of layers
 
 %% Numerical parameters
 pol=in.pol;                         % For normal incidence, TM <=> H//y and TE <=> E//y
