@@ -573,19 +573,19 @@ if cal_abs
 
     wavelength_A = wavelength;
     load('Solarspectrum.mat','wavelength')                                          % spectra loaded in [W.m^-2.nm^-1]
-    w_range = find(wavelength==lambdamin*1000):find(wavelength==lambdamax*1000);
+    w_range = find(wavelength==lambdamin*1000):find(wavelength==lambdamax*1000+1);
     wavelength_S = wavelength(w_range);                                             % wavelength from wavmin to wavmax [nm]
     E_A = fliplr(h*c./(q*wavelength_A*1e-6));                                       % from wavelength [nm] to energy [eV]
     E_S = fliplr(flipud(h*c./(wavelength_S*1e-9))/q);                               % from wavelength [nm] to energy [eV]
 
     % 1-D data interpolation
     for index = 1:length(Abs_array)
-        Abs_array_eV{index} = interp1(E_A,fliplr(Abs_array{index}),E_S,'makima');
+        Abs_array_eV{index} = interp1(E_A,fliplr(Abs_array{index}),E_S(1:end-1),'makima');
     end
 
     % create absorption table
     header = ["wavelength","energy"];
-    data = [flipud(wavelength_S),E_S];
+    data = [flipud(wavelength_S(1:end-1)),E_S(1:end-1)];
     for index = 1:length(Abs_array)
         header= horzcat(header, in.layers{index});
         data = horzcat(data, Abs_array_eV{index});
