@@ -165,8 +165,8 @@ Nb_pts_z_semicon=50;                        % Number of points in the z directio
 % IMPORTANT: only one wavelength
 trace_champ = npoints==1;                   % si 1,calculates a cross-section of the field
 x0 = tif(in.horizontal_label == 'x',0,[]);  % Cross section along x=x0 if trace_champ=1 ([] if the cross-section is along another direction)
-y0 = tif(in.horizontal_label == 'x',[],0);  % Cross section along y=y0 if trace_champ=1 ([] if the cross-section is along another direction)
-z0=[];                                      % Cross section along z=z0 if trace_champ=1 ([] if the cross-section is along another direction)
+y0 = tif(in.horizontal_label == 'y',0,[]);  % Cross section along y=y0 if trace_champ=1 ([] if the cross-section is along another direction)
+z0 = tif(in.horizontal_label == 'z',2.8,[]);  % Cross section along z=z0 if trace_champ=1 ([] if the cross-section is along another direction)
                                             % note: z=0 corresponds to the bottom of the considered stack, at a depth h_sub inside the substrate
 h_air=0.05;                                 % Thickness in incident medium to represent the cross-section (trace_champ=1)
 h_sub=0.05;                                 % Thickness in the substrate to represent the cross-section  (trace_champ=1)
@@ -189,7 +189,7 @@ A_tot=zeros(1,length(wavelength));
 A_sub=zeros(1,length(wavelength));
 Abs=zeros(n_layer,length(wavelength));
 Abs_plots=zeros(n_layer,length(wavelength));
-XX=[]; YY=[]; ZZ=[]; E_x=[]; E_y=[]; INDICE=[];
+XX=[]; YY=[]; ZZ=[]; E_x=[]; E_y=[]; E_z=[]; INDICE=[];
 Ntre=1;
 H=cell2mat(in.params(:,1));
 n = cell2mat(in.params(:,2));
@@ -439,10 +439,10 @@ parfor zou=1:length(wavelength)
             o0(:,:,:,ii)=1;
         end
         indice=squeeze(sqrt(o0(:,:,:,4)));
-        Ex=squeeze(e0(:,:,:,1));Ey=squeeze(e0(:,:,:,2));Ez=squeeze(e0(:,:,:,3));
-        Hx=squeeze(e0(:,:,:,4));Hy=squeeze(e0(:,:,:,5));Hz=squeeze(e0(:,:,:,6));
+        Ex=squeeze(e0(:,:,:,1)); Ey=squeeze(e0(:,:,:,2)); Ez=squeeze(e0(:,:,:,3));
+        Hx=squeeze(e0(:,:,:,4)); Hy=squeeze(e0(:,:,:,5)); Hz=squeeze(e0(:,:,:,6));
 
-        XX=[XX,xx]; YY=[YY,yy]; ZZ=[ZZ,zz]; E_x=[E_x,Ex]; E_y=[E_y,Ey]; INDICE=[INDICE,indice];
+        XX=[XX,xx]; YY=[YY,yy]; ZZ=[ZZ,zz]; E_x=[E_x,Ex]; E_y=[E_y,Ey]; E_z=[E_z,Ez]; INDICE=[INDICE,indice];
     end
 
 end
@@ -453,16 +453,35 @@ end
 %%%% Hy as a function of x and z
 %%%% The separation between the layers is in white (indice contains the position of all indices)
 if trace_champ
-    horizontal = tif(in.horizontal_label == 'x',XX,YY);
-    E = tif(in.horizontal_label == 'x', E_y, E_x);
+    if in.horizontal_label == 'x'
+        horizontal = XX;
+        vertical = ZZ;
+        horizontal_label = 'x';
+        vertical_label = 'z';
+        E = E_y;
+    elseif in.horizontal_label == 'y'
+        horizontal = YY;
+        vertical = ZZ;
+        horizontal_label = 'y';
+        vertical_label = 'z';
+        E = E_x;
+    else
+        horizontal = XX;
+        vertical = YY;
+        horizontal_label = 'x';
+        vertical_label = 'y';
+        E = E_z;
+    end    
+    %horizontal = tif(in.horizontal_label == 'x',XX,YY);
+    %E = tif(in.horizontal_label == 'x', E_y, E_x);
     figure
-    pcolor(horizontal,ZZ,abs(E).^2);
+    pcolor(horizontal,vertical,abs(E).^2);
     shading interp;
     colormap(jet);
     hold on
-    contour(real(horizontal),real(ZZ),real(INDICE),'black','linewidth',2);
-    xlabel(in.horizontal_label)
-    ylabel('z')
+    contour(real(horizontal),real(vertical),real(INDICE),'black','linewidth',0.01);
+    xlabel(horizontal_label)
+    ylabel(vertical_label)
     hold off
 
     filename = append(in.prefix,"cross-section_",in.horizontal_label,"_.png");

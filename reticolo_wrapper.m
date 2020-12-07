@@ -4,10 +4,11 @@ clear;retio;
 
 %% flags
 notification    = false;    % true: send result mail (set address in sendMail.m)
-cal_absorption  = true;     % true: calculate absorption
-cal_structure_x = true;     % true: calculate structure (x direction)
-cal_structure_y = true;     % true: calculate structure (y direction)
-cal_current     = true;     % true: calculate current density from absorption
+cal_absorption  = false;     % true: calculate absorption
+cal_structure_x = false;     % true: calculate structure (x direction)
+cal_structure_y = false;     % true: calculate structure (y direction)
+cal_structure_z = true;     % true: calculate structure (z direction)
+cal_current     = false;     % true: calculate current density from absorption
 
 %% make output direcory in Results
 dateString = datestr(datetime('now'),'yyyymmddHHMMSSFFF');
@@ -55,8 +56,8 @@ for index = 1:l
         end
         
         % calculate structure
-        in.Mx = 0;
-        in.My = 0;
+        in.Mx = 5;
+        in.My = 5;
         in.npoints = 1;
         % x direction
         if cal_structure_x
@@ -66,6 +67,11 @@ for index = 1:l
         % y direction
         if cal_structure_y
             in.horizontal_label = 'y';
+            attachments(length(attachments)+1) = reticolo_eng(in);
+        end
+        % z direction
+        if cal_structure_z
+            in.horizontal_label = 'z';
             attachments(length(attachments)+1) = reticolo_eng(in);
         end
         

@@ -6,12 +6,13 @@ for az=1:n_layer
     if Nm(az)==0
         u{az}=retu(period,{N(az),k0});
     else
-        % u{az}=retu(period,{N(az),[0,0,diameter_x,diameter_y,Nm(az),Ntre],[-diameter_x/2+w_rectangle/2,diameter_y/2+h_rectangle/2,w_rectangle,h_rectangle,Nm(az),Ntre],[diameter_x/2+h_rectangle/2,-diameter_y/2+w_rectangle/2,h_rectangle,w_rectangle,Nm(az),Ntre ],k0});
-        if N(az)==1    %Nm(az)~=0
+        dx=11; dy=11;
+        if N(az)==1
             structure_array = {};
-            for px=-5:5
-                for py=-5:5
-                    structure_array = [structure_array, [1200*2*px/11,1200*2*py/11,diameter_x(az),diameter_y(az),Nm(az),Ntre]];
+            for px=-(dx-1)/2:(dx-1)/2
+                for py=-(dy-1)/2:(dy-1)/2
+                    structure_array = [structure_array, [period(1)*1000*px/dx,period(2)*1000*py/dy,diameter_x(az),diameter_y(az),Nm(az),Ntre]];
+%                    structure_array = [structure_array, [period(1)*1000*px/dx,period(2)*1000*py/dy,period(1)/dx*0.9,0.9*period(2)/dy,Nm(az),Ntre]];
                 end
             end
             texture=[{N(az)},structure_array(:)',{k0}];
