@@ -1,8 +1,8 @@
-function [u,a] = structure(Nb_couches,period,N,Nm,k0,diameter_x,diameter_y,Ntre,init,op_retcouche)
+function [u,a] = structure(in,n_layer,period,N,Nm,k0,diameter_x,diameter_y,Ntre,init,op_retcouche)
 
 u=[];
 a=[];
-for az=1:Nb_couches
+for az=1:n_layer
     if Nm(az)==0
         u{az}=retu(period,{N(az),k0});
     else

@@ -244,7 +244,7 @@ parfor zou=1:length(wavelength)
     ab=retcouche(init,ub,op_retcouche);
 
     % get structure
-    [u,a] = structure(n_layer,period,N,Nm,k0,diameter_x,diameter_y,Ntre,init,op_retcouche);
+    [u,a] = structure(in,n_layer,period,N,Nm,k0,diameter_x,diameter_y,Ntre,init,op_retcouche);
 
     if op_objet==1
         struct_test=cell(1,n_layer+2);
