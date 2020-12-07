@@ -142,7 +142,7 @@ My=double(in.My);                                   % Number of Fourier terms in
 % Parameters of each layer
 nh=1;                                               % Refraction indices of Air (front)
 nsub=ones(size(wavelength));                        % Refraction indices of Air (back)
-Nb_couches = size(in.params,1);                        % Total number of layers
+Nb_couches = size(in.params,1);                     % Total number of layers
 
 %% Numerical parameters
 pol=in.pol;                         % For normal incidence, TM <=> H//y and TE <=> E//y
@@ -261,30 +261,9 @@ parfor zou=1:length(wavelength)
     end
     ab=retcouche(init,ub,op_retcouche);
 
-    u=[];
-    a=[];
-    for az=1:Nb_couches
-        if Nm(az)==0
-            u{az}=retu(period,{N(az),k0});
-        else
-            % u{az}=retu(period,{N(az),[0,0,diameter_x,diameter_y,Nm(az),Ntre],[-diameter_x/2+w_rectangle/2,diameter_y/2+h_rectangle/2,w_rectangle,h_rectangle,Nm(az),Ntre],[diameter_x/2+h_rectangle/2,-diameter_y/2+w_rectangle/2,h_rectangle,w_rectangle,Nm(az),Ntre ],k0});
-            if N(az)==1    %Nm(az)~=0
-                structure_array = {};
-                for px=-5:5
-                    for py=-5:5
-                        structure_array = [structure_array, [1200*2*px/11,1200*2*py/11,diameter_x(az),diameter_y(az),Nm(az),Ntre]];
-                    end
-                end
-                texture=[{N(az)},structure_array(:)',{k0}];
-            else
-                structure=[0,0,diameter_x(az),diameter_y(az),Nm(az),Ntre];
-                texture={N(az),structure,k0};
-            end
+    % get structure
+    [u,a] = structure(Nb_couches,period,N,Nm,k0,diameter_x,diameter_y,Ntre,init,op_retcouche);
 
-            u{az}=retu(period,texture);
-        end
-        a{az}=retcouche(init,u{az},op_retcouche);
-    end
     if op_objet==1
         struct_test=cell(1,Nb_couches+2);
         struct_test{1}={0.1,uh};
