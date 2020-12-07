@@ -241,6 +241,16 @@ parfor zou=1:length(wavelength)
 
     ns=nsub(zou);
 
+    Number = zeros(length(n(:,1)));
+    for index = 1:length(n(:,1))
+        if length(n(index,:))==1; Number(index)=n(index); else; Number(index)=n(index, zou); end
+    end
+
+    Numberm = zeros(length(nm(:,1)));
+    for index = 1:length(nm(:,1))
+        if length(n(index,:))==1; Numberm(index)=n(index); else; Numberm(index)=n(index, zou); end
+    end
+
     N=set_layer_number(n,zou,Nb_couches);
     Nm=set_layer_number(nm,zou,Nb_couches);
     diameter_x=cell2mat(in.params(:,4));
