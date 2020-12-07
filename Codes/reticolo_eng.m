@@ -142,73 +142,60 @@ My=double(in.My);                                   % Number of Fourier terms in
 % Parameters of each layer
 nh=1;                                               % Refraction indices of Air (front)
 nsub=ones(size(wavelength));                        % Refraction indices of Air (back)
-Nb_couches = size(in.params,1);                     % Total number of layers
+n_layer = size(in.params,1);                     % Total number of layers
 
 %% Numerical parameters
-pol=in.pol;                         % For normal incidence, TM <=> H//y and TE <=> E//y
+pol=in.pol;                                 % For normal incidence, TM <=> H//y and TE <=> E//y
 
 % IMPORTANT: To be changed if non-normal incident or if non-rectangular structures
-if in.asymmetry
-    sym=[];            
-else
-    sym=[pol-1,pol-1,0,0];      % The symmetry of the structure, more symmetry means shorter calculation time
-end
+sym = tif(in.asymmetry, [], [pol-1,pol-1,0,0]); % [pol-1,pol-1,0,0]: The symmetry of the structure, more symmetry means shorter calculation time
 % if theta(1)==0 && theta(2)==0;sym=[pol-1,pol-1,0,0];end;
 % if theta(1)~=0 && theta(2)==0;sym=[0,pol-1,0,0];end;
 % if theta(1)==0 && theta(2)~=0;sym=[1-pol,0,0,0];end;
 % if theta(1)~=0 && theta(2)~=0;sym=[];end;
 
-cal_abs = npoints>1;                % If 1, calculate absorption in each layer
-Nb_pts_z=10;                        % Number of points in z to calculate absorption, when absorption is calculated in each layer
+cal_abs = npoints>1;                        % If 1, calculate absorption in each layer
+Nb_pts_z=10;                                % Number of points in z to calculate absorption, when absorption is calculated in each layer
 
 % IMPORTANT: only one wavelength (calculate can be quite heavy, depending on Nb_pts_z_semicon)
-cal_champ=0;                        % If 1, calculate the field in layer N_semicon
-N_semicon=3;                        % Layer where field is calculated (if cal_champ=1)
-Nb_pts_z_semicon=50;                % Number of points in the z direction to calculate the field in N_semicon (if cal_champ=1)
+cal_champ=0;                               % If 1, calculate the field in layer N_semicon
+N_semicon=3;                                % Layer where field is calculated (if cal_champ=1)
+Nb_pts_z_semicon=50;                        % Number of points in the z direction to calculate the field in N_semicon (if cal_champ=1)
 
 % IMPORTANT: only one wavelength
-trace_champ = npoints==1;           % si 1,calculates a cross-section of the field
-if in.horizontal_label == 'x'
-    x0=0;                           % Cross section along x=x0 if trace_champ=1 ([] if the cross-section is along another direction)
-    y0=[];                          % Cross section along y=y0 if trace_champ=1 ([] if the cross-section is along another direction)
-else
-    x0=[];                          % Cross section along x=x0 if trace_champ=1 ([] if the cross-section is along another direction)
-    y0=0;                           % Cross section along y=y0 if trace_champ=1 ([] if the cross-section is along another direction)
-end
-z0=[];                              % Cross section along z=z0 if trace_champ=1 ([] if the cross-section is along another direction)
-                                    % note: z=0 corresponds to the bottom of the considered stack, at a depth h_sub inside the substrate
-h_air=0.05;                         % Thickness in incident medium to represent the cross-section (trace_champ=1)
-h_sub=0.05;                         % Thickness in the substrate to represent the cross-section  (trace_champ=1)
-h_2pts=20;                          % distance between 2 points in z pour the layers whose thickness is higher than 1??m (trace_champ=1)
-op_objet=0;                         % If 1, plot the geometry to verify the calculated structure is correct
+trace_champ = npoints==1;                   % si 1,calculates a cross-section of the field
+x0 = tif(in.horizontal_label == 'x',0,[]);  % Cross section along x=x0 if trace_champ=1 ([] if the cross-section is along another direction)
+y0 = tif(in.horizontal_label == 'x',[],0);  % Cross section along y=y0 if trace_champ=1 ([] if the cross-section is along another direction)
+z0=[];                                      % Cross section along z=z0 if trace_champ=1 ([] if the cross-section is along another direction)
+                                            % note: z=0 corresponds to the bottom of the considered stack, at a depth h_sub inside the substrate
+h_air=0.05;                                 % Thickness in incident medium to represent the cross-section (trace_champ=1)
+h_sub=0.05;                                 % Thickness in the substrate to represent the cross-section  (trace_champ=1)
+h_2pts=20;                                  % distance between 2 points in z pour the layers whose thickness is higher than 1??m (trace_champ=1)
+op_objet=0;                                 % If 1, plot the geometry to verify the calculated structure is correct
 
 % IMPORTANT: this parameter is tricky to use, and does not work out of normal incidence. Better keep it at zero
-op_granet=0;                        % If 1, RCWA is modified to improve convergence (Transforms the real coordinates at discontinuities)
+op_granet=0;                                % If 1, RCWA is modified to improve convergence (Transforms the real coordinates at discontinuities)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Code (for parallel computing of the absorption)
 
 % Initialisation of the parameters for parallel computing
-ref_TE_TE=zeros(1,length(wavelength));
-ref_TE_TM=ref_TE_TE;
-ref_TM_TM=ref_TE_TE;
-ref_TM_TE=ref_TE_TE;
-R0_TE_TE=zeros(1,length(wavelength));
-R0_TE_TM=R0_TE_TE;
-R0_TM_TM=R0_TE_TE;
-R0_TM_TE=R0_TE_TE;
+ref_TE_TE=zeros(1,length(wavelength)); R0_TE_TE=zeros(1,length(wavelength));
+ref_TE_TM=zeros(1,length(wavelength)); R0_TE_TM=zeros(1,length(wavelength));
+ref_TM_TM=zeros(1,length(wavelength)); R0_TM_TM=zeros(1,length(wavelength));
+ref_TM_TE=zeros(1,length(wavelength)); R0_TM_TE=zeros(1,length(wavelength));
 A_tot=zeros(1,length(wavelength));
 A_sub=zeros(1,length(wavelength));
-Abs=zeros(Nb_couches,length(wavelength));
-Abs_plots=zeros(Nb_couches,length(wavelength));
-XX = []; YY = []; ZZ = []; E_x = []; E_y = []; INDICE = [];
+Abs=zeros(n_layer,length(wavelength));
+Abs_plots=zeros(n_layer,length(wavelength));
+XX=[]; YY=[]; ZZ=[]; E_x=[]; E_y=[]; INDICE=[];
 Ntre=1;
 H=cell2mat(in.params(:,1));
 n = cell2mat(in.params(:,2));
 nm = cell2mat(in.params(:,3));
 if cal_abs||cal_champ==1||trace_champ;op_retcouche=1; else; op_retcouche=0; end
-if H(Nb_couches)<1e-5;disp('WARNING : There is a problem in the definition of the layers number !!'); return; end
+if H(n_layer)<1e-5;disp('WARNING : There is a problem in the definition of the layers number !!'); return; end
 if trace_champ&&isempty(x0)==1&&isempty(y0)==1&&isempty(z0)==1;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 if trace_champ&&isempty(x0)==0&&isempty(y0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 if trace_champ&&isempty(x0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
@@ -220,57 +207,52 @@ parfor zou=1:length(wavelength)
     inc=[];
     e0=[];
     o0=[];
-    R0_TE_TE_vect=zeros(1);
-    R0_TE_TM_vect=R0_TE_TE_vect;
-    R0_TM_TM_vect=R0_TE_TE_vect;
-    R0_TM_TE_vect=R0_TE_TE_vect;
-    ref_TE_TE_vect=zeros(1);ref_TE_TM_vect=ref_TE_TE_vect;ref_TM_TM_vect=ref_TE_TE_vect;ref_TM_TE_vect=ref_TE_TE_vect;
+    R0_TE_TE_vect=zeros(1); ref_TE_TE_vect=zeros(1);
+    R0_TE_TM_vect=zeros(1); ref_TE_TM_vect=zeros(1);
+    R0_TM_TM_vect=zeros(1); ref_TM_TM_vect=zeros(1);
+    R0_TM_TE_vect=zeros(1); ref_TM_TE_vect=zeros(1);
     A_tot_vect=zeros(1);
     A_sub_vect=zeros(1);
-    Abs_vect=zeros(Nb_couches,1);
-    Abs_plots_vect=zeros(Nb_couches,1);
+    Abs_vect=zeros(n_layer,1);
+    Abs_plots_vect=zeros(n_layer,1);
     test_vect=zeros(1);
-    Einc=[];Hinc=[];E_semicon=[];H_semicon=[];x_semicon=[];y_semicon=[];z_semicon=[];W_semicon=[];
-    Ex=[];Ey=[];Ez=[];Hx=[];Hy=[];Hz=[];
-
-    xx=[];yy=[];zz=[];indice=[];
+    xx=[]; yy=[]; zz=[]; Ex=[]; Ey=[]; Ez=[]; Hx=[]; Hy=[]; Hz=[]; indice=[];
+    Einc=[]; E_semicon=[]; x_semicon=[]; z_semicon=[];
+    Hinc=[]; H_semicon=[]; y_semicon=[]; W_semicon=[];
+    
     lwa=wavelength(zou);
     k0=2*pi/lwa;
-    %tic
-    period=[period_x,period_y];
+    period=[period_x, period_y];
 
     ns=nsub(zou);
-
-    N=set_layer_number(n,zou,Nb_couches);
-    Nm=set_layer_number(nm,zou,Nb_couches);
-    diameter_x=cell2mat(in.params(:,4));
-    diameter_y=cell2mat(in.params(:,5));
-    Bx=500;Ax=0.02/Bx;By=Bx;Ay=Ax;
-    xdisc=[-diameter_x/2,diameter_x/2];ydisc=[-diameter_y/2,diameter_y/2];
-    kx=k0*nh*sin(theta(1)*pi/180);
-    ky=k0*nh*sin(theta(2)*pi/180);
-    beta=[kx,ky];
+    N=set_layer_number(n,zou,n_layer);      Nm=set_layer_number(nm,zou,n_layer);
+    diameter_x=cell2mat(in.params(:,4));    diameter_y=cell2mat(in.params(:,5));
+    xdisc=[-diameter_x/2,diameter_x/2];     ydisc=[-diameter_y/2,diameter_y/2];
+    Bx=500; Ax=0.02/Bx; By=Bx; Ay=Ax;
+    beta=[k0*nh*sin(theta(1)*pi/180), k0*nh*sin(theta(2)*pi/180)];
 
     uh=retu(period,{nh,k0});
     ub=retu(period,{ns,k0});
 
     if op_granet==1
-        init=retinit(period,[-Mx,Mx,-My,My],beta,sym,{[],{xdisc,Ax,Bx,ydisc,Ay,By}});ah=retcouche(init,uh,1);
+        init=retinit(period,[-Mx,Mx,-My,My],beta,sym,{[],{xdisc,Ax,Bx,ydisc,Ay,By}});
+        ah=retcouche(init,uh,1);
     else
-        init=retinit(period,[-Mx,Mx,-My,My],beta,sym);ah=retcouche(init,uh,op_retcouche);
+        init=retinit(period,[-Mx,Mx,-My,My],beta,sym);
+        ah=retcouche(init,uh,op_retcouche);
     end
     ab=retcouche(init,ub,op_retcouche);
 
     % get structure
-    [u,a] = structure(Nb_couches,period,N,Nm,k0,diameter_x,diameter_y,Ntre,init,op_retcouche);
+    [u,a] = structure(n_layer,period,N,Nm,k0,diameter_x,diameter_y,Ntre,init,op_retcouche);
 
     if op_objet==1
-        struct_test=cell(1,Nb_couches+2);
+        struct_test=cell(1,n_layer+2);
         struct_test{1}={0.1,uh};
-        for az=1:Nb_couches
+        for az=1:n_layer
             struct_test{az+1}={H(az),u{az}};
         end
-        struct_test{Nb_couches+2}={0.05,ub};
+        struct_test{n_layer+2}={0.05,ub};
         rettestobjet(period,struct_test,[0,-1.5,1],[2,2,-period/2]);
         rettestobjet(period,struct_test,[0,-2],[2,2,-period/2]);
     end
@@ -285,16 +267,16 @@ parfor zou=1:length(wavelength)
         [sh,haut,beth,ch,anglh]=retb(init,ah,1e-4);
     end
     ordre=[0,0];
-    K=[kx,ky]+ordre*2*pi./period;
+    K=beta+ordre*2*pi./period;
     inch=find(((K(1)-beth(:,1)).^2+(K(2)-beth(:,2)).^2)<1e-8);
     difh=inch;
     sh=rettronc(sh,haut(inch,1),haut(difh,1),1);
 
     [sb,bas,betb,cb,anglb]=retb(init,ab,-0.001);
-    incb=[];difb=[];
+    incb=[]; difb=[];
     sb=rettronc(sb,bas(incb,1),bas(difb,1),-1);
     stemp=retc(a{1},H(1));
-    for az=2:Nb_couches
+    for az=2:n_layer
         stemp=retss(stemp,retc(a{az},H(az)));
     end
 
@@ -326,7 +308,7 @@ parfor zou=1:length(wavelength)
         [Y,wY]=retgauss(-period_y/2,period_y/2,15,10,Ydisc);
         [x,y]=retgranet(init,'num2phys',X,Y);
         [X,Y,Xder,Yder]=retgranet(init,x,y);
-        wx=wX./Xder;wy=wY./Yder;
+        wx=wX./Xder; wy=wY./Yder;
     else
         [x,wx]=retgauss(-period_x/2,period_x/2,15,10,[-unique(diameter_x)/2,unique(diameter_x)/2]);
         [y,wy]=retgauss(-period_y/2,period_y/2,15,10,[-unique(diameter_y)/2,unique(diameter_y)/2]);
@@ -341,7 +323,7 @@ parfor zou=1:length(wavelength)
             inc=[0,0];
             if pol==0;inc(ef.inc.TE)=1; elseif pol==2; inc(ef.inc.TM)=1; end
         end
-        for az=1:(Nb_couches)
+        for az=1:(n_layer)
             [ei,zi]=retchamp(init,{ah},sh,sb_norm,inc,{x,y},tab_norm,[],1:6,1,1,1:6);
             flux=retpoynting(ei,[0,0,-1],wx,wy,[]);
             inc=1/sqrt(flux).*inc;
@@ -364,10 +346,10 @@ parfor zou=1:length(wavelength)
         end
         num=retelimine(num);
 
-        tab=zeros(Nb_couches,3); %tab=[];
+        tab=zeros(n_layer,3); %tab=[];
         tab2=[];
         struct={ab};
-        for az=1:Nb_couches
+        for az=1:n_layer
             tab(az,:)=[H(az),az+1,0];               %tab=[tab;[H(az),az+1,0]];
             tab2=[tab2;[0,az+1,1];[H(az),az+1,0]];
             struct=[struct(:)',a(az)];
@@ -387,8 +369,8 @@ parfor zou=1:length(wavelength)
 
         A_sub_vect=flux_poyn(2)-flux_poyn(1);
 
-        for az=1:Nb_couches
-            Abs_vect(Nb_couches-az+1)=flux_poyn(az+2)-flux_poyn(az+1);
+        for az=1:n_layer
+            Abs_vect(n_layer-az+1)=flux_poyn(az+2)-flux_poyn(az+1);
         end
 
         for az=1:length(num)
@@ -407,9 +389,9 @@ parfor zou=1:length(wavelength)
     end
 
     if cal_champ==1
-        tab_semicon=zeros(Nb_couches);  %tab_semicon=[];
+        tab_semicon=zeros(n_layer);  %tab_semicon=[];
         struct={ab};
-        for az=1:Nb_couches
+        for az=1:n_layer
             tab_semicon(az)=[tab_semicon;[H(az),az+1,0]];   %tab_semicon=[tab_semicon;[H(az),az+1,0]];
             struct=[struct(:)',a(az)];
         end
@@ -425,15 +407,15 @@ parfor zou=1:length(wavelength)
     end
 
     if trace_champ
-        tab0 = zeros(Nb_couches+2,3);
+        tab0 = zeros(n_layer+2,3);
         tab0(1,:) = [h_air,1,Nb_pts_z+10];    %tab0=[h_air,1,Nb_pts_z+10];
         struct0={ah};
-        for az=1:Nb_couches
+        for az=1:n_layer
             tab0(az+1,:)=[H(az),az+1,Nb_pts_z+10];  %tab0=[tab0;[H(az),az+1,Nb_pts_z+10]];
             struct0=[struct0(:)',a(az)];
         end
         struct0=[struct0(:)',{ab}];
-        tab0(Nb_couches+2,:)=[h_sub,Nb_couches+2,Nb_pts_z+10];  %tab0=[tab0;[h_sub,Nb_couches+2,Nb_pts_z+10]];
+        tab0(n_layer+2,:)=[h_sub,n_layer+2,Nb_pts_z+10];  %tab0=[tab0;[h_sub,n_layer+2,Nb_pts_z+10]];
         tab0(tab0(:,1)>1,3)=floor(tab0(tab0(:,1)>1,1)*1000/h_2pts);
 
         [xx,wx]=retgauss(-period_x/2,period_x/2,15,12,[-diameter_x/2,diameter_x/2]);
@@ -460,7 +442,7 @@ parfor zou=1:length(wavelength)
         Ex=squeeze(e0(:,:,:,1));Ey=squeeze(e0(:,:,:,2));Ez=squeeze(e0(:,:,:,3));
         Hx=squeeze(e0(:,:,:,4));Hy=squeeze(e0(:,:,:,5));Hz=squeeze(e0(:,:,:,6));
 
-        XX = [XX,xx]; YY = [YY,yy]; ZZ = [ZZ,zz]; E_x = [E_x,Ex]; E_y = [E_y,Ey]; INDICE = [INDICE,indice];
+        XX=[XX,xx]; YY=[YY,yy]; ZZ=[ZZ,zz]; E_x=[E_x,Ex]; E_y=[E_y,Ey]; INDICE=[INDICE,indice];
     end
 
 end
@@ -471,13 +453,8 @@ end
 %%%% Hy as a function of x and z
 %%%% The separation between the layers is in white (indice contains the position of all indices)
 if trace_champ
-    if in.horizontal_label == 'x'
-        horizontal = XX;
-        E = E_y;
-    else
-        horizontal = YY;
-        E = E_x;
-    end
+    horizontal = tif(in.horizontal_label == 'x',XX,YY);
+    E = tif(in.horizontal_label == 'x', E_y, E_x);
     figure
     pcolor(horizontal,ZZ,abs(E).^2);
     shading interp;

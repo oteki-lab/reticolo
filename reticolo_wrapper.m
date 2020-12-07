@@ -5,8 +5,8 @@ clear;retio;
 %% flags
 notification    = false;    % true: send result mail (set address in sendMail.m)
 cal_absorption  = true;     % true: calculate absorption
-cal_structure_x = false;     % true: calculate structure (x direction)
-cal_structure_y = false;     % true: calculate structure (y direction)
+cal_structure_x = true;     % true: calculate structure (x direction)
+cal_structure_y = true;     % true: calculate structure (y direction)
 cal_current     = true;     % true: calculate current density from absorption
 
 %% make output direcory in Results
