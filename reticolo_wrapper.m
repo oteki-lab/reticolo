@@ -5,9 +5,9 @@ clear;retio;
 %% flags
 notification    = false;    % true: send result mail (set address in sendMail.m)
 cal_absorption  = false;     % true: calculate absorption
-cal_structure_x = false;     % true: calculate structure (x direction)
-cal_structure_y = false;     % true: calculate structure (y direction)
-cal_structure_z = true;     % true: calculate structure (z direction)
+cal_structure_yz = true;     % true: calculate structure (x direction)
+cal_structure_xz = true;     % true: calculate structure (y direction)
+cal_structure_xy = true;     % true: calculate structure (z direction)
 cal_current     = false;     % true: calculate current density from absorption
 
 %% make output direcory in Results
@@ -45,8 +45,8 @@ for index = 1:l
         in.res = ['period_',int2str(in.period_x*1000),'_diam_',int2str(in.diam_x*1000),'wav',int2str(in.lambdamin*1000),'_',int2str(in.lambdamax*1000),'_npoints',int2str(in.npoints),'_Fourier',int2str(in.Mx)];
 
         % calculate absorption
-        in.horizontal_label = 'x';
         if cal_absorption
+            in.cs_x=[]; in.cs_y=in.y0; in.cs_z=[];
             attachments(length(attachments)+1) = reticolo_eng(in);
         end
 
@@ -56,22 +56,22 @@ for index = 1:l
         end
         
         % calculate structure
-        in.Mx = 5;
-        in.My = 5;
+        in.Mx = 0;
+        in.My = 0;
         in.npoints = 1;
         % x direction
-        if cal_structure_x
-            in.horizontal_label = 'x';
+        if cal_structure_yz
+            in.cs_x=in.x0; in.cs_y=[]; in.cs_z=[];
             attachments(length(attachments)+1) = reticolo_eng(in);
         end
         % y direction
-        if cal_structure_y
-            in.horizontal_label = 'y';
+        if cal_structure_xz
+            in.cs_x=[]; in.cs_y=in.y0; in.cs_z=[];
             attachments(length(attachments)+1) = reticolo_eng(in);
         end
         % z direction
-        if cal_structure_z
-            in.horizontal_label = 'z';
+        if cal_structure_xy
+            in.cs_x=[]; in.cs_y=[]; in.cs_z=in.z0;
             attachments(length(attachments)+1) = reticolo_eng(in);
         end
         

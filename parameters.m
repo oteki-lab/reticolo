@@ -7,9 +7,14 @@ in.npoints = 1;        % point number of wavelength
 in.lambdamin = 1.2;     % min wavelength
 in.lambdamax = 1.2;     % max wavelength
 
+%% Cross section along x0, y0, z0
+in.x0 = 0;
+in.y0 = 0;
+in.z0 = 2.8;
+
 %% x
 % Number of Fourier terms
-in.Mx = 5;
+in.Mx = 0;
 % period of nano structure
 in.diam_x = 0.215;
 % height of nano structure

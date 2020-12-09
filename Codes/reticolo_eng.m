@@ -145,7 +145,7 @@ nsub=ones(size(wavelength));                        % Refraction indices of Air 
 n_layer = size(in.params,1);                     % Total number of layers
 
 %% Numerical parameters
-pol=in.pol;                                 % For normal incidence, TM <=> H//y and TE <=> E//y
+pol=in.pol;                 % For normal incidence, TM <=> H//y and TE <=> E//y
 
 % IMPORTANT: To be changed if non-normal incident or if non-rectangular structures
 sym = tif(in.asymmetry, [], [pol-1,pol-1,0,0]); % [pol-1,pol-1,0,0]: The symmetry of the structure, more symmetry means shorter calculation time
@@ -154,27 +154,27 @@ sym = tif(in.asymmetry, [], [pol-1,pol-1,0,0]); % [pol-1,pol-1,0,0]: The symmetr
 % if theta(1)==0 && theta(2)~=0;sym=[1-pol,0,0,0];end;
 % if theta(1)~=0 && theta(2)~=0;sym=[];end;
 
-cal_abs = npoints>1;                        % If 1, calculate absorption in each layer
-Nb_pts_z=10;                                % Number of points in z to calculate absorption, when absorption is calculated in each layer
+cal_abs = npoints>1;        % If 1, calculate absorption in each layer
+Nb_pts_z=10;                % Number of points in z to calculate absorption, when absorption is calculated in each layer
 
 % IMPORTANT: only one wavelength (calculate can be quite heavy, depending on Nb_pts_z_semicon)
-cal_champ=0;                               % If 1, calculate the field in layer N_semicon
-N_semicon=3;                                % Layer where field is calculated (if cal_champ=1)
-Nb_pts_z_semicon=50;                        % Number of points in the z direction to calculate the field in N_semicon (if cal_champ=1)
+cal_champ=0;                % If 1, calculate the field in layer N_semicon
+N_semicon=3;                % Layer where field is calculated (if cal_champ=1)
+Nb_pts_z_semicon=50;        % Number of points in the z direction to calculate the field in N_semicon (if cal_champ=1)
 
 % IMPORTANT: only one wavelength
-trace_champ = npoints==1;                   % si 1,calculates a cross-section of the field
-x0 = tif(in.horizontal_label == 'x',0,[]);  % Cross section along x=x0 if trace_champ=1 ([] if the cross-section is along another direction)
-y0 = tif(in.horizontal_label == 'y',0,[]);  % Cross section along y=y0 if trace_champ=1 ([] if the cross-section is along another direction)
-z0 = tif(in.horizontal_label == 'z',2.8,[]);  % Cross section along z=z0 if trace_champ=1 ([] if the cross-section is along another direction)
-                                            % note: z=0 corresponds to the bottom of the considered stack, at a depth h_sub inside the substrate
-h_air=0.05;                                 % Thickness in incident medium to represent the cross-section (trace_champ=1)
-h_sub=0.05;                                 % Thickness in the substrate to represent the cross-section  (trace_champ=1)
-h_2pts=20;                                  % distance between 2 points in z pour the layers whose thickness is higher than 1??m (trace_champ=1)
-op_objet=0;                                 % If 1, plot the geometry to verify the calculated structure is correct
+trace_champ = npoints==1;   % si 1,calculates a cross-section of the field
+x0 = in.cs_x;               % Cross section along x=x0 if trace_champ=1 ([] if the cross-section is along another direction)
+y0 = in.cs_y;               % Cross section along y=y0 if trace_champ=1 ([] if the cross-section is along another direction)
+z0 = in.cs_z;               % Cross section along z=z0 if trace_champ=1 ([] if the cross-section is along another direction)
+                            % note: z=0 corresponds to the bottom of the considered stack, at a depth h_sub inside the substrate
+h_air=0.05;                 % Thickness in incident medium to represent the cross-section (trace_champ=1)
+h_sub=0.05;                 % Thickness in the substrate to represent the cross-section  (trace_champ=1)
+h_2pts=20;                  % distance between 2 points in z pour the layers whose thickness is higher than 1??m (trace_champ=1)
+op_objet=0;                 % If 1, plot the geometry to verify the calculated structure is correct
 
 % IMPORTANT: this parameter is tricky to use, and does not work out of normal incidence. Better keep it at zero
-op_granet=0;                                % If 1, RCWA is modified to improve convergence (Transforms the real coordinates at discontinuities)
+op_granet=0;                % If 1, RCWA is modified to improve convergence (Transforms the real coordinates at discontinuities)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -189,7 +189,7 @@ A_tot=zeros(1,length(wavelength));
 A_sub=zeros(1,length(wavelength));
 Abs=zeros(n_layer,length(wavelength));
 Abs_plots=zeros(n_layer,length(wavelength));
-XX=[]; YY=[]; ZZ=[]; E_x=[]; E_y=[]; E_z=[]; INDICE=[];
+XX=[]; YY=[]; ZZ=[]; E_x=[]; E_y=[]; E_z=[]; INDICE=[]; CONTOUR=[]; CS=[];
 Ntre=1;
 H=cell2mat(in.params(:,1));
 n = cell2mat(in.params(:,2));
@@ -216,7 +216,7 @@ parfor zou=1:length(wavelength)
     Abs_vect=zeros(n_layer,1);
     Abs_plots_vect=zeros(n_layer,1);
     test_vect=zeros(1);
-    xx=[]; yy=[]; zz=[]; Ex=[]; Ey=[]; Ez=[]; Hx=[]; Hy=[]; Hz=[]; indice=[];
+    xx=[]; yy=[]; zz=[]; Ex=[]; Ey=[]; Ez=[]; Hx=[]; Hy=[]; Hz=[]; indice=[]; cs=0;
     Einc=[]; E_semicon=[]; x_semicon=[]; z_semicon=[];
     Hinc=[]; H_semicon=[]; y_semicon=[]; W_semicon=[];
     
@@ -407,6 +407,11 @@ parfor zou=1:length(wavelength)
     end
 
     if trace_champ
+        %disp(z0)
+        %layer_z = cumsum([0.0;H]);
+        %for lz=layer_z(:)'
+        %    disp(lz)
+        %end
         tab0 = zeros(n_layer+2,3);
         tab0(1,:) = [h_air,1,Nb_pts_z+10];    %tab0=[h_air,1,Nb_pts_z+10];
         struct0={ah};
@@ -422,10 +427,13 @@ parfor zou=1:length(wavelength)
         [yy,wy]=retgauss(-period_y/2,period_y/2,15,12,[-diameter_y/2,diameter_y/2]);
 
         if isempty(x0)==1&&isempty(z0)==1
+            cs=y0;
             [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,y0},tab0,[],(1:6)+7.25i,1,1,1:6);
         elseif isempty(y0)==1&&isempty(z0)==1
+            cs=x0;
             [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{x0,yy},tab0,[],(1:6)+7.25i,1,1,1:6);
         elseif isempty(x0)==1&&isempty(y0)==1
+            cs=z0;
             tab0(:,3)=0;
             HH=cumsum(tab0(:,1));
             numz=1;
@@ -443,51 +451,28 @@ parfor zou=1:length(wavelength)
         Hx=squeeze(e0(:,:,:,4)); Hy=squeeze(e0(:,:,:,5)); Hz=squeeze(e0(:,:,:,6));
 
         XX=[XX,xx]; YY=[YY,yy]; ZZ=[ZZ,zz]; E_x=[E_x,Ex]; E_y=[E_y,Ey]; E_z=[E_z,Ez]; INDICE=[INDICE,indice];
+        
+        ct = repmat(cs,size(indice));
+        ct(indice==1) = -1*(period_x+period_y);
+        CONTOUR = [CONTOUR,ct];
+        CS = [CS,cs];
     end
-
 end
 
 %% Saving and plotting output data
 
-%%%% Example to plot a cross section with trace_champ=1, x0=[], y0=0, z0=[]
-%%%% Hy as a function of x and z
-%%%% The separation between the layers is in white (indice contains the position of all indices)
+%%%% Plot a cross section with trace_champ=1, x0=[], y0=0, z0=[]
 if trace_champ
-    if in.horizontal_label == 'x'
-        horizontal = XX;
-        vertical = ZZ;
-        horizontal_label = 'x';
-        vertical_label = 'z';
-        E = E_y;
-    elseif in.horizontal_label == 'y'
-        horizontal = YY;
-        vertical = ZZ;
-        horizontal_label = 'y';
-        vertical_label = 'z';
-        E = E_x;
-    else
-        horizontal = XX;
-        vertical = YY;
-        horizontal_label = 'x';
-        vertical_label = 'y';
-        E = E_z;
-    end    
-    %horizontal = tif(in.horizontal_label == 'x',XX,YY);
-    %E = tif(in.horizontal_label == 'x', E_y, E_x);
-    figure
-    pcolor(horizontal,vertical,abs(E).^2);
-    shading interp;
-    colormap(jet);
-    hold on
-    contour(real(horizontal),real(vertical),real(INDICE),'black','linewidth',0.01);
-    xlabel(horizontal_label)
-    ylabel(vertical_label)
-    hold off
-
-    filename = append(in.prefix,"cross-section_",in.horizontal_label,"_.png");
-    saveas(gcf, filename);
+    if isempty(x0)==1&&isempty(z0)==1
+        filename = save_cross_section(in, XX, ZZ, CONTOUR, CS(1), E_x, 'x', 'z', 'y', [-period_y/2,period_y/2], [0 inf], [-period_x/2,period_x/2]);
+    elseif isempty(y0)==1&&isempty(z0)==1
+        filename = save_cross_section(in, YY, ZZ, CONTOUR, CS(1), E_y, 'y', 'z', 'x', [-period_x/2,period_x/2], [0 inf], [-period_y/2,period_y/2]);
+    elseif isempty(x0)==1&&isempty(y0)==1
+        filename = save_cross_section(in, XX, YY, CONTOUR, CS(1), E_z, 'x', 'y', 'z', [-period_x/2,period_x/2], [-period_y/2,period_y/2], [0 inf]);
+    end
 end
 
+%%%% Plot Absorption - wavelength
 if cal_abs
     %%%% Save the data into a file
     text=append(in.prefix, in.res, '.mat');
