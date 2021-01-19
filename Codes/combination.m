@@ -9,6 +9,6 @@ end
 in_list = allcomb(params{:});
 t = cell2table(table2cell(array2table(in_list)), 'VariableNames',keys);
 
-toDelete = t.asymmetry & (~((t.Mx == t.My) & (t.period_x == t.period_y) & (t.diam_x == t.diam_y)));
+toDelete = t.sym90 & (~((t.Mx == t.My) & (t.period_x == t.period_y) & (t.diam_x == t.diam_y)));
 t(toDelete,:) = [];
 param_table = t;

@@ -148,7 +148,7 @@ n_layer = size(in.params,1);                     % Total number of layers
 pol=in.pol;                 % For normal incidence, TM <=> H//y and TE <=> E//y
 
 % IMPORTANT: To be changed if non-normal incident or if non-rectangular structures
-sym = tif(in.asymmetry, [], [pol-1,pol-1,0,0]); % [pol-1,pol-1,0,0]: The symmetry of the structure, more symmetry means shorter calculation time
+sym = tif(in.sym, [pol-1,pol-1,0,0], []); % [pol-1,pol-1,0,0]: The symmetry of the structure, more symmetry means shorter calculation time
 % if theta(1)==0 && theta(2)==0;sym=[pol-1,pol-1,0,0];end;
 % if theta(1)~=0 && theta(2)==0;sym=[0,pol-1,0,0];end;
 % if theta(1)==0 && theta(2)~=0;sym=[1-pol,0,0,0];end;
@@ -273,6 +273,7 @@ parfor zou=1:length(wavelength)
     sh=rettronc(sh,haut(inch,1),haut(difh,1),1);
 
     [sb,bas,betb,cb,anglb]=retb(init,ab,-0.001);
+
     incb=[]; difb=[];
     sb=rettronc(sb,bas(incb,1),bas(difb,1),-1);
     stemp=retc(a{1},H(1));
@@ -464,11 +465,11 @@ end
 %%%% Plot a cross section with trace_champ=1, x0=[], y0=0, z0=[]
 if trace_champ
     if isempty(x0)==1&&isempty(z0)==1
-        filename = save_cross_section(in, XX, ZZ, CONTOUR, CS(1), E_x, 'x', 'z', 'y', [-period_y/2,period_y/2], [0 inf], [-period_x/2,period_x/2]);
+        filename = save_cross_section(in, XX, ZZ, CONTOUR, CS(1), E_x, 'x', 'z', 'y', [-period_x/2,period_x/2], [0 inf], [-period_y/2,period_y/2]);
     elseif isempty(y0)==1&&isempty(z0)==1
-        filename = save_cross_section(in, YY, ZZ, CONTOUR, CS(1), E_y, 'y', 'z', 'x', [-period_x/2,period_x/2], [0 inf], [-period_y/2,period_y/2]);
+        filename = save_cross_section(in, YY, ZZ, CONTOUR, CS(1), E_y, 'y', 'z', 'x', [-period_y/2,period_y/2], [0 inf], [-period_x/2,period_x/2]);
     elseif isempty(x0)==1&&isempty(y0)==1
-        filename = save_cross_section(in, XX, YY, CONTOUR, CS(1), E_z, 'x', 'y', 'z', [-period_x/2,period_x/2], [-period_y/2,period_y/2], [0 inf]);
+        filename = save_cross_section(in, YY, XX, CONTOUR, CS(1), E_z, 'y', 'x', 'z', [-period_y/2,period_y/2], [-period_x/2,period_x/2], [0 inf]);
     end
 end
 
