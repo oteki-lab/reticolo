@@ -347,11 +347,11 @@ parfor zou=1:length(wavelength)
         end
         num=retelimine(num);
 
-        tab=zeros(n_layer,3); %tab=[];
+        tab=zeros(n_layer,3);
         tab2=[];
         struct={ab};
         for az=1:n_layer
-            tab(az,:)=[H(az),az+1,0];               %tab=[tab;[H(az),az+1,0]];
+            tab(az,:)=[H(az),az+1,Nb_pts_z];               %tab(az,:)=[H(az),az+1,0];
             tab2=[tab2;[0,az+1,1];[H(az),az+1,0]];
             struct=[struct(:)',a(az)];
         end
@@ -360,6 +360,7 @@ parfor zou=1:length(wavelength)
 
         [e,z,wz,o]=retchamp(init,struct,sh,sb,inc,{x,y},tab,[],(1:6)+7.25i,1,1,1:6);
         [e2,z2,wz2,o2]=retchamp(init,struct,sh,sb,inc,{x,y},tab2,[],(1:6)+7.25i,1,1,1:6);
+
         for ii=1:3
             o(:,:,:,ii+3)=o(:,:,:,ii+3)./o(:,:,:,ii);
             o(:,:,:,ii)=1;
