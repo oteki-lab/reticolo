@@ -411,97 +411,77 @@ parfor zou=1:length(wavelength)
         x_semicon=x; y_semicon=y;
     end
 
-    if trace_champ
+    if trace_champ||in.cal_field
         tab0 = zeros(n_layer+2,3);
-        tab0(1,:) = [h_air,1,Nb_pts_z+10];    %tab0=[h_air,1,Nb_pts_z+10];
+        tab0(1,:) = [h_air,1,Nb_pts_z+10];
         struct0={ah};
         for az=1:n_layer
-            tab0(az+1,:)=[H(az),az+1,Nb_pts_z+10];  %tab0=[tab0;[H(az),az+1,Nb_pts_z+10]];
+            tab0(az+1,:)=[H(az),az+1,Nb_pts_z+10];
             struct0=[struct0(:)',a(az)];
         end
         struct0=[struct0(:)',{ab}];
-        tab0(n_layer+2,:)=[h_sub,n_layer+2,Nb_pts_z+10];  %tab0=[tab0;[h_sub,n_layer+2,Nb_pts_z+10]];
+        tab0(n_layer+2,:)=[h_sub,n_layer+2,Nb_pts_z+10];
         tab0(tab0(:,1)>1,3)=floor(tab0(tab0(:,1)>1,1)*1000/h_2pts);
 
         [xx,wx]=retgauss(-period_x/2,period_x/2,15,12,[-diameter_x/2,diameter_x/2]);
         [yy,wy]=retgauss(-period_y/2,period_y/2,15,12,[-diameter_y/2,diameter_y/2]);
 
-        if isempty(x0)==1&&isempty(z0)==1
-            cs=y0;
-            [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,y0},tab0,[],(1:6)+7.25i,1,1,1:6);
-        elseif isempty(y0)==1&&isempty(z0)==1
-            cs=x0;
-            [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{x0,yy},tab0,[],(1:6)+7.25i,1,1,1:6);
-        elseif isempty(x0)==1&&isempty(y0)==1
-            cs=z0;
-            tab0(:,3)=0;
-            HH=cumsum(tab0(:,1));
-            numz=1;
-            while (HH(end)-z0)>HH(numz);numz=numz+1; end
-            tab1=[tab0(1:numz-1,:);[tab0(numz,1)-(z0-sum(tab0(numz+1:end,1))),numz,0];[0,numz,1];[z0-sum(tab0(numz+1:end,1)),numz,0];tab0(numz+1:end,:)];
-            [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,yy},tab1,[],(1:6)+7.25i,1,1,1:6);
-        end
-
-        for ii=1:3
-            o0(:,:,:,ii+3)=o0(:,:,:,ii+3)./o0(:,:,:,ii);
-            o0(:,:,:,ii)=1;
-        end
-        indice=squeeze(sqrt(o0(:,:,:,4)));
-        Ex=squeeze(e0(:,:,:,1)); Ey=squeeze(e0(:,:,:,2)); Ez=squeeze(e0(:,:,:,3));
-        Hx=squeeze(e0(:,:,:,4)); Hy=squeeze(e0(:,:,:,5)); Hz=squeeze(e0(:,:,:,6));
-        XX=[XX,xx]; YY=[YY,yy]; ZZ=[ZZ,zz];
-        E = [E, tif(pol==0, Ey, Ex)];
-
-        ct = repmat(cs,size(indice));
-        ct(indice==1) = -1*(period_x+period_y);
-        CONTOUR = [CONTOUR,ct];
-        CS = [CS,cs];
-    end
-
-    if in.cal_field
-        disp(['Calculating normalized field map n-' int2str(zou) ' of ' int2str(length(wavelength))])
-        for zl = h_sub+active_b:0.001:h_sub+active_t
-            tab0 = zeros(n_layer+2,3);
-            tab0(1,:) = [h_air,1,Nb_pts_z+10];    %tab0=[h_air,1,Nb_pts_z+10];
-            struct0={ah};
-            for az=1:n_layer
-                tab0(az+1,:)=[H(az),az+1,Nb_pts_z+10];  %tab0=[tab0;[H(az),az+1,Nb_pts_z+10]];
-                struct0=[struct0(:)',a(az)];
+        if trace_champ
+            if isempty(x0)==1&&isempty(z0)==1
+                cs=y0;
+                [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,y0},tab0,[],(1:6)+7.25i,1,1,1:6);
+            elseif isempty(y0)==1&&isempty(z0)==1
+                cs=x0;
+                [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{x0,yy},tab0,[],(1:6)+7.25i,1,1,1:6);
+            elseif isempty(x0)==1&&isempty(y0)==1
+                cs=z0;
+                tab0(:,3)=0;
+                HH=cumsum(tab0(:,1));
+                numz=1;
+                while (HH(end)-z0)>HH(numz);numz=numz+1; end
+                tab1=[tab0(1:numz-1,:);[tab0(numz,1)-(z0-sum(tab0(numz+1:end,1))),numz,0];[0,numz,1];[z0-sum(tab0(numz+1:end,1)),numz,0];tab0(numz+1:end,:)];
+                [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,yy},tab1,[],(1:6)+7.25i,1,1,1:6);
             end
-            struct0=[struct0(:)',{ab}];
-            tab0(n_layer+2,:)=[h_sub,n_layer+2,Nb_pts_z+10];  %tab0=[tab0;[h_sub,n_layer+2,Nb_pts_z+10]];
-            tab0(tab0(:,1)>1,3)=floor(tab0(tab0(:,1)>1,1)*1000/h_2pts);
-
-            [xx,wx]=retgauss(-period_x/2,period_x/2,15,12,[-diameter_x/2,diameter_x/2]);
-            [yy,wy]=retgauss(-period_y/2,period_y/2,15,12,[-diameter_y/2,diameter_y/2]);
-
-            tab0(:,3)=0;
-            HH=cumsum(tab0(:,1));
-            numz=1;
-            while (HH(end)-zl)>HH(numz);numz=numz+1; end
-            tab1=[tab0(1:numz-1,:);[tab0(numz,1)-(zl-sum(tab0(numz+1:end,1))),numz,0];[0,numz,1];[zl-sum(tab0(numz+1:end,1)),numz,0];tab0(numz+1:end,:)];
-            [e0,~,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,yy},tab1,[],(1:6)+7.25i,1,1,1:6);
 
             for ii=1:3
                 o0(:,:,:,ii+3)=o0(:,:,:,ii+3)./o0(:,:,:,ii);
                 o0(:,:,:,ii)=1;
             end
+            indice=squeeze(sqrt(o0(:,:,:,4)));
+            Ex=squeeze(e0(:,:,:,1)); Ey=squeeze(e0(:,:,:,2)); Ez=squeeze(e0(:,:,:,3));
+            Hx=squeeze(e0(:,:,:,4)); Hy=squeeze(e0(:,:,:,5)); Hz=squeeze(e0(:,:,:,6));
+            XX=[XX,xx]; YY=[YY,yy]; ZZ=[ZZ,zz];
+            E = [E, tif(pol==0, Ey, Ex)];
 
-            Ez=cat(3,Ez,squeeze(e0(:,:,:,tif(pol==2, 1, 2))));
-            zz=[zz,sum(H)+h_sub-zl];
+            ct = repmat(cs,size(indice));
+            ct(indice==1) = -1*(period_x+period_y);
+            CONTOUR = [CONTOUR,ct];
+            CS = [CS,cs];
+        else
+            tab0(:,3)=0;
+            HH=cumsum(tab0(:,1));
+            numz=1;
+
+            zz = sum(H)-active_b:-0.001:sum(H)-active_t;
+            for zzi = zz
+                while (HH(end)-(sum(H)+h_sub-zzi))>HH(numz);numz=numz+1; end
+                tab1=[tab0(1:numz-1,:);[tab0(numz,1)-((sum(H)+h_sub-zzi)-sum(tab0(numz+1:end,1))),numz,0];[0,numz,1];[(sum(H)+h_sub-zzi)-sum(tab0(numz+1:end,1)),numz,0];tab0(numz+1:end,:)];
+                [e0,~,~,~]=retchamp(init,struct0,sh,sb,inc,{xx,yy},tab1,[],(1:6)+7.25i,1,1,1:6);
+                Ez=cat(3,Ez,squeeze(e0(:,:,:,tif(pol==2, 1, 2))));
+            end
+            ZZ=[ZZ,zz];
+            mapping_field(in, zou, xx, yy, zz, Ez);
+            I(:,zou) = mean(abs(Ez).^2, [1 2]);
         end
-        mapping_field(in, zou, xx, yy, zz, Ez);
-        I(:,zou) = mean(abs(Ez).^2, [1 2]);
     end
 end
 
 %% Saving and plotting output data
 if in.cal_field
-    z = h_sub+0.5:0.001:sum(H)+h_sub;
     text=append(in.prefix, 'I_mean.mat');
     save(text, 'I');
     figure
-    hP=surf(wavelength, z, I);
+    hP=surf(wavelength, ZZ, I);
     shading interp;
     colormap(jet);
     colorbar;
@@ -513,7 +493,6 @@ if in.cal_field
     hP.DataTipTemplate.DataTipRows(3).Value = hP.CData;
     filename = append(in.prefix,"I_mean.png");
     saveas(gcf, filename);
-
 end
 
 %%%% Plot a cross section with trace_champ=1, x0=[], y0=0, z0=[]

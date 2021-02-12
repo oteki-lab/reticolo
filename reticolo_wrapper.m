@@ -36,6 +36,7 @@ for index = 1:l
         % load input parameters
         in = table2struct(data(index,:));
         in.cal_field = cal_field;
+        
         % get layers parameters
         [in.params, in.layers] = layers(in);
 
@@ -44,15 +45,11 @@ for index = 1:l
         mkdir(item_dir);
         in.prefix = append(item_dir, "\no_", int2str(index), "_");
         in.res = ['period_',int2str(in.period_x*1000),'_diam_',int2str(in.diam_x*1000),'wav',int2str(in.lambdamin*1000),'_',int2str(in.lambdamax*1000),'_npoints',int2str(in.npoints),'_Fourier',int2str(in.Mx)];
-        map_dir = append(item_dir,'\I_map');
-        mkdir(map_dir);
+        in.map_dir = append(item_dir,'\I_map');
+        mkdir(in.map_dir);
 
         % calculate absorption
         if cal_absorption
-            if cal_field
-                in.map_dir = map_dir;
-            end
-            
             in.trace_champ = false;
             in.cs_x=[]; in.cs_y=in.y0; in.cs_z=[];
             attachments(length(attachments)+1) = reticolo_eng(in);
