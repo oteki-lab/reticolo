@@ -189,7 +189,7 @@ A_tot=zeros(1,length(wavelength));
 A_sub=zeros(1,length(wavelength));
 Abs=zeros(n_layer,length(wavelength));
 Abs_plots=zeros(n_layer,length(wavelength));
-XX=[]; YY=[]; ZZ=[]; E_x=[]; E_y=[]; E_z=[]; Em=[]; INDICE=[]; CONTOUR=[]; CS=[];
+XX=[]; YY=[]; ZZ=[]; E=[]; I=[]; CONTOUR=[]; CS=[];
 Ntre=1;
 H=cell2mat(in.params(:,1));
 n = cell2mat(in.params(:,2));
@@ -216,7 +216,7 @@ parfor zou=1:length(wavelength)
     Abs_vect=zeros(n_layer,1);
     Abs_plots_vect=zeros(n_layer,1);
     test_vect=zeros(1);
-    xx=[]; yy=[]; zz=[]; Ex=[]; Ey=[]; Ez=[]; E=[]; Hx=[]; Hy=[]; Hz=[]; indice=[]; cs=0;
+    xx=[]; yy=[]; zz=[]; Ex=[]; Ey=[]; Ez=[]; Hx=[]; Hy=[]; Hz=[]; indice=[]; cs=0;
     Einc=[]; E_semicon=[]; x_semicon=[]; z_semicon=[];
     Hinc=[]; H_semicon=[]; y_semicon=[]; W_semicon=[];
     
@@ -446,9 +446,9 @@ parfor zou=1:length(wavelength)
         indice=squeeze(sqrt(o0(:,:,:,4)));
         Ex=squeeze(e0(:,:,:,1)); Ey=squeeze(e0(:,:,:,2)); Ez=squeeze(e0(:,:,:,3));
         Hx=squeeze(e0(:,:,:,4)); Hy=squeeze(e0(:,:,:,5)); Hz=squeeze(e0(:,:,:,6));
-        ZZ=[ZZ,sum(H)+h_sub-z0];
-        XX=[XX,xx]; YY=[YY,yy];  E_x=[E_x,Ex]; E_y=[E_y,Ey]; E_z=[E_z,Ez]; INDICE=[INDICE,indice];
-        
+        XX=[XX,xx]; YY=[YY,yy]; ZZ=[ZZ,zz];
+        E = [E, tif(pol==0, Ey, Ex)];
+
         ct = repmat(cs,size(indice));
         ct(indice==1) = -1*(period_x+period_y);
         CONTOUR = [CONTOUR,ct];
@@ -483,16 +483,12 @@ parfor zou=1:length(wavelength)
                 o0(:,:,:,ii+3)=o0(:,:,:,ii+3)./o0(:,:,:,ii);
                 o0(:,:,:,ii)=1;
             end
-            
-            if pol==2
-                E=cat(3,E,squeeze(e0(:,:,:,1)));
-            else
-                E=cat(3,E,squeeze(e0(:,:,:,2)));
-            end
+
+            Ez=cat(3,Ez,squeeze(e0(:,:,:,tif(pol==2, 1, 2))));
             zz=[zz,sum(H)+h_sub-zl];
         end
-        mapping_field(in, zou, xx, yy, zz, E);
-        Em(:,zou) = mean(abs(E).^2, [1 2]);
+        mapping_field(in, zou, xx, yy, zz, Ez);
+        I(:,zou) = mean(abs(Ez).^2, [1 2]);
     end
 end
 
@@ -500,9 +496,9 @@ end
 if in.cal_field
     z = h_sub+0.5:0.001:sum(H)+h_sub;
     text=append(in.prefix, 'I_mean.mat');
-    save(text, 'Em');
+    save(text, 'I');
     figure
-    hP=surf(wavelength, z, Em);
+    hP=surf(wavelength, z, I);
     shading interp;
     colormap(jet);
     colorbar;
@@ -516,15 +512,15 @@ if in.cal_field
     saveas(gcf, filename);
 
 end
-        
+
 %%%% Plot a cross section with trace_champ=1, x0=[], y0=0, z0=[]
 if trace_champ
     if isempty(x0)==1&&isempty(z0)==1
-        filename = save_cross_section(in, XX, ZZ, CONTOUR, CS(1), E_y, 'x', 'z', 'y', [-period_x/2,period_x/2], [0 inf], [-period_y/2,period_y/2]);
+        filename = save_cross_section(in, XX, ZZ, CONTOUR, CS(1), E, 'x', 'z', 'y', [-period_x/2,period_x/2], [0 inf], [-period_y/2,period_y/2]);
     elseif isempty(y0)==1&&isempty(z0)==1
-        filename = save_cross_section(in, YY, ZZ, CONTOUR, CS(1), E_y, 'y', 'z', 'x', [-period_y/2,period_y/2], [0 inf], [-period_x/2,period_x/2]);
+        filename = save_cross_section(in, YY, ZZ, CONTOUR, CS(1), E, 'y', 'z', 'x', [-period_y/2,period_y/2], [0 inf], [-period_x/2,period_x/2]);
     elseif isempty(x0)==1&&isempty(y0)==1
-        filename = save_cross_section(in, YY, XX, CONTOUR, CS(1), E_y, 'y', 'x', 'z', [-period_y/2,period_y/2], [-period_x/2,period_x/2], [0 inf]);
+        filename = save_cross_section(in, YY, XX, CONTOUR, CS(1), E, 'y', 'x', 'z', [-period_y/2,period_y/2], [-period_x/2,period_x/2], [0 inf]);
     end
 end
 

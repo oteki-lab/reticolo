@@ -35,7 +35,7 @@ for index = 1:l
     try
         % load input parameters
         in = table2struct(data(index,:));
-        in.cal_field = false;
+        in.cal_field = cal_field;
         % get layers parameters
         [in.params, in.layers] = layers(in);
 
@@ -54,7 +54,6 @@ for index = 1:l
             end
             
             in.trace_champ = false;
-            in.cal_field = cal_field;
             in.cs_x=[]; in.cs_y=in.y0; in.cs_z=[];
             attachments(length(attachments)+1) = reticolo_eng(in);
 
