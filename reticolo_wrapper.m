@@ -3,13 +3,13 @@ addpath(genpath('./'))
 clear;retio;
 
 %% flags
-notification     = false;    % true: send result mail (set address in sendMail.m)
+notification     = false;   % true: send result mail (set address in sendMail.m)
 cal_absorption   = true;    % true: calculate absorption
-cal_current      = false;    % true: calculate current density from absorption
-cal_structure_yz = false;     % true: calculate structure (x direction)
-cal_structure_xz = false;     % true: calculate structure (y direction)
-cal_structure_xy = false;     % true: calculate structure (z direction)
-cal_field        = true;     % true: calculate structure (z direction)
+cal_field        = true;    % true: calculate field intensity (3D)
+cal_current      = false;   % true: calculate current density from absorption
+cal_structure_yz = false;   % true: calculate structure (x direction)
+cal_structure_xz = false;   % true: calculate structure (y direction)
+cal_structure_xy = false;   % true: calculate structure (z direction)
 
 %% make output direcory in Results
 dateString = datestr(datetime('now'),'yyyymmddHHMMSSFFF');
@@ -44,19 +44,26 @@ for index = 1:l
         mkdir(item_dir);
         in.prefix = append(item_dir, "\no_", int2str(index), "_");
         in.res = ['period_',int2str(in.period_x*1000),'_diam_',int2str(in.diam_x*1000),'wav',int2str(in.lambdamin*1000),'_',int2str(in.lambdamax*1000),'_npoints',int2str(in.npoints),'_Fourier',int2str(in.Mx)];
+        map_dir = append(item_dir,'\I_map');
+        mkdir(map_dir);
 
         % calculate absorption
         if cal_absorption
+            if cal_field
+                in.map_dir = map_dir;
+            end
+            
             in.trace_champ = false;
+            in.cal_field = cal_field;
             in.cs_x=[]; in.cs_y=in.y0; in.cs_z=[];
             attachments(length(attachments)+1) = reticolo_eng(in);
+
+            % calculate current density
+            if cal_current
+                current_density(in);
+            end
         end
 
-        % calculate current density
-        if cal_current
-            current_density(in);
-        end
-        
         % calculate structure
         in.Mx = 0;
         in.My = 0;
@@ -80,12 +87,6 @@ for index = 1:l
             attachments(length(attachments)+1) = reticolo_eng(in);
         end
         
-        if cal_field
-            in.trace_champ = false;
-            in.cal_field = true;
-            in.cs_x=[]; in.cs_y=[]; in.cs_z=in.z0;
-            attachments(length(attachments)+1) = reticolo_eng(in);
-        end
         msg = "reticolo Simulation Done.";
         
     catch e

@@ -189,7 +189,7 @@ A_tot=zeros(1,length(wavelength));
 A_sub=zeros(1,length(wavelength));
 Abs=zeros(n_layer,length(wavelength));
 Abs_plots=zeros(n_layer,length(wavelength));
-XX=[]; YY=[]; ZZ=[]; E_x=[]; E_y=[]; E_z=[]; INDICE=[]; CONTOUR=[]; CS=[];
+XX=[]; YY=[]; ZZ=[]; E_x=[]; E_y=[]; E_z=[]; Em=[]; INDICE=[]; CONTOUR=[]; CS=[];
 Ntre=1;
 H=cell2mat(in.params(:,1));
 n = cell2mat(in.params(:,2));
@@ -216,7 +216,7 @@ parfor zou=1:length(wavelength)
     Abs_vect=zeros(n_layer,1);
     Abs_plots_vect=zeros(n_layer,1);
     test_vect=zeros(1);
-    xx=[]; yy=[]; zz=[]; Ex=[]; Ey=[]; Ez=[]; Hx=[]; Hy=[]; Hz=[]; indice=[]; cs=0;
+    xx=[]; yy=[]; zz=[]; Ex=[]; Ey=[]; Ez=[]; E=[]; Hx=[]; Hy=[]; Hz=[]; indice=[]; cs=0;
     Einc=[]; E_semicon=[]; x_semicon=[]; z_semicon=[];
     Hinc=[]; H_semicon=[]; y_semicon=[]; W_semicon=[];
     
@@ -472,83 +472,51 @@ parfor zou=1:length(wavelength)
             [xx,wx]=retgauss(-period_x/2,period_x/2,15,12,[-diameter_x/2,diameter_x/2]);
             [yy,wy]=retgauss(-period_y/2,period_y/2,15,12,[-diameter_y/2,diameter_y/2]);
 
-            if isempty(x0)==1&&isempty(z0)==1
-                cs=y0;
-                [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,y0},tab0,[],(1:6)+7.25i,1,1,1:6);
-            elseif isempty(y0)==1&&isempty(z0)==1
-                cs=x0;
-                [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{x0,yy},tab0,[],(1:6)+7.25i,1,1,1:6);
-            elseif isempty(x0)==1&&isempty(y0)==1
-                cs=zl;
-                tab0(:,3)=0;
-                HH=cumsum(tab0(:,1));
-                numz=1;
-                while (HH(end)-zl)>HH(numz);numz=numz+1; end
-                tab1=[tab0(1:numz-1,:);[tab0(numz,1)-(zl-sum(tab0(numz+1:end,1))),numz,0];[0,numz,1];[zl-sum(tab0(numz+1:end,1)),numz,0];tab0(numz+1:end,:)];
-                [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,yy},tab1,[],(1:6)+7.25i,1,1,1:6);
-            end
+            tab0(:,3)=0;
+            HH=cumsum(tab0(:,1));
+            numz=1;
+            while (HH(end)-zl)>HH(numz);numz=numz+1; end
+            tab1=[tab0(1:numz-1,:);[tab0(numz,1)-(zl-sum(tab0(numz+1:end,1))),numz,0];[0,numz,1];[zl-sum(tab0(numz+1:end,1)),numz,0];tab0(numz+1:end,:)];
+            [e0,~,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,yy},tab1,[],(1:6)+7.25i,1,1,1:6);
 
             for ii=1:3
                 o0(:,:,:,ii+3)=o0(:,:,:,ii+3)./o0(:,:,:,ii);
                 o0(:,:,:,ii)=1;
             end
-            indice=squeeze(sqrt(o0(:,:,:,4)));
-            Ex=squeeze(e0(:,:,:,1)); Ey=cat(3,Ey,squeeze(e0(:,:,:,2))); Ez=squeeze(e0(:,:,:,3));
-            Hx=squeeze(e0(:,:,:,4)); Hy=squeeze(e0(:,:,:,5)); Hz=squeeze(e0(:,:,:,6));
-            ZZ=[ZZ,sum(H)+h_sub-zl];
+            
+            if pol==2
+                E=cat(3,E,squeeze(e0(:,:,:,1)));
+            else
+                E=cat(3,E,squeeze(e0(:,:,:,2)));
+            end
+            zz=[zz,sum(H)+h_sub-zl];
         end
-
-        XX=[XX,xx]; YY=[YY,yy];  E_x=[E_x,Ex]; E_y=[E_y,Ey]; E_z=[E_z,Ez]; INDICE=[INDICE,indice];
-        
-        ct = repmat(cs,size(indice));
-        ct(indice==1) = -1*(period_x+period_y);
-        CONTOUR = [CONTOUR,ct];
-        CS = [CS,cs];
+        mapping_field(in, zou, xx, yy, zz, E);
+        Em(:,zou) = mean(abs(E).^2, [1 2]);
     end
 end
 
 %% Saving and plotting output data
-
 if in.cal_field
-    text=append(in.prefix, 'I_map', '.mat');
-    save(text, 'XX', 'YY', 'ZZ', 'E_y');
-    plot4D = true;
-
-    M1 = mean(abs(E_y).^2, [1 2]);
+    z = h_sub+0.5:0.001:sum(H)+h_sub;
+    text=append(in.prefix, 'I_mean.mat');
+    save(text, 'Em');
     figure
-    plot(ZZ, M1(1,:), 'Linewidth',3);
-    xlabel('Height (um)')
-    ylabel('I')
-    xlim([0 max(ZZ)])
-    ylim([0 max(abs(E_y).^2,[],'all')])
-    set(gca,'Fontsize',12)
-    set(gca,'XMinorTick','on','YMinorTick','on')
-    set(gcf,'color','w');
-    box on
-    
-    filename = append(in.prefix,"Mean normalized field.png");
+    hP=surf(wavelength, z, Em);
+    shading interp;
+    colormap(jet);
+    colorbar;
+    caxis([0 Inf]);
+    view(2)
+    hP.DataTipTemplate.DataTipRows(1).Label = 'Wavelength';
+    hP.DataTipTemplate.DataTipRows(2).Label = 'Depth';
+    hP.DataTipTemplate.DataTipRows(3).Label = '|E|^2';
+    hP.DataTipTemplate.DataTipRows(3).Value = hP.CData;
+    filename = append(in.prefix,"I_mean.png");
     saveas(gcf, filename);
 
-    if plot4D
-        figure
-        isosurface(XX,YY,ZZ,abs(E_y).^2)
-        colorbar
-        colormap jet
-        [fe, ve, ce] = isocaps(XX,YY,ZZ,abs(E_y).^2,10);
-        p2 = patch('Faces',fe, 'Vertices',ve, 'FaceVertexCData',ce);
-        p2.FaceColor = 'interp';
-        p2.EdgeColor = 'none';
-        %set(gca, 'clim',[0 14])
-        grid on
-        xlabel('x');
-        ylabel('y');
-        zlabel('z');
-        
-        filename = append(in.prefix,"Normalized field map.png");
-        saveas(gcf, filename);
-    end
 end
-
+        
 %%%% Plot a cross section with trace_champ=1, x0=[], y0=0, z0=[]
 if trace_champ
     if isempty(x0)==1&&isempty(z0)==1

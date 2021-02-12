@@ -3,11 +3,11 @@ function in=parameters()
 in.sym90 = true;       % true: Combination only when the x-axis and the y-axis have the same value
 
 in.sym = true;         % true: The symmetry of the structure, more symmetry means shorter calculation time
-in.pol = 0;             % polarization of the incident wave, TM pol=2  TE pol=0
+in.pol = 0;            % polarization of the incident wave, TM pol=2  TE pol=0
 
-in.npoints   = 2;       % point number of wavelength
-in.lambdamin = 1.191;     % min wavelength
-in.lambdamax = 1.192;     % max wavelength
+in.npoints   = 7;       % point number of wavelength
+in.lambdamin = 0.900;   % min wavelength
+in.lambdamax = 1.200;   % max wavelength
 
 %% Cross section along x0, y0, z0
 in.x0 = 0;
