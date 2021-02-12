@@ -478,10 +478,11 @@ end
 
 %% Saving and plotting output data
 if in.cal_field
+    Z = sum(H)-active_t:0.001:sum(H)-active_b;
     text=append(in.prefix, 'I_mean.mat');
     save(text, 'I');
     figure
-    hP=surf(wavelength, ZZ, I);
+    hP=surf(wavelength, Z, I);
     shading interp;
     colormap(jet);
     colorbar;

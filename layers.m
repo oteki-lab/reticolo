@@ -19,7 +19,7 @@ structure_params = {
 %    0.16,   retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
 %    0.14,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
 %    1.7,    retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
-    1.8,    retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength)),        in.diam_x,           in.diam_y;
+    1.8,    retindice_semicond(wavelength,40),   0.00*ones(size(wavelength)),        in.diam_x,           in.diam_y;
 %    0.04,   retindice_chen(wavelength,4.802),   0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
 %	0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802),   in.period_x*11/12,     in.period_y*11/12;
 %	0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802),   in.period_x*10/12,     in.period_y*10/12;
@@ -32,7 +32,7 @@ structure_params = {
 %	0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802),   in.period_x*3/12,      in.period_y*3/12;
 %	0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802),   in.period_x*2/12,      in.period_y*2/12;
 %	0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802),   in.period_x*1/12,      in.period_y*1/12;
-    0.5,    retindice_chen(wavelength,1.72),    0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
+    0.5,    retindice_metal(wavelength,1.9),    0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
 };
 x = structure_params;
 

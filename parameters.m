@@ -5,9 +5,9 @@ in.sym90 = true;       % true: Combination only when the x-axis and the y-axis h
 in.sym = true;         % true: The symmetry of the structure, more symmetry means shorter calculation time
 in.pol = 0;            % polarization of the incident wave, TM pol=2  TE pol=0
 
-in.npoints   = 7;       % point number of wavelength
+in.npoints   = 5;       % point number of wavelength
 in.lambdamin = 0.900;   % min wavelength
-in.lambdamax = 1.200;   % max wavelength
+in.lambdamax = 1.300;   % max wavelength
 
 %% Cross section along x0, y0, z0
 in.x0 = 0;
