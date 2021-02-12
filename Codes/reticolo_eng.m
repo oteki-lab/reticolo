@@ -194,6 +194,9 @@ Ntre=1;
 H=cell2mat(in.params(:,1));
 n = cell2mat(in.params(:,2));
 nm = cell2mat(in.params(:,3));
+active_layer = in.layers{strcmp('Active region', in.layers),2};
+active_t = sum(H(min(active_layer):end));
+active_b = sum(H(max(active_layer)+1:end));
 if cal_abs||cal_champ==1||trace_champ||in.cal_field;op_retcouche=1; else; op_retcouche=0; end
 if H(n_layer)<1e-5;disp('WARNING : There is a problem in the definition of the layers number !!'); return; end
 if trace_champ&&isempty(x0)==1&&isempty(y0)==1&&isempty(z0)==1;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
@@ -457,7 +460,7 @@ parfor zou=1:length(wavelength)
 
     if in.cal_field
         disp(['Calculating normalized field map n-' int2str(zou) ' of ' int2str(length(wavelength))])
-        for zl = h_sub+0.5:0.001:sum(H)+h_sub
+        for zl = h_sub+active_b:0.001:h_sub+active_t
             tab0 = zeros(n_layer+2,3);
             tab0(1,:) = [h_air,1,Nb_pts_z+10];    %tab0=[h_air,1,Nb_pts_z+10];
             struct0={ah};
