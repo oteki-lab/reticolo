@@ -9,6 +9,7 @@ cal_current      = false;    % true: calculate current density from absorption
 cal_structure_yz = false;     % true: calculate structure (x direction)
 cal_structure_xz = false;     % true: calculate structure (y direction)
 cal_structure_xy = false;     % true: calculate structure (z direction)
+cal_field        = true;     % true: calculate structure (z direction)
 
 %% make output direcory in Results
 dateString = datestr(datetime('now'),'yyyymmddHHMMSSFFF');
@@ -34,7 +35,7 @@ for index = 1:l
     try
         % load input parameters
         in = table2struct(data(index,:));
-
+        in.cal_field = false;
         % get layers parameters
         [in.params, in.layers] = layers(in);
 
@@ -46,6 +47,7 @@ for index = 1:l
 
         % calculate absorption
         if cal_absorption
+            in.trace_champ = false;
             in.cs_x=[]; in.cs_y=in.y0; in.cs_z=[];
             attachments(length(attachments)+1) = reticolo_eng(in);
         end
@@ -61,20 +63,29 @@ for index = 1:l
         in.npoints = 1;
         % x direction
         if cal_structure_yz
+            in.trace_champ = true;
             in.cs_x=in.x0; in.cs_y=[]; in.cs_z=[];
             attachments(length(attachments)+1) = reticolo_eng(in);
         end
         % y direction
         if cal_structure_xz
+            in.trace_champ = true;
             in.cs_x=[]; in.cs_y=in.y0; in.cs_z=[];
             attachments(length(attachments)+1) = reticolo_eng(in);
         end
         % z direction
         if cal_structure_xy
+            in.trace_champ = true;
             in.cs_x=[]; in.cs_y=[]; in.cs_z=in.z0;
             attachments(length(attachments)+1) = reticolo_eng(in);
         end
         
+        if cal_field
+            in.trace_champ = false;
+            in.cal_field = true;
+            in.cs_x=[]; in.cs_y=[]; in.cs_z=in.z0;
+            attachments(length(attachments)+1) = reticolo_eng(in);
+        end
         msg = "reticolo Simulation Done.";
         
     catch e

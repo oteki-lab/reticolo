@@ -163,7 +163,7 @@ N_semicon=3;                % Layer where field is calculated (if cal_champ=1)
 Nb_pts_z_semicon=50;        % Number of points in the z direction to calculate the field in N_semicon (if cal_champ=1)
 
 % IMPORTANT: only one wavelength
-trace_champ = npoints==1;   % si 1,calculates a cross-section of the field
+trace_champ = in.trace_champ;%npoints==1;   % si 1,calculates a cross-section of the field
 x0 = in.cs_x;               % Cross section along x=x0 if trace_champ=1 ([] if the cross-section is along another direction)
 y0 = in.cs_y;               % Cross section along y=y0 if trace_champ=1 ([] if the cross-section is along another direction)
 z0 = in.cs_z;               % Cross section along z=z0 if trace_champ=1 ([] if the cross-section is along another direction)
@@ -194,7 +194,7 @@ Ntre=1;
 H=cell2mat(in.params(:,1));
 n = cell2mat(in.params(:,2));
 nm = cell2mat(in.params(:,3));
-if cal_abs||cal_champ==1||trace_champ;op_retcouche=1; else; op_retcouche=0; end
+if cal_abs||cal_champ==1||trace_champ||in.cal_field;op_retcouche=1; else; op_retcouche=0; end
 if H(n_layer)<1e-5;disp('WARNING : There is a problem in the definition of the layers number !!'); return; end
 if trace_champ&&isempty(x0)==1&&isempty(y0)==1&&isempty(z0)==1;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 if trace_champ&&isempty(x0)==0&&isempty(y0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
@@ -315,7 +315,7 @@ parfor zou=1:length(wavelength)
         [y,wy]=retgauss(-period_y/2,period_y/2,15,10,[-unique(diameter_y)/2,unique(diameter_y)/2]);
     end
 
-    if cal_abs||cal_champ==1||trace_champ
+    if cal_abs||cal_champ==1||trace_champ||in.cal_field
         sb_norm=retb(init,ah,-0.1,0,[],[]);
         tab_norm=[0,1,1];
         if size(ef.inc.teta,2)==1
@@ -409,11 +409,6 @@ parfor zou=1:length(wavelength)
     end
 
     if trace_champ
-        %disp(z0)
-        %layer_z = cumsum([0.0;H]);
-        %for lz=layer_z(:)'
-        %    disp(lz)
-        %end
         tab0 = zeros(n_layer+2,3);
         tab0(1,:) = [h_air,1,Nb_pts_z+10];    %tab0=[h_air,1,Nb_pts_z+10];
         struct0={ah};
@@ -451,8 +446,59 @@ parfor zou=1:length(wavelength)
         indice=squeeze(sqrt(o0(:,:,:,4)));
         Ex=squeeze(e0(:,:,:,1)); Ey=squeeze(e0(:,:,:,2)); Ez=squeeze(e0(:,:,:,3));
         Hx=squeeze(e0(:,:,:,4)); Hy=squeeze(e0(:,:,:,5)); Hz=squeeze(e0(:,:,:,6));
+        ZZ=[ZZ,sum(H)+h_sub-z0];
+        XX=[XX,xx]; YY=[YY,yy];  E_x=[E_x,Ex]; E_y=[E_y,Ey]; E_z=[E_z,Ez]; INDICE=[INDICE,indice];
+        
+        ct = repmat(cs,size(indice));
+        ct(indice==1) = -1*(period_x+period_y);
+        CONTOUR = [CONTOUR,ct];
+        CS = [CS,cs];
+    end
 
-        XX=[XX,xx]; YY=[YY,yy]; ZZ=[ZZ,zz]; E_x=[E_x,Ex]; E_y=[E_y,Ey]; E_z=[E_z,Ez]; INDICE=[INDICE,indice];
+    if in.cal_field
+        disp(['Calculating normalized field map n-' int2str(zou) ' of ' int2str(length(wavelength))])
+        for zl = h_sub+0.5:0.001:sum(H)+h_sub
+            tab0 = zeros(n_layer+2,3);
+            tab0(1,:) = [h_air,1,Nb_pts_z+10];    %tab0=[h_air,1,Nb_pts_z+10];
+            struct0={ah};
+            for az=1:n_layer
+                tab0(az+1,:)=[H(az),az+1,Nb_pts_z+10];  %tab0=[tab0;[H(az),az+1,Nb_pts_z+10]];
+                struct0=[struct0(:)',a(az)];
+            end
+            struct0=[struct0(:)',{ab}];
+            tab0(n_layer+2,:)=[h_sub,n_layer+2,Nb_pts_z+10];  %tab0=[tab0;[h_sub,n_layer+2,Nb_pts_z+10]];
+            tab0(tab0(:,1)>1,3)=floor(tab0(tab0(:,1)>1,1)*1000/h_2pts);
+
+            [xx,wx]=retgauss(-period_x/2,period_x/2,15,12,[-diameter_x/2,diameter_x/2]);
+            [yy,wy]=retgauss(-period_y/2,period_y/2,15,12,[-diameter_y/2,diameter_y/2]);
+
+            if isempty(x0)==1&&isempty(z0)==1
+                cs=y0;
+                [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,y0},tab0,[],(1:6)+7.25i,1,1,1:6);
+            elseif isempty(y0)==1&&isempty(z0)==1
+                cs=x0;
+                [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{x0,yy},tab0,[],(1:6)+7.25i,1,1,1:6);
+            elseif isempty(x0)==1&&isempty(y0)==1
+                cs=zl;
+                tab0(:,3)=0;
+                HH=cumsum(tab0(:,1));
+                numz=1;
+                while (HH(end)-zl)>HH(numz);numz=numz+1; end
+                tab1=[tab0(1:numz-1,:);[tab0(numz,1)-(zl-sum(tab0(numz+1:end,1))),numz,0];[0,numz,1];[zl-sum(tab0(numz+1:end,1)),numz,0];tab0(numz+1:end,:)];
+                [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,yy},tab1,[],(1:6)+7.25i,1,1,1:6);
+            end
+
+            for ii=1:3
+                o0(:,:,:,ii+3)=o0(:,:,:,ii+3)./o0(:,:,:,ii);
+                o0(:,:,:,ii)=1;
+            end
+            indice=squeeze(sqrt(o0(:,:,:,4)));
+            Ex=squeeze(e0(:,:,:,1)); Ey=cat(3,Ey,squeeze(e0(:,:,:,2))); Ez=squeeze(e0(:,:,:,3));
+            Hx=squeeze(e0(:,:,:,4)); Hy=squeeze(e0(:,:,:,5)); Hz=squeeze(e0(:,:,:,6));
+            ZZ=[ZZ,sum(H)+h_sub-zl];
+        end
+
+        XX=[XX,xx]; YY=[YY,yy];  E_x=[E_x,Ex]; E_y=[E_y,Ey]; E_z=[E_z,Ez]; INDICE=[INDICE,indice];
         
         ct = repmat(cs,size(indice));
         ct(indice==1) = -1*(period_x+period_y);
@@ -463,14 +509,54 @@ end
 
 %% Saving and plotting output data
 
+if in.cal_field
+    text=append(in.prefix, 'I_map', '.mat');
+    save(text, 'XX', 'YY', 'ZZ', 'E_y');
+    plot4D = true;
+
+    M1 = mean(abs(E_y).^2, [1 2]);
+    figure
+    plot(ZZ, M1(1,:), 'Linewidth',3);
+    xlabel('Height (um)')
+    ylabel('I')
+    xlim([0 max(ZZ)])
+    ylim([0 max(abs(E_y).^2,[],'all')])
+    set(gca,'Fontsize',12)
+    set(gca,'XMinorTick','on','YMinorTick','on')
+    set(gcf,'color','w');
+    box on
+    
+    filename = append(in.prefix,"Mean normalized field.png");
+    saveas(gcf, filename);
+
+    if plot4D
+        figure
+        isosurface(XX,YY,ZZ,abs(E_y).^2)
+        colorbar
+        colormap jet
+        [fe, ve, ce] = isocaps(XX,YY,ZZ,abs(E_y).^2,10);
+        p2 = patch('Faces',fe, 'Vertices',ve, 'FaceVertexCData',ce);
+        p2.FaceColor = 'interp';
+        p2.EdgeColor = 'none';
+        %set(gca, 'clim',[0 14])
+        grid on
+        xlabel('x');
+        ylabel('y');
+        zlabel('z');
+        
+        filename = append(in.prefix,"Normalized field map.png");
+        saveas(gcf, filename);
+    end
+end
+
 %%%% Plot a cross section with trace_champ=1, x0=[], y0=0, z0=[]
 if trace_champ
     if isempty(x0)==1&&isempty(z0)==1
-        filename = save_cross_section(in, XX, ZZ, CONTOUR, CS(1), E_x, 'x', 'z', 'y', [-period_x/2,period_x/2], [0 inf], [-period_y/2,period_y/2]);
+        filename = save_cross_section(in, XX, ZZ, CONTOUR, CS(1), E_y, 'x', 'z', 'y', [-period_x/2,period_x/2], [0 inf], [-period_y/2,period_y/2]);
     elseif isempty(y0)==1&&isempty(z0)==1
         filename = save_cross_section(in, YY, ZZ, CONTOUR, CS(1), E_y, 'y', 'z', 'x', [-period_y/2,period_y/2], [0 inf], [-period_x/2,period_x/2]);
     elseif isempty(x0)==1&&isempty(y0)==1
-        filename = save_cross_section(in, YY, XX, CONTOUR, CS(1), E_z, 'y', 'x', 'z', [-period_y/2,period_y/2], [-period_x/2,period_x/2], [0 inf]);
+        filename = save_cross_section(in, YY, XX, CONTOUR, CS(1), E_y, 'y', 'x', 'z', [-period_y/2,period_y/2], [-period_x/2,period_x/2], [0 inf]);
     end
 end
 
