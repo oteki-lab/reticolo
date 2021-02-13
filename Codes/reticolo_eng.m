@@ -478,7 +478,7 @@ end
 
 %% Saving and plotting output data
 if in.cal_field
-    Z = sum(H)-active_t:0.001:sum(H)-active_b;
+    Z = active_b:0.001:active_t;
     text=append(in.prefix, 'I_mean.mat');
     save(text, 'I');
     figure
@@ -486,7 +486,8 @@ if in.cal_field
     shading interp;
     colormap(jet);
     colorbar;
-    caxis([0 Inf]);
+    caxis([0 Inf]); 
+    ylim([active_b active_t])
     view(2)
     hP.DataTipTemplate.DataTipRows(1).Label = 'Wavelength';
     hP.DataTipTemplate.DataTipRows(2).Label = 'Depth';
