@@ -1,4 +1,4 @@
-load("Results\20210212172832465\no_1\I_map\I_map_2.mat")
+load("Results\20210215002729005\no_4\I_map\I_map_1.mat")
 
 figure
 isosurface(x,y,z,abs(E).^2)

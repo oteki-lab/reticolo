@@ -5,7 +5,7 @@ wavelength=linspace(in.lambdamin, in.lambdamax, in.npoints);    % range of wavel
 % Thicknesses, from top to bottom   (0 si if no layer)
 % Refraction indices (from top to bottom), can be a function of the wavelength
 % params = [height, ni, nim, in.period_x, in.period_y]
-structure_params = {
+structure_props = {
 %    0.08,   retindice_chen(wavelength,23.21),   retindice_chen(wavelength,23.21),   in.period_x,           in.period_y;
 %	0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802),   in.diam_x*1/9,         in.diam_y*1/9;
 %	0.4/8,  ones(size(wavelength)),             retindice_chen(wavelength,4.802),   in.diam_x*2/9,         in.diam_y*2/9;
@@ -20,7 +20,8 @@ structure_params = {
 %    0.14,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
 %    1.7,    retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
     1.8,    retindice_semicond(wavelength,40),   0.00*ones(size(wavelength)),        in.diam_x,           in.diam_y;
-%    0.04,   retindice_chen(wavelength,4.802),   0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
+%    0.9,    retindice_chen(wavelength,4.802),   1.58*ones(size(wavelength)),        in.diam_x,           in.diam_y;
+%    0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802),   in.period_x,           in.period_y;
 %	0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802),   in.period_x*11/12,     in.period_y*11/12;
 %	0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802),   in.period_x*10/12,     in.period_y*10/12;
 %	0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802),   in.period_x*9/12,      in.period_y*9/12;
@@ -34,7 +35,7 @@ structure_params = {
 %	0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802),   in.period_x*1/12,      in.period_y*1/12;
     0.5,    retindice_metal(wavelength,1.9),    0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
 };
-x = structure_params;
+x = structure_props;
 
 layers = {
 %    'SiNx ARC',         [1,2,3,4,5,6,7];
@@ -42,8 +43,8 @@ layers = {
 %    'GaAs emitter',     [9];
 %    'QD',               [10];
 %    'GaAs base',        [11];
-%    'AlInP BSF',        [12];
     'GaAs',             [1]
+%    'AlInP BSF',        [2];
     'Ag mirror',        [2];
 %    'GaAs',             [9,11]
     'Active region',    [1]

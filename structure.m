@@ -1,4 +1,4 @@
-function [u,a] = structure(in,n_layer,period,N,Nm,k0,diameter_x,diameter_y,Ntre,init,op_retcouche)
+function [u,a] = structure(n_layer,period,N,Nm,k0,diameter_x,diameter_y,Ntre,init,op_retcouche)
 
 u=[];
 a=[];

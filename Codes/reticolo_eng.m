@@ -142,7 +142,7 @@ My=double(in.My);                                   % Number of Fourier terms in
 % Parameters of each layer
 nh=1;                                               % Refraction indices of Air (front)
 nsub=ones(size(wavelength));                        % Refraction indices of Air (back)
-n_layer = size(in.params,1);                     % Total number of layers
+n_layer = size(in.props,1);                     % Total number of layers
 
 %% Numerical parameters
 pol=in.pol;                 % For normal incidence, TM <=> H//y and TE <=> E//y
@@ -163,11 +163,10 @@ N_semicon=3;                % Layer where field is calculated (if cal_champ=1)
 Nb_pts_z_semicon=50;        % Number of points in the z direction to calculate the field in N_semicon (if cal_champ=1)
 
 % IMPORTANT: only one wavelength
-trace_champ = in.trace_champ;%npoints==1;   % si 1,calculates a cross-section of the field
-x0 = in.cs_x;               % Cross section along x=x0 if trace_champ=1 ([] if the cross-section is along another direction)
-y0 = in.cs_y;               % Cross section along y=y0 if trace_champ=1 ([] if the cross-section is along another direction)
-z0 = in.cs_z;               % Cross section along z=z0 if trace_champ=1 ([] if the cross-section is along another direction)
-                            % note: z=0 corresponds to the bottom of the considered stack, at a depth h_sub inside the substrate
+trace_champ = in.trace_champ; % si 1,calculates a cross-section of the field
+x0 = in.x0;               % Cross section along x=x0 if trace_champ=1 ([] if the cross-section is along another direction)
+y0 = in.y0;               % Cross section along y=y0 if trace_champ=1 ([] if the cross-section is along another direction)
+z0 = in.z0;               % Cross section along z=z0 if trace_champ=1 ([] if the cross-section is along another direction)
 h_air=0.05;                 % Thickness in incident medium to represent the cross-section (trace_champ=1)
 h_sub=0.05;                 % Thickness in the substrate to represent the cross-section  (trace_champ=1)
 h_2pts=20;                  % distance between 2 points in z pour the layers whose thickness is higher than 1??m (trace_champ=1)
@@ -189,20 +188,20 @@ A_tot=zeros(1,length(wavelength));
 A_sub=zeros(1,length(wavelength));
 Abs=zeros(n_layer,length(wavelength));
 Abs_plots=zeros(n_layer,length(wavelength));
-XX=[]; YY=[]; ZZ=[]; E=[]; I=[]; CONTOUR=[]; CS=[];
+XX=[]; YY=[]; ZZ=[]; I=[]; CONTOUR=[];
 Ntre=1;
-H=cell2mat(in.params(:,1));
-n = cell2mat(in.params(:,2));
-nm = cell2mat(in.params(:,3));
+H=cell2mat(in.props(:,1));
+n = cell2mat(in.props(:,2));
+nm = cell2mat(in.props(:,3));
 active_layer = in.layers{strcmp('Active region', in.layers),2};
 active_t = sum(H(min(active_layer):end));
 active_b = sum(H(max(active_layer)+1:end));
 if cal_abs||cal_champ==1||trace_champ||in.cal_field;op_retcouche=1; else; op_retcouche=0; end
 if H(n_layer)<1e-5;disp('WARNING : There is a problem in the definition of the layers number !!'); return; end
-if trace_champ&&isempty(x0)==1&&isempty(y0)==1&&isempty(z0)==1;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
-if trace_champ&&isempty(x0)==0&&isempty(y0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
-if trace_champ&&isempty(x0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
-if trace_champ&&isempty(y0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
+%if trace_champ&&isempty(x0)==1&&isempty(y0)==1&&isempty(z0)==1;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
+%if trace_champ&&isempty(x0)==0&&isempty(y0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
+%if trace_champ&&isempty(x0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
+%if trace_champ&&isempty(y0)==0&&isempty(z0)==0;disp('WARNING : There is a problem in the definition of the desired cross section for plotting the field (trace_champ=1) !!'); return; end
 
 parfor zou=1:length(wavelength)
     disp(['Calculation n-' int2str(zou) ' of ' int2str(length(wavelength))])
@@ -219,7 +218,7 @@ parfor zou=1:length(wavelength)
     Abs_vect=zeros(n_layer,1);
     Abs_plots_vect=zeros(n_layer,1);
     test_vect=zeros(1);
-    xx=[]; yy=[]; zz=[]; Ex=[]; Ey=[]; Ez=[]; Hx=[]; Hy=[]; Hz=[]; indice=[]; cs=0;
+    xx=[]; yy=[]; zz=[]; Ex=[]; Ey=[]; Ez=[]; Hx=[]; Hy=[]; Hz=[]; indice=[]; cs=0; E=[];
     Einc=[]; E_semicon=[]; x_semicon=[]; z_semicon=[];
     Hinc=[]; H_semicon=[]; y_semicon=[]; W_semicon=[];
     
@@ -229,7 +228,7 @@ parfor zou=1:length(wavelength)
 
     ns=nsub(zou);
     N=set_layer_number(n,zou,n_layer);      Nm=set_layer_number(nm,zou,n_layer);
-    diameter_x=cell2mat(in.params(:,4));    diameter_y=cell2mat(in.params(:,5));
+    diameter_x=cell2mat(in.props(:,4));    diameter_y=cell2mat(in.props(:,5));
     xdisc=[-diameter_x/2,diameter_x/2];     ydisc=[-diameter_y/2,diameter_y/2];
     Bx=500; Ax=0.02/Bx; By=Bx; Ay=Ax;
     beta=[k0*nh*sin(theta(1)*pi/180), k0*nh*sin(theta(2)*pi/180)];
@@ -247,7 +246,7 @@ parfor zou=1:length(wavelength)
     ab=retcouche(init,ub,op_retcouche);
 
     % get structure
-    [u,a] = structure(in,n_layer,period,N,Nm,k0,diameter_x,diameter_y,Ntre,init,op_retcouche);
+    [u,a] = structure(n_layer,period,N,Nm,k0,diameter_x,diameter_y,Ntre,init,op_retcouche);
 
     if op_objet==1
         struct_test=cell(1,n_layer+2);
@@ -427,37 +426,17 @@ parfor zou=1:length(wavelength)
         [yy,wy]=retgauss(-period_y/2,period_y/2,15,12,[-diameter_y/2,diameter_y/2]);
 
         if trace_champ
-            if isempty(x0)==1&&isempty(z0)==1
-                cs=y0;
-                [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,y0},tab0,[],(1:6)+7.25i,1,1,1:6);
-            elseif isempty(y0)==1&&isempty(z0)==1
-                cs=x0;
-                [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{x0,yy},tab0,[],(1:6)+7.25i,1,1,1:6);
-            elseif isempty(x0)==1&&isempty(y0)==1
-                cs=z0;
-                tab0(:,3)=0;
-                HH=cumsum(tab0(:,1));
-                numz=1;
-                while (HH(end)-z0)>HH(numz);numz=numz+1; end
-                tab1=[tab0(1:numz-1,:);[tab0(numz,1)-(z0-sum(tab0(numz+1:end,1))),numz,0];[0,numz,1];[z0-sum(tab0(numz+1:end,1)),numz,0];tab0(numz+1:end,:)];
-                [e0,zz,wz,o0]=retchamp(init,struct0,sh,sb,inc,{xx,yy},tab1,[],(1:6)+7.25i,1,1,1:6);
+            if in.cal_structure_yz
+                calc_cross_section(in, in.x0, [], [], init,struct0,sh,sb,inc, tab0, xx, yy, zou);
             end
-
-            for ii=1:3
-                o0(:,:,:,ii+3)=o0(:,:,:,ii+3)./o0(:,:,:,ii);
-                o0(:,:,:,ii)=1;
+            if in.cal_structure_xz
+                calc_cross_section(in, [], in.y0, [], init,struct0,sh,sb,inc, tab0, xx, yy, zou);
             end
-            indice=squeeze(sqrt(o0(:,:,:,4)));
-            Ex=squeeze(e0(:,:,:,1)); Ey=squeeze(e0(:,:,:,2)); Ez=squeeze(e0(:,:,:,3));
-            Hx=squeeze(e0(:,:,:,4)); Hy=squeeze(e0(:,:,:,5)); Hz=squeeze(e0(:,:,:,6));
-            XX=[XX,xx]; YY=[YY,yy]; ZZ=[ZZ,zz];
-            E = [E, tif(pol==0, Ey, Ex)];
-
-            ct = repmat(cs,size(indice));
-            ct(indice==1) = -1*(period_x+period_y);
-            CONTOUR = [CONTOUR,ct];
-            CS = [CS,cs];
-        else
+            if in.cal_structure_xy
+                calc_cross_section(in, [], [], in.z0, init,struct0,sh,sb,inc, tab0, xx, yy, zou);
+            end
+        end
+        if in.cal_field
             tab0(:,3)=0;
             HH=cumsum(tab0(:,1));
             numz=1;
@@ -469,8 +448,10 @@ parfor zou=1:length(wavelength)
                 [e0,~,~,~]=retchamp(init,struct0,sh,sb,inc,{xx,yy},tab1,[],(1:6)+7.25i,1,1,1:6);
                 Ez=cat(3,Ez,squeeze(e0(:,:,:,tif(pol==2, 1, 2))));
             end
-            ZZ=[ZZ,zz];
-            mapping_field(in, zou, xx, yy, zz, Ez);
+
+            if in.out_I_map
+                mapping_field(in, zou, xx, yy, zz, Ez);
+            end
             I(:,zou) = mean(abs(Ez).^2, [1 2]);
         end
     end
@@ -495,17 +476,8 @@ if in.cal_field
     hP.DataTipTemplate.DataTipRows(3).Value = hP.CData;
     filename = append(in.prefix,"I_mean.png");
     saveas(gcf, filename);
-end
-
-%%%% Plot a cross section with trace_champ=1, x0=[], y0=0, z0=[]
-if trace_champ
-    if isempty(x0)==1&&isempty(z0)==1
-        filename = save_cross_section(in, XX, ZZ, CONTOUR, CS(1), E, 'x', 'z', 'y', [-period_x/2,period_x/2], [0 inf], [-period_y/2,period_y/2]);
-    elseif isempty(y0)==1&&isempty(z0)==1
-        filename = save_cross_section(in, YY, ZZ, CONTOUR, CS(1), E, 'y', 'z', 'x', [-period_y/2,period_y/2], [0 inf], [-period_x/2,period_x/2]);
-    elseif isempty(x0)==1&&isempty(y0)==1
-        filename = save_cross_section(in, YY, XX, CONTOUR, CS(1), E, 'y', 'x', 'z', [-period_y/2,period_y/2], [-period_x/2,period_x/2], [0 inf]);
-    end
+    filename = append(in.prefix,"I_mean.fig");
+    saveas(gcf, filename);
 end
 
 %%%% Plot Absorption - wavelength
@@ -548,7 +520,9 @@ if cal_abs
     set(gcf,'color','w');
     box on
 
-    filename = append(in.prefix,"absorption graph.png");
+    filename = append(in.prefix,"Abs.png");
+    saveas(gcf, filename);
+    filename = append(in.prefix,"Abs.fig");
     saveas(gcf, filename);
     
     % constants

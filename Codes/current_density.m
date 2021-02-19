@@ -45,11 +45,13 @@ if exist(text, 'file')
         J_table_tmp = vertcat(J_table, J_array); 
         filename = append(in.prefix, "J_", AM_list(i), ".csv");
         writematrix(J_table_tmp, filename, 'Delimiter',',');
+        filename = append(in.prefix, "J_", AM_list(i), ".mat");
+        save(filename, 'J_table_tmp');
         J_array=[];
     end
-    filename = append(in.prefix,"J.mat");
+    filename = append(in.prefix,"J_sum.mat");
     save(filename, 'J_sum_table');
-    filename = append(in.prefix, "J.csv");
+    filename = append(in.prefix, "J_sum.csv");
     writematrix(J_sum_table, filename, 'Delimiter',',');
 
     save(text);
