@@ -474,9 +474,9 @@ if in.cal_field
     hP.DataTipTemplate.DataTipRows(2).Label = 'Depth';
     hP.DataTipTemplate.DataTipRows(3).Label = '|E|^2';
     hP.DataTipTemplate.DataTipRows(3).Value = hP.CData;
-    filename = append(in.prefix,"I_mean.png");
-    saveas(gcf, filename);
     filename = append(in.prefix,"I_mean.fig");
+    saveas(gcf, filename);
+    filename = append(in.prefix,"I_mean.png");
     saveas(gcf, filename);
 end
 
@@ -520,9 +520,9 @@ if cal_abs
     set(gcf,'color','w');
     box on
 
-    filename = append(in.prefix,"Abs.png");
-    saveas(gcf, filename);
     filename = append(in.prefix,"Abs.fig");
+    saveas(gcf, filename);
+    filename = append(in.prefix,"Abs.png");
     saveas(gcf, filename);
     
     % constants

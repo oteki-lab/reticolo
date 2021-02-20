@@ -9,9 +9,9 @@
 % ===== Main =====
 function [] = sendMail(body,attachmentFilePath)
     % Modify these two lines to reflect your account and password.
-    email = 'okadalab.matlab.notification@gmail.com';
-    password = 'Xw8fPKh4';
-    recipients = 'oteki@g.ecc.u-tokyo.ac.jp';
+    email = '';
+    password = '';
+    recipients = '';
 
     setpref('Internet', 'E_mail', email);
     setpref('Internet', 'SMTP_Server', 'smtp.gmail.com');
