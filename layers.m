@@ -19,7 +19,7 @@ structure_props = {
 %    0.16,   retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
 %    0.14,   retindice_chen(wavelength,4.708),   0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
 %    1.7,    retindice_chen(wavelength,4.707),   0.00*ones(size(wavelength)),        in.period_x,           in.period_y;
-    1.8,    retindice_semicond(wavelength,40),   0.00*ones(size(wavelength)),        in.diam_x,           in.diam_y;
+    1.8,    ones(size(wavelength)),   retindice_semicond(wavelength,40),        in.diam_x,           in.diam_y;
 %    0.9,    retindice_chen(wavelength,4.802),   1.58*ones(size(wavelength)),        in.diam_x,           in.diam_y;
 %    0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802),   in.period_x,           in.period_y;
 %	0.9/12, 1.58*ones(size(wavelength)),        retindice_chen(wavelength,4.802),   in.period_x*11/12,     in.period_y*11/12;

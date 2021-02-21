@@ -154,7 +154,7 @@ sym = tif(in.sym, [pol-1,pol-1,0,0], []); % [pol-1,pol-1,0,0]: The symmetry of t
 % if theta(1)==0 && theta(2)~=0;sym=[1-pol,0,0,0];end;
 % if theta(1)~=0 && theta(2)~=0;sym=[];end;
 
-cal_abs = npoints>1;        % If 1, calculate absorption in each layer
+cal_abs = in.cal_absorption;        % If 1, calculate absorption in each layer
 Nb_pts_z=10;                % Number of points in z to calculate absorption, when absorption is calculated in each layer
 
 % IMPORTANT: only one wavelength (calculate can be quite heavy, depending on Nb_pts_z_semicon)
@@ -462,26 +462,28 @@ if in.cal_field
     Z = active_b:0.001:active_t;
     text=append(in.prefix, 'I_mean.mat');
     save(text, 'I');
-    figure
-    hP=surf(wavelength, Z, I);
-    shading interp;
-    colormap(jet);
-    colorbar;
-    caxis([0 Inf]); 
-    ylim([active_b active_t])
-    view(2)
-    hP.DataTipTemplate.DataTipRows(1).Label = 'Wavelength';
-    hP.DataTipTemplate.DataTipRows(2).Label = 'Depth';
-    hP.DataTipTemplate.DataTipRows(3).Label = '|E|^2';
-    hP.DataTipTemplate.DataTipRows(3).Value = hP.CData;
-    filename = append(in.prefix,"I_mean.fig");
-    saveas(gcf, filename);
-    filename = append(in.prefix,"I_mean.png");
-    saveas(gcf, filename);
+    if npoints>1
+        figure
+        hP=surf(wavelength, Z, I);
+        shading interp;
+        colormap(jet);
+        colorbar;
+        caxis([0 Inf]); 
+        ylim([active_b active_t])
+        view(2)
+        hP.DataTipTemplate.DataTipRows(1).Label = 'Wavelength';
+        hP.DataTipTemplate.DataTipRows(2).Label = 'Depth';
+        hP.DataTipTemplate.DataTipRows(3).Label = '|E|^2';
+        hP.DataTipTemplate.DataTipRows(3).Value = hP.CData;
+        filename = append(in.prefix,"I_mean.fig");
+        saveas(gcf, filename);
+        filename = append(in.prefix,"I_mean.png");
+        saveas(gcf, filename);
+    end
 end
 
 %%%% Plot Absorption - wavelength
-if cal_abs
+if in.cal_absorption
     %%%% Save the data into a file
     text=append(in.prefix, in.res, '.mat');
     
@@ -504,26 +506,28 @@ if cal_abs
     end
 
     %%%% Example to plot the absorption
-    figure
-    hold on
-    for index=1:length(in.layers)
-        plot(wavelength,cell2mat(Abs_array(:,index)), 'Linewidth',3);
-    end
-    hold off
-    legend(legends)
-    xlabel('\lambda (um)')
-    ylabel('Absorption')
-    xlim([min(wavelength) max(wavelength)])
-    ylim([0 1])
-    set(gca,'Fontsize',12)
-    set(gca,'XMinorTick','on','YMinorTick','on')
-    set(gcf,'color','w');
-    box on
+    if npoints>1
+        figure
+        hold on
+        for index=1:length(in.layers)
+            plot(wavelength,cell2mat(Abs_array(:,index)), 'Linewidth',3);
+        end
+        hold off
+        legend(legends)
+        xlabel('\lambda (um)')
+        ylabel('Absorption')
+        xlim([min(wavelength) max(wavelength)])
+        ylim([0 1])
+        set(gca,'Fontsize',12)
+        set(gca,'XMinorTick','on','YMinorTick','on')
+        set(gcf,'color','w');
+        box on
 
-    filename = append(in.prefix,"Abs.fig");
-    saveas(gcf, filename);
-    filename = append(in.prefix,"Abs.png");
-    saveas(gcf, filename);
+        filename = append(in.prefix,"Abs.fig");
+        saveas(gcf, filename);
+        filename = append(in.prefix,"Abs.png");
+        saveas(gcf, filename); 
+    end
     
     % constants
     E_G=1.424;          % bandgap
@@ -533,26 +537,31 @@ if cal_abs
 
     wavelength_A = wavelength;
     load('Solarspectrum.mat','wavelength')                                          % spectra loaded in [W.m^-2.nm^-1]
-    w_range = find(wavelength==lambdamin*1000):find(wavelength==lambdamax*1000+1);
-    wavelength_S = wavelength(w_range);                                             % wavelength from wavmin to wavmax [nm]
+    w_range = find(wavelength==wavelength_A(1)*1000):find(wavelength==wavelength_A(end)*1000+1);
     E_A = fliplr(h*c./(q*wavelength_A*1e-6));                                       % from wavelength [nm] to energy [eV]
+    wavelength_S = wavelength(w_range);                                             % wavelength from wavmin to wavmax [nm]
     E_S = fliplr(flipud(h*c./(wavelength_S*1e-9))/q);                               % from wavelength [nm] to energy [eV]
 
     % 1-D data interpolation
     for index = 1:length(Abs_array)
-        Abs_array_eV{index} = interp1(E_A,fliplr(Abs_array{index}),E_S(1:end-1),'makima');
+        if npoints>1
+           Abs_array_eV{index} = interp1(E_A,fliplr(Abs_array{index}),E_S(1:end-1),'makima');
+        else
+           Abs_array_eV{index} = Abs_array{index};
+        end
     end
 
     % create absorption table
     header = ["wavelength","energy"];
-    data = [flipud(wavelength_S(1:end-1)),E_S(1:end-1)];
+        data = [flipud(wavelength_S(1:end-1)),E_S(1:end-1)];
+    
     for index = 1:length(Abs_array)
         header= horzcat(header, in.layers{index});
         data = horzcat(data, Abs_array_eV{index});
     end
+
     Abs_table = vertcat(header,data);
     save(append(in.prefix,"Abs.mat"), 'Abs_table');
     writematrix(Abs_table, append(in.prefix, "Abs.csv"), 'Delimiter',',');
-
     save(text);
 end

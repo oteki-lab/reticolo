@@ -38,7 +38,8 @@ for index = 1:height(params_list)
 
         % calculate absorption
         if in.cal_absorption
-            attachments = cat(1, attachments, reticolo_eng(in));
+            %attachments = cat(1, attachments, reticolo_eng(in));
+            reticolo_eng(in)
 
             % calculate current density
             if in.cal_current
